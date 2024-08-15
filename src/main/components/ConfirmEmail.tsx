@@ -16,7 +16,6 @@ const ConfirmEmail = () => {
     if (token && email) {
       confirmEmail.mutate({ token, email });
       toast.success("Your email is successfully verified!");
-      alert(token)
     }
   }, [location.search, confirmEmail.mutate]);
 

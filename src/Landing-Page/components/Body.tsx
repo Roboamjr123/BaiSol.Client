@@ -6,7 +6,7 @@ import Faq from "./FAQ";
 
 const Body = () => {
   return (
-    <div className="max-w mx-auto">
+    <div className="max-w mx-auto ">
       <HeroSection />
       <Benefit/>
       <Pricing />

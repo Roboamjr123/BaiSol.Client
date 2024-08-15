@@ -5,7 +5,7 @@ import Footer from "../../layouts/shared/Footer";
 const LandingPage = () => {
   return (
     <>
-      <div className="flex flex-col min-h-screen">
+      <div className="flex flex-col min-h-screen ">
         <NavBar />
         <Outlet />
         <Footer />

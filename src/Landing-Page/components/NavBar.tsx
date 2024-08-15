@@ -1,4 +1,4 @@
-import logo from "../../assets/BaiSol-Logo.png";
+import logo from "../../assets/logo/BaiSol-Logo.png";
 import { navItems } from "../constants/landing-page";
 import { Link } from "react-scroll";
 import { Menu, X } from "lucide-react";
