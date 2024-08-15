@@ -23,7 +23,7 @@ import { BiDotsVertical } from "react-icons/bi";
 import { CiSearch } from "react-icons/ci";
 import { FaChevronDown } from "react-icons/fa6";
 import { FaPlus } from "react-icons/fa6";
-import { capitalize } from "../../pages/utils";
+import { capitalize } from "../../../lib/utils/utils";
 import {
   INITIAL_VISIBLE_COLUMNS,
   INITIAL_FACILITATOR_VISIBLE_COLUMNS,
@@ -69,7 +69,7 @@ const PersonnelTable: React.FC<UserProps> = ({ role }) => {
   const [statusFilter, setStatusFilter] = useState<Selection>("all");
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
-    column: "name",
+    column: "status",
     direction: "ascending",
   });
   const [page, setPage] = useState(1);
@@ -91,6 +91,7 @@ const PersonnelTable: React.FC<UserProps> = ({ role }) => {
     setRowsPerPage(5);
     setPage(1); // Reset page to 1
   }, [role]);
+
   const headerColumns = useMemo(() => {
     if (visibleColumns === "all") return columns;
 
@@ -103,8 +104,10 @@ const PersonnelTable: React.FC<UserProps> = ({ role }) => {
     let filteredUsers = personnelUsers ?? [];
 
     if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter((user) =>
-        user.userName.toLowerCase().includes(filterValue.toLowerCase())
+      filteredUsers = filteredUsers.filter(
+        (user) =>
+          user.userName.toLowerCase().includes(filterValue.toLowerCase()) ||
+          user.email.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
     if (
@@ -142,12 +145,23 @@ const PersonnelTable: React.FC<UserProps> = ({ role }) => {
     return sortedItems.slice(start, end);
   }, [page, sortedItems, rowsPerPage]);
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: actionIsOpen,
+    onOpen: actionOnOpen,
+    onClose: actionOnClose,
+  } = useDisclosure();
+
+  const {
+    isOpen: addIsOpen,
+    onOpen: addOnOpen,
+    onClose: addOnClose,
+  } = useDisclosure();
+
   const [userId, setUserId] = useState<string>("");
   const [userEmail, setUserEmail] = useState<string>("");
   const [action, setAction] = useState<string>("");
 
-  const handleDropdownItemClick = (
+  const handleDropdownActionItemClick = (
     userId: string,
     userEmail: string,
     action: string
@@ -155,7 +169,7 @@ const PersonnelTable: React.FC<UserProps> = ({ role }) => {
     setUserId(userId);
     setUserEmail(userEmail);
     setAction(action);
-    onOpen();
+    actionOnOpen();
   };
 
   const renderCell = useCallback(
@@ -174,6 +188,8 @@ const PersonnelTable: React.FC<UserProps> = ({ role }) => {
               </span>
             </div>
           );
+        // case "project":
+        //   return user.project;
         case "creator":
           return user.adminEmail;
         case "timestamps":
@@ -218,7 +234,11 @@ const PersonnelTable: React.FC<UserProps> = ({ role }) => {
                   {user.status === "Active" ? (
                     <DropdownItem
                       onClick={() =>
-                        handleDropdownItemClick(user.id, user.email, "Suspend")
+                        handleDropdownActionItemClick(
+                          user.id,
+                          user.email,
+                          "Suspend"
+                        )
                       }
                       key={user.id}
                       className="text-warning"
@@ -229,7 +249,11 @@ const PersonnelTable: React.FC<UserProps> = ({ role }) => {
                   ) : user.status === "Suspended" ? (
                     <DropdownItem
                       onClick={() =>
-                        handleDropdownItemClick(user.id, user.email, "Activate")
+                        handleDropdownActionItemClick(
+                          user.id,
+                          user.email,
+                          "Activate"
+                        )
                       }
                       key={user.id}
                       className="text-primary"
@@ -238,12 +262,16 @@ const PersonnelTable: React.FC<UserProps> = ({ role }) => {
                       Activate
                     </DropdownItem>
                   ) : (
-                    <DropdownItem></DropdownItem>
+                    <DropdownItem className="hidden"></DropdownItem>
                   )}
                   {user.status !== "InActive" ? (
                     <DropdownItem
                       onClick={() =>
-                        handleDropdownItemClick(user.id, user.email, "Delete")
+                        handleDropdownActionItemClick(
+                          user.id,
+                          user.email,
+                          "Delete"
+                        )
                       }
                       key={user.id}
                       color="danger"
@@ -257,7 +285,7 @@ const PersonnelTable: React.FC<UserProps> = ({ role }) => {
                       Delete
                     </DropdownItem>
                   ) : (
-                    <DropdownItem></DropdownItem>
+                    <DropdownItem className="hidden"></DropdownItem>
                   )}
                 </DropdownMenu>
               </Dropdown>
@@ -324,11 +352,15 @@ const PersonnelTable: React.FC<UserProps> = ({ role }) => {
                 selectionMode="multiple"
                 onSelectionChange={setStatusFilter}
               >
-                {statusOptions.map((status) => (
-                  <DropdownItem key={status.uid} className="capitalize">
-                    {capitalize(status.name)}
-                  </DropdownItem>
-                ))}
+                {statusOptions
+                  .filter(
+                    (status) => role !== "Admin" || status.name !== "OnWork"
+                  )
+                  .map((status) => (
+                    <DropdownItem key={status.uid} className="capitalize">
+                      {capitalize(status.name)}
+                    </DropdownItem>
+                  ))}
               </DropdownMenu>
             </Dropdown>
             <Dropdown>
@@ -360,6 +392,7 @@ const PersonnelTable: React.FC<UserProps> = ({ role }) => {
               className="bg-orange-500 text-background"
               endContent={<FaPlus />}
               size="sm"
+              onClick={() => addOnOpen()}
             >
               Add New
             </Button>
@@ -392,13 +425,15 @@ const PersonnelTable: React.FC<UserProps> = ({ role }) => {
     onRowsPerPageChange,
     userLength,
     hasSearchFilter,
-    rowsPerPage
+    rowsPerPage,
   ]);
 
   const bottomContent = useMemo(() => {
     return (
       <div className="py-2 px-2 flex justify-between items-center">
         <Pagination
+          loop
+          initialPage={1}
           showControls
           classNames={{
             cursor: "bg-orange-400 text-background",
@@ -438,13 +473,21 @@ const PersonnelTable: React.FC<UserProps> = ({ role }) => {
     []
   );
 
+  const disabledUsers = items
+    ?.filter((item) => item.status === "InActive" || item.status === "OnWork")
+    .map((row) => row.id);
+
   return (
     <div className="bg-gray-100 flex items-center justify-center">
       <div className="container mx-auto p-4 bg-white h-full">
-        <div className="overflow-x-auto overflow-y-hidden scrollbar-thin scrollbar-track-white scrollbar-thumb-slate-100">
+        <div className="overflow-x-auto overflow-y-hidden scrollbar-thin scrollbar-track-white scrollbar-thumb-orange-100">
           <div className=" min-w-full">
+            <span>Material Cost</span>
+
             <Table
+              aria-label="Admins and Facilitators Table"
               isCompact
+              disabledKeys={disabledUsers}
               removeWrapper
               bottomContent={bottomContent}
               bottomContentPlacement="outside"
@@ -494,15 +537,15 @@ const PersonnelTable: React.FC<UserProps> = ({ role }) => {
       </div>
 
       <RegisterPersonnelUserModal
-        isOpen={isOpen}
-        onClose={onClose}
+        isOpen={addIsOpen}
+        onClose={addOnClose}
         refetch={refetch}
         role={role}
       />
 
       <UserModal
-        isOpen={isOpen}
-        onClose={onClose}
+        isOpen={actionIsOpen}
+        onClose={actionOnClose}
         userId={userId}
         email={userEmail}
         action={action}

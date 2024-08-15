@@ -12,7 +12,7 @@ const AdminLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
         isOpen={isSidebarOpen}
         setOpen={setIsSidebarOpen}
       />
-      <div className="flex-1 flex overflow-x-hidden scrollbar-hide scrollbar-track-white scrollbar-thumb-slate-100 flex-col mx-auto h-full">
+      <div className="flex-1 flex overflow-x-hidden scrollbar-hide scrollbar-track-white scrollbar-thumb-orange-100 flex-col mx-auto h-full">
         <Header
           isSidebarOpen={isSidebarOpen}
           setIsSidebarOpen={setIsSidebarOpen}

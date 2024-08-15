@@ -124,8 +124,8 @@ export const getAllFacilitatorUsers = () => {
         role: user.role,
         adminEmail: user.adminEmail,
         status: user.status,
-        updatedAt: new Date(user.updatedAt).toLocaleString(), // Format updatedAt
-        createdAt: new Date(user.createdAt).toLocaleString(), // Format createdAt
+        updatedAt: user.updatedAt, // Format updatedAt
+        createdAt: user.createdAt, // Format createdAt
       }));
       return filteredData;
     },
@@ -146,10 +146,33 @@ export const getAllPersonnelUsers = (role: string) => {
         role: user.role,
         adminEmail: user.adminEmail,
         status: user.status,
-        updatedAt: new Date(user.updatedAt).toLocaleString(), // Format updatedAt
-        createdAt: new Date(user.createdAt).toLocaleString(), // Format createdAt
+        updatedAt: user.updatedAt, // Format updatedAt
+        createdAt: user.createdAt, // Format createdAt
       }));
       return filteredData;
+    },
+  });
+};
+
+// Define the type for the installer data
+interface Installer {
+  installerId: number;
+  name: string;
+  position: string;
+  status: string;
+  assignedProj: string;
+  adminEmail: string;
+  updatedAt: string;
+  createdAt: string;
+}
+
+// Get all installers
+export const getAllInstaller = () => {
+  return useQuery<Installer[], Error>({
+    queryKey: ["all-installers"],
+    queryFn: async () => {
+      const response = await api.get("api/Personnel/Get-Installers");
+      return response.data;
     },
   });
 };
@@ -189,6 +212,49 @@ export const useDeleteUser = () => {
           "Content-Type": "application/json", // Ensure it matches the server requirements
         },
       });
+    },
+  });
+};
+
+// Update Installer Status
+export const useStatusMutateInstaller = () => {
+  return useMutation({
+    mutationFn: async ({ id, status }: { id: number; status: string }) => {
+      return await api.put(
+        `api/Personnel/Update-Installer-Status?id=${id}&status=${status}`,
+        null,
+        {
+          headers: {
+            "Content-Type": "application/json", // Ensure it matches the server requirements
+          },
+        }
+      );
+    },
+  });
+};
+
+// Add New Installer
+export const useAddNewInstaller = () => {
+  // const admin = useSelector(selectUser);
+  return useMutation({
+    mutationFn: async (formData: { name: string; position: string }) => {
+      const data = {
+        ...formData,
+        adminEmail: "user@example.com",
+        // adminEmail: admin.email, // Add adminEmail dynamically
+      };
+
+      try {
+        const response = await api.post(`api/Personnel/Add-Installer`, data, {
+          headers: {
+            "Content-Type": "application/json", // Ensure it matches the server requirements
+          },
+        });
+        return response.data;
+      } catch (error) {
+        console.error("Error adding installer:", error);
+        throw error; // Ensure the error is thrown so it can be handled by react-query
+      }
     },
   });
 };

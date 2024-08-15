@@ -15,6 +15,7 @@ import {
   useRegisterAdminMutation,
   useRegisterPersonnelUserMutation,
 } from "../../../lib/API/UsersApi";
+import { capitalizeFirstLetter } from "../../../lib/utils/functions";
 
 interface RegisterUserProps {
   isOpen: boolean;
@@ -61,19 +62,12 @@ const RegisterPersonnelUserModal: React.FC<RegisterUserProps> = ({
     return true;
   }, [password, conPassword]);
 
-  // Utility function to capitalize first letter and convert rest to lowercase
-  const capitalizeFirstLetter = (str: string) => {
-    return (
-      str.trim().charAt(0).toUpperCase() + str.trim().slice(1).toLowerCase()
-    );
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const formData = {
-      firstName: capitalizeFirstLetter(firstName),
-      lastName: capitalizeFirstLetter(lastName),
+      firstName: capitalizeFirstLetter(firstName.trim()),
+      lastName: capitalizeFirstLetter(lastName.trim()),
       email: email.toLowerCase().trim(),
       password: password.trim(),
     };

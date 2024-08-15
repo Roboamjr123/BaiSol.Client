@@ -14,7 +14,9 @@ import ForgotPass from "./main/forms/auth/ForgotPass";
 import ChangePass from "./main/forms/auth/ChangePass";
 import AdminLayout from "./layouts/AdminLayout";
 import Personnel from "./Admin/pages/Personnel";
-import SampleTable from "./Admin/pages/Sample";
+import ClientPage from "./Client/ClientPage";
+import ProjectPage from "./Admin/pages/ProjectPage";
+import ProjectCostQuotation from "./Admin/components/quotation/ProjectCostQuotation";
 
 const queryClient = new QueryClient({});
 
@@ -39,10 +41,12 @@ function App() {
 
       <AdminLayout>
         <Routes>
-          <Route path="/" index element={<Home />}></Route>{" "}
-          <Route path="Register" element={<SampleTable />} />
+          <Route path="/" index element={<Home />}></Route>
           <Route path="Confirm-Email" element={<ConfirmEmail />} />
+          <Route path="project" element={<ProjectPage />} />
+          <Route path="project/:projId" element={<ProjectCostQuotation />} />
           <Route path="personnel" element={<Personnel />}></Route>
+          <Route path="clients" element={<ClientPage />} />
         </Routes>
       </AdminLayout>
 

@@ -124,7 +124,7 @@ const Sidebar: React.FC<SidebarProps> = ({ links, isOpen, setOpen }) => {
         </div>
 
         <div className="flex flex-col  h-full">
-          <ul className="whitespace-pre px-2.5 text-[0.9rem] py-5 flex flex-col gap-1  font-medium overflow-x-hidden scrollbar-thin scrollbar-track-white scrollbar-thumb-slate-100   md:h-[68%] h-[70%]">
+          <ul className="whitespace-pre px-2.5 text-[0.9rem] py-5 flex flex-col gap-1  font-medium overflow-x-hidden scrollbar-thin scrollbar-track-white scrollbar-thumb-orange-100   md:h-[68%] h-[70%]">
             {links.map((link) => (
               <li key={link.key}>
                 <NavLink

@@ -1,11 +1,8 @@
 import { useState } from "react";
 import { RiArrowRightWideFill } from "react-icons/ri";
-import App from "./App";
-import { getAllFacilitatorUsers } from "../../lib/API/UsersApi";
 import { Button } from "@nextui-org/react";
-import AdminUsersTable from "../components/tables/AdminUsersTable";
-import FacilitatorUsersTable from "../components/tables/FacilitatorUsersTable";
 import PersonnelTable from "../components/tables/PersonnelTable";
+import InstallerTable from "../components/tables/InstallerTable";
 
 const Personnel = () => {
   const components = [
@@ -19,18 +16,7 @@ const Personnel = () => {
       name: "Facilitator",
       index: 2,
     },
-    // {
-    //   component: <AdminUsersTable />,
-    //   name: "Admin",
-    //   index: 1,
-    // // },
-    // {
-    //   component: <FacilitatorUsersTable />,
-    //   name: "Facilitator",
-    //   index: 2,
-    // },
-    { component: <App />, name: "Installer", index: 3 },
-    // { component: <InstallerTable />, name: "Installer", index: 3 },
+    { component: <InstallerTable />, name: "Installer", index: 3 },
   ];
 
   const [activeComponent, setActiveComponent] = useState<JSX.Element | null>(

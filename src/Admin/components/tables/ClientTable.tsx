@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Table,
   TableHeader,
@@ -23,60 +23,71 @@ import { BiDotsVertical } from "react-icons/bi";
 import { CiSearch } from "react-icons/ci";
 import { FaChevronDown } from "react-icons/fa6";
 import { FaPlus } from "react-icons/fa6";
-import { capitalize } from "../../pages/utils";
+import { capitalize } from "../../../lib/utils/utils";
+import { getAllClientUsers } from "../../../lib/API/Client/ClientApi";
 import {
-  INITIAL_VISIBLE_COLUMNS,
-  UserTableProps,
-  columns,
+  client_columns,
+  clientStatusColorMap,
+  clientStatusOptions,
+  ClientTableProps,
   iconClasses,
-  statusColorMap,
-  statusOptions,
+  INITIAL_CLIENT_VISIBLE_COLUMNS,
 } from "../../../lib/utils/usersTable";
 import { MdOutlineDeleteForever } from "react-icons/md";
-import { getAllAdminUsers } from "../../../lib/API/UsersApi";
-import UserActionModal from "../modal/UserActionModal";
-import RegisterPersonnelUserModal from "../modal/RegisterPersonnelUserModal";
 
-
-const AdminUsersTable = () => {
-  const { data: adminUsers, isLoading, error, refetch } = getAllAdminUsers();
-  const adminLength = adminUsers ? adminUsers.length : 0;
+const ClientTable = () => {
+  const { data: clients, isLoading, error, refetch } = getAllClientUsers();
+  const clientLength = clients ? clients.length : 0;
 
   const [filterValue, setFilterValue] = useState("");
   const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
-    new Set(INITIAL_VISIBLE_COLUMNS)
+    new Set(INITIAL_CLIENT_VISIBLE_COLUMNS)
   );
+
   const [statusFilter, setStatusFilter] = useState<Selection>("all");
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
-    column: "name",
+    column: "status",
     direction: "ascending",
   });
+
   const [page, setPage] = useState(1);
 
-  const pages = Math.ceil(adminLength / rowsPerPage);
+  const pages = useMemo(
+    () => Math.ceil(clientLength / rowsPerPage),
+    [clientLength, rowsPerPage]
+  );
 
   const hasSearchFilter = Boolean(filterValue);
-  const headerColumns = useMemo(() => {
-    if (visibleColumns === "all") return columns;
+  // Update visibleColumns when role changes
+  useEffect(() => {
+    setRowsPerPage(5);
+    setPage(1); // Reset page to 1
+  }, []);
 
-    return columns.filter((column) =>
+  const headerColumns = useMemo(() => {
+    if (visibleColumns === "all") return client_columns;
+
+    return client_columns.filter((column) =>
       Array.from(visibleColumns).includes(column.uid)
     );
-  }, [visibleColumns]);
+  }, [visibleColumns, client_columns]);
 
   const filteredItems = useMemo(() => {
-    let filteredUsers = adminUsers ?? [];
+    let filteredUsers = clients ?? [];
 
     if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter((user) =>
-        user.userName.toLowerCase().includes(filterValue.toLowerCase())
+      filteredUsers = filteredUsers.filter(
+        (user) =>
+          user.email.toLowerCase().includes(filterValue.toLowerCase()) ||
+          user.userName.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
+
     if (
       statusFilter !== "all" &&
-      Array.from(statusFilter).length !== statusOptions.length
+      Array.from(statusFilter).length !== clientStatusOptions.length
     ) {
       filteredUsers = filteredUsers.filter((user) =>
         Array.from(statusFilter).includes(user.status)
@@ -84,32 +95,29 @@ const AdminUsersTable = () => {
     }
 
     return filteredUsers;
-  }, [adminUsers, filterValue, statusFilter]);
+  }, [clients, filterValue, statusFilter]);
 
   const sortedItems = useMemo(() => {
-    return [...filteredItems].sort((a: UserTableProps, b: UserTableProps) => {
-      const first = a[sortDescriptor.column as keyof UserTableProps] as string;
-      const second = b[sortDescriptor.column as keyof UserTableProps] as string;
+    return [...filteredItems].sort(
+      (a: ClientTableProps, b: ClientTableProps) => {
+        const first = a[
+          sortDescriptor.column as keyof ClientTableProps
+        ] as string;
+        const second = b[
+          sortDescriptor.column as keyof ClientTableProps
+        ] as string;
 
-      if (first === undefined)
-        return sortDescriptor.direction === "descending" ? 1 : -1;
-      if (second === undefined)
-        return sortDescriptor.direction === "descending" ? -1 : 1;
+        if (first === undefined)
+          return sortDescriptor.direction === "descending" ? 1 : -1;
+        if (second === undefined)
+          return sortDescriptor.direction === "descending" ? -1 : 1;
 
-      const cmp = first.localeCompare(second);
+        const cmp = first.localeCompare(second);
 
-      return sortDescriptor.direction === "descending" ? -cmp : cmp;
-    });
-  }, [sortDescriptor, filteredItems]);
-
-  // Get all inactive admin users
-  const inactiveAdminIds = useMemo(() => {
-    return (
-      adminUsers
-        ?.filter((user) => user.status === "InActive")
-        .map((user) => user.id) || []
+        return sortDescriptor.direction === "descending" ? -cmp : cmp;
+      }
     );
-  }, [adminUsers]);
+  }, [sortDescriptor, filteredItems]);
 
   const items = useMemo(() => {
     const start = (page - 1) * rowsPerPage;
@@ -119,85 +127,102 @@ const AdminUsersTable = () => {
   }, [page, sortedItems, rowsPerPage]);
 
   const {
-    isOpen: isOpenAction,
-    onOpen: onOpenAction,
-    onClose: onCloseAction,
+    isOpen: actionIsOpen,
+    onOpen: actionOnOpen,
+    onClose: actionOnClose,
   } = useDisclosure();
 
-  const {
-    isOpen: isOpenNewAdmin,
-    onOpen: onOpenNewAdmin,
-    onClose: onCloseNewAdmin,
-  } = useDisclosure();
-
-  const [userId, setUserId] = useState<string>("");
-  const [userEmail, setUserEmail] = useState<string>("");
+  const [clientId, setclientId] = useState<string>("");
+  const [clientName, setclientName] = useState<string>("");
   const [action, setAction] = useState<string>("");
 
-  const handleDropdownItemClick = (
-    userId: string,
-    userEmail: string,
+  const {
+    isOpen: addIsOpen,
+    onOpen: addOnOpen,
+    onClose: addOnClose,
+  } = useDisclosure();
+
+  const handleDropdownActionItemClick = (
+    clientId: string,
+    clientName: string,
     action: string
   ) => {
-    setUserId(userId);
-    setUserEmail(userEmail);
+    setclientId(clientId);
+    setclientName(clientName);
     setAction(action);
-    onOpenAction();
+    actionOnOpen();
   };
 
-  const handleAddNewAdminClick = () => {
-    onOpenNewAdmin();
-  };
+  const renderCell = useCallback(
+    (client: ClientTableProps, columnKey: React.Key) => {
+      const cellValue = client[columnKey as keyof ClientTableProps];
 
-  const renderCell = useCallback((admin: UserTableProps, columnKey: React.Key) => {
-    const cellValue = admin[columnKey as keyof UserTableProps];
+      switch (columnKey) {
+        case "name":
+          return (
+            <div className="flex flex-col">
+              <span className="font-semibold tracking-widest">
+                {client.userName}
+              </span>
+              <span className="text-xs text-gray-400 tracking-tight">
+                {client.email}
+              </span>
+            </div>
+          );
 
-    switch (columnKey) {
-      case "name":
-        return (
-          <div className="flex flex-col">
-            <span className="font-semibold tracking-widest">
-              {admin.userName}
-            </span>
-            <span className="text-xs text-gray-400 tracking-tight">
-              {admin.email}
-            </span>
-          </div>
-        );
-      case "creator":
-        return admin.adminEmail;
-      case "timestamps":
-        return (
-          <div className="flex flex-col ">
-            <span className="font-semibold tracking-widest">
-              Created:{" "}
-              <span className="text-xs text-gray-400 tracking-tight">
-                {admin.createdAt}
+        case "project":
+          return null; // TODO Add the client project here
+
+        case "details":
+          return (
+            <div className="flex flex-col">
+              <span className="font-semibold tracking-widest">
+                {client.ClientContactNum}
               </span>
-            </span>
-            <span className="font-semibold tracking-widest">
-              Updated:{" "}
               <span className="text-xs text-gray-400 tracking-tight">
-                {admin.updatedAt}
+                {client.clientAddress}
               </span>
-            </span>
-          </div>
-        );
-      case "status":
-        return (
-          <Chip
-            className="capitalize border-none gap-1 text-default-600"
-            color={statusColorMap[admin.status]}
-            size="sm"
-            variant="dot"
-          >
-            {cellValue}
-          </Chip>
-        );
-      case "actions":
-        return (
-          <div className="relative flex justify-end items-center gap-2">
-            {admin.status !== "InActive" ? (
+              <span className="text-xs text-gray-400 tracking-tight">
+                {client.clientMonthlyElectricBill}
+              </span>
+            </div>
+          );
+
+        case "creator":
+          return client.adminEmail;
+
+        case "timestamps":
+          return (
+            <div className="flex flex-col ">
+              <span className="font-semibold tracking-widest">
+                Created:{" "}
+                <span className="text-xs text-gray-400 tracking-tight">
+                  {client.createdAt}
+                </span>
+              </span>
+              <span className="font-semibold tracking-widest">
+                Updated:{" "}
+                <span className="text-xs text-gray-400 tracking-tight">
+                  {client.updatedAt}
+                </span>
+              </span>
+            </div>
+          );
+        case "status":
+          return (
+            <Chip
+              className="capitalize border-none gap-1 text-default-600"
+              color={clientStatusColorMap[client.status]}
+              size="sm"
+              variant="dot"
+            >
+              {cellValue}
+            </Chip>
+          );
+
+        case "actions":
+          return (
+            <div className="relative flex justify-end items-center gap-2">
               <Dropdown className="bg-background border-1 border-default-200">
                 <DropdownTrigger>
                   <Button isIconOnly radius="full" size="sm" variant="light">
@@ -205,45 +230,50 @@ const AdminUsersTable = () => {
                   </Button>
                 </DropdownTrigger>
                 <DropdownMenu variant="shadow">
-                  {admin.status === "Active" ? (
+                  <DropdownItem>View</DropdownItem>
+                  {client.status === "Active" ? (
                     <DropdownItem
                       onClick={() =>
-                        handleDropdownItemClick(
-                          admin.id,
-                          admin.email,
+                        handleDropdownActionItemClick(
+                          client.id,
+                          client.userName,
                           "Suspend"
                         )
                       }
-                      key={admin.id}
+                      key={client.id}
                       className="text-warning"
                       color="warning"
                     >
                       Suspend
                     </DropdownItem>
-                  ) : admin.status === "Suspended" ? (
+                  ) : client.status === "Suspended" ? (
                     <DropdownItem
                       onClick={() =>
-                        handleDropdownItemClick(
-                          admin.id,
-                          admin.email,
+                        handleDropdownActionItemClick(
+                          client.id,
+                          client.userName,
                           "Activate"
                         )
                       }
-                      key={admin.id}
+                      key={client.id}
                       className="text-primary"
                       color="primary"
                     >
                       Activate
                     </DropdownItem>
                   ) : (
-                    <DropdownItem></DropdownItem>
+                    <DropdownItem className="hidden"></DropdownItem>
                   )}
-                  {admin.status !== "InActive" ? (
+                  {client.status !== "InActive" ? (
                     <DropdownItem
                       onClick={() =>
-                        handleDropdownItemClick(admin.id, admin.email, "Delete")
+                        handleDropdownActionItemClick(
+                          client.id,
+                          client.userName,
+                          "Delete"
+                        )
                       }
-                      key={admin.id}
+                      key={client.id}
                       color="danger"
                       className="text-danger"
                       startContent={
@@ -255,19 +285,19 @@ const AdminUsersTable = () => {
                       Delete
                     </DropdownItem>
                   ) : (
-                    <DropdownItem></DropdownItem>
+                    <DropdownItem className="hidden"></DropdownItem>
                   )}
                 </DropdownMenu>
               </Dropdown>
-            ) : (
-              ""
-            )}
-          </div>
-        );
-      default:
-        return cellValue;
-    }
-  }, []);
+            </div>
+          );
+
+        default:
+          return cellValue;
+      }
+    },
+    []
+  );
 
   const onRowsPerPageChange = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -323,7 +353,7 @@ const AdminUsersTable = () => {
                 selectionMode="multiple"
                 onSelectionChange={setStatusFilter}
               >
-                {statusOptions.map((status) => (
+                {clientStatusOptions.map((status) => (
                   <DropdownItem key={status.uid} className="capitalize">
                     {capitalize(status.name)}
                   </DropdownItem>
@@ -348,7 +378,7 @@ const AdminUsersTable = () => {
                 selectionMode="multiple"
                 onSelectionChange={setVisibleColumns}
               >
-                {columns.map((column) => (
+                {client_columns.map((column) => (
                   <DropdownItem key={column.uid} className="capitalize">
                     {capitalize(column.name)}
                   </DropdownItem>
@@ -359,7 +389,7 @@ const AdminUsersTable = () => {
               className="bg-orange-500 text-background"
               endContent={<FaPlus />}
               size="sm"
-              onClick={() => handleAddNewAdminClick()}
+              onClick={() => addOnOpen()}
             >
               Add New
             </Button>
@@ -367,12 +397,13 @@ const AdminUsersTable = () => {
         </div>
         <div className="flex justify-between items-center">
           <span className="text-default-400 text-small">
-            Total {adminLength} users
+            Total {clientLength} users
           </span>
           <label className="flex items-center text-default-400 text-small">
             Rows per page:
             <select
               className="bg-transparent outline-none text-default-400 text-small"
+              value={rowsPerPage}
               onChange={onRowsPerPageChange}
             >
               <option value="5">5</option>
@@ -389,14 +420,35 @@ const AdminUsersTable = () => {
     visibleColumns,
     onSearchChange,
     onRowsPerPageChange,
-    adminLength,
+    clientLength,
     hasSearchFilter,
+    rowsPerPage,
   ]);
+
+  const classNames = useMemo(
+    () => ({
+      wrapper: ["max-h-[382px]", "max-w-3xl"],
+      th: ["bg-transparent", "text-default-500", "border-b", "border-divider"],
+      td: [
+        // changing the rows border radius
+        // first
+        "group-data-[first=true]:first:before:rounded-none",
+        "group-data-[first=true]:last:before:rounded-none",
+        // middle
+        "group-data-[middle=true]:before:rounded-none",
+        // last
+        "group-data-[last=true]:first:before:rounded-none",
+        "group-data-[last=true]:last:before:rounded-none",
+      ],
+    }),
+    []
+  );
 
   const bottomContent = useMemo(() => {
     return (
       <div className="py-2 px-2 flex justify-between items-center">
         <Pagination
+          loop
           showControls
           classNames={{
             cursor: "bg-orange-400 text-background",
@@ -408,43 +460,33 @@ const AdminUsersTable = () => {
           variant="light"
           onChange={setPage}
         />
-        {/* <span className="text-small text-default-400">
+        <span className="text-small text-default-400">
           {selectedKeys === "all"
             ? "All items selected"
             : `${selectedKeys.size} of ${items.length} selected`}
-        </span> */}
+        </span>
       </div>
     );
   }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
 
-  const classNames = useMemo(
-    () => ({
-      wrapper: ["max-h-[382px]", "max-w-3xl"],
-      th: ["bg-transparent", "text-default-500", "border-b", "border-divider"],
-      // td: [
-      //   // changing the rows border radius
-      //   // first
-      //   "group-data-[first=true]:first:before:rounded-none",
-      //   "group-data-[first=true]:last:before:rounded-none",
-      //   // middle
-      //   "group-data-[middle=true]:before:rounded-none",
-      //   // last
-      //   "group-data-[last=true]:first:before:rounded-none",
-      //   "group-data-[last=true]:last:before:rounded-none",
-      // ],
-    }),
-    []
-  );
+  // const disabledClient = installers
+  //   ?.filter(
+  //     (installer) =>
+  //       installer.status === "InActive" || installer.status === "OnWork"
+  //   )
+  //   .map((row) => row.installerId)
+  //   .toString();
 
   return (
     <div className="bg-gray-100 flex items-center justify-center">
       <div className="container mx-auto p-4 bg-white h-full">
-        <div className="overflow-x-auto overflow-y-hidden scrollbar-thin scrollbar-track-white scrollbar-thumb-slate-100">
+        <div className="overflow-x-auto overflow-y-hidden scrollbar-thin scrollbar-track-white scrollbar-thumb-orange-100">
           <div className=" min-w-full">
             <Table
+              aria-label="Installer Table"
+              // disabledKeys={disabledClient}
               isCompact
               removeWrapper
-              aria-label="Example table with custom cells, pagination and sorting"
               bottomContent={bottomContent}
               bottomContentPlacement="outside"
               checkboxesProps={{
@@ -454,15 +496,13 @@ const AdminUsersTable = () => {
                 },
               }}
               classNames={classNames}
-              // selectedKeys={selectedKeys}
+              selectedKeys={selectedKeys}
               selectionMode="single"
               sortDescriptor={sortDescriptor}
               topContent={topContent}
               topContentPlacement="outside"
               onSelectionChange={setSelectedKeys}
               onSortChange={setSortDescriptor}
-              disabledKeys={inactiveAdminIds}
-              className="min-w-max"
             >
               <TableHeader columns={headerColumns}>
                 {(column) => (
@@ -476,11 +516,10 @@ const AdminUsersTable = () => {
                 )}
               </TableHeader>
               <TableBody
-                emptyContent={"No users found"}
+                emptyContent={"No personnel found"}
                 items={items}
-                loadingContent={"Loading users..."}
+                loadingContent={"Loading personnel..."}
                 isLoading={isLoading}
-                aria-errormessage={error?.message}
               >
                 {(item) => (
                   <TableRow key={item.id}>
@@ -494,23 +533,18 @@ const AdminUsersTable = () => {
           </div>
         </div>
       </div>
-
-      <RegisterPersonnelUserModal
-        isOpen={isOpenNewAdmin}
-        onClose={onCloseNewAdmin}
-        refetch={refetch}
-        role="Admin"
-      />
-
-      <UserActionModal
-        isOpen={isOpenAction}
-        onClose={onCloseAction}
-        userId={userId}
-        email={userEmail}
+      {/* <InstallerActionModal
         action={action}
+        installerId={installerId}
+        installerName={installerName}
+        isOpen={actionIsOpen}
+        onClose={actionOnClose}
         refetch={refetch}
       />
+
+      <AddInstaller isOpen={addIsOpen} onClose={addOnClose} refetch={refetch} /> */}
     </div>
   );
 };
-export default AdminUsersTable;
+
+export default ClientTable;
