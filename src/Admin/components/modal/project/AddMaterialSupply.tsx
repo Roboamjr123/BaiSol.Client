@@ -20,6 +20,9 @@ import {
   SelectItem,
   Spinner,
 } from "@nextui-org/react";
+import { useAddProjectMaterialSupply } from "../../../../lib/API/Quote/QuotationAPI";
+import { toast } from "react-toastify";
+import { error } from "console";
 
 interface IAdd {
   projId: string;
@@ -39,11 +42,11 @@ const AddMaterialSupply: React.FC<IAdd> = ({
   const [availableQuantity, setAvailableQuantity] = useState<number>(0);
   const [category, setCategory] = useState<string>("");
   const [selectedMaterialCode, setSelectedMaterialCode] = useState<string>("");
-  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const { data: allMaterialCategories } = getMaterialCategory();
   const { data: availableMaterialsData, refetch: refetchMaterials } =
     getAvailableMaterials(projId, category);
+  const addProjectSupply = useAddProjectMaterialSupply();
 
   const availableMaterials = availableMaterialsData || [];
 
@@ -60,13 +63,16 @@ const AddMaterialSupply: React.FC<IAdd> = ({
     if (!isOpen) {
       setCategory("");
       setSelectedMaterialCode("");
+      setQuantity(0);
+      setAvailableQuantity(0);
+      refetchMaterials();
     }
-  }, []);
+  }, [isOpen, refetchMaterials]);
 
-  const handleMaterialChange = (value: string, qty: number) => {
-    setSelectedMaterialCode(value);
-    setAvailableQuantity(qty);
-  };
+  // const handleMaterialChange = (value: string, qty: number) => {
+  //   setSelectedMaterialCode(value);
+  //   setAvailableQuantity(qty);
+  // };
 
   const validateQtyNumber = (value: number | undefined) => {
     // Convert the value to string for validation
@@ -84,6 +90,37 @@ const AddMaterialSupply: React.FC<IAdd> = ({
     }
   };
 
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setCategory(e.target.value);
+  };
+
+  const handleAddNewMaerial = () => {
+    addProjectSupply.mutate(
+      {
+        mtlCode: selectedMaterialCode,
+        projId: projId,
+        mtlQuantity: quantity,
+      },
+      {
+        onSuccess: (data: any) => {
+          toast.success(data);
+          refetch();
+
+          setCategory("");
+          setSelectedMaterialCode("");
+          setQuantity(0);
+          setAvailableQuantity(0);
+
+          onClose();
+        },
+        onError: (error: any) => {
+          toast.error(error.response.data.message);
+          console.error("Something wrong with the Api: ", error);
+        },
+      }
+    );
+  };
+
   return (
     <Modal placement="center" isOpen={isOpen} onClose={onClose}>
       <ModalContent>
@@ -91,12 +128,17 @@ const AddMaterialSupply: React.FC<IAdd> = ({
           <span>Add New Material Supply</span>
         </ModalHeader>
         <ModalBody className="grid grid-cols-2 gap-5">
-          <Select label="Select category" size="sm">
+          <Select
+            label="Select category"
+            size="sm"
+            value={[category]}
+            onChange={handleCategoryChange}
+          >
             {allMaterialCategories && allMaterialCategories.length > 0 ? (
               allMaterialCategories.map((item) => (
                 <SelectItem
                   key={item.category}
-                  onClick={() => setCategory(item.category)}
+                  // onClick={() => setCategory(item.category)}
                 >
                   {item.category}
                 </SelectItem>
@@ -110,15 +152,25 @@ const AddMaterialSupply: React.FC<IAdd> = ({
           <Select
             label="Select Material"
             size="sm"
-            disabled={!availableMaterials}
+            disabled={!availableMaterials.length}
+            value={selectedMaterialCode}
+            onSelectionChange={(keys) => {
+              const value = Array.from(keys)[0]; // Extract the first selected key from the Set
+              const selectedMaterial = availableMaterials.find(
+                (material) => material.code === value
+              );
+              setSelectedMaterialCode(String(value) || "");
+              setAvailableQuantity(selectedMaterial?.quantity || 0);
+            }}
           >
             {availableMaterials.length > 0 ? (
               availableMaterials.map((material) => (
                 <SelectItem
                   key={material.code}
-                  onClick={() =>
-                    handleMaterialChange(material.code, material.quantity)
-                  }
+                  value={material.code}
+                  // onClick={() =>
+                  //   handleMaterialChange(material.code, material.quantity)
+                  // }
                 >
                   {material.description}
                 </SelectItem>
@@ -147,12 +199,27 @@ const AddMaterialSupply: React.FC<IAdd> = ({
             defaultValue={String(availableQuantity)}
             type="text"
             value={String(availableQuantity)}
+            color={availableQuantity < 1 ? "danger" : "default"}
             label="Available QOH"
             variant="flat"
             size="sm"
           />
         </ModalBody>
-        <ModalFooter></ModalFooter>
+        <ModalFooter>
+          <Button
+            onClick={() => handleAddNewMaerial()}
+            className="bg-orange-400 w-max m-auto text-white rounded-lg py-2 px-3 hover:bg-gray-200 hover:text-orange-500 transition-all duration-300 ease-in"
+            isLoading={addProjectSupply.isPending}
+            isDisabled={
+              isInvalidQuantity ||
+              quantity > availableQuantity ||
+              quantity <= 0 ||
+              !category
+            }
+          >
+            {addProjectSupply.isPending ? "Adding..." : "Add"}
+          </Button>
+        </ModalFooter>
       </ModalContent>
     </Modal>
   );

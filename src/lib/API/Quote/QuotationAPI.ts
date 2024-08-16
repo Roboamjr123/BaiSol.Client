@@ -127,3 +127,25 @@ export const useDeleteProjectMaterialSupply = () => {
   });
 };
 
+interface IAddMaterialSupply {
+  mtlQuantity: number;
+  mtlCode: string;
+  projId: string;
+}
+
+export const useAddProjectMaterialSupply = () => {
+  return useMutation({
+    mutationFn: async (formData: IAddMaterialSupply) => {
+      const response = await api.post(
+        "api/Quotation/Add-Material-Supply",
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      return response.data;
+    },
+  });
+};
