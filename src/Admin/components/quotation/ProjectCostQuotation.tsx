@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import {
   getProjectCostQuote,
   MaterialCost,
@@ -18,10 +18,12 @@ import {
 } from "@nextui-org/react";
 import { project_quotation_columns } from "../../../lib/utils/QuotationTable";
 import { useParams } from "react-router-dom";
-import { FaEdit, FaSave, FaTrashAlt } from "react-icons/fa";
+import { FaEdit, FaPlus, FaSave, FaTrashAlt } from "react-icons/fa";
 import { FaDeleteLeft } from "react-icons/fa6";
 import EditQuantityMaterialModal from "../modal/project/EditQuantityMaterialModal";
 import { toast } from "react-toastify";
+import { getMaterialQOH } from "../../../lib/API/MaterialAPI";
+import AddMaterialSupply from "../modal/project/AddMaterialSupply";
 
 const ProjectCostQuotation = () => {
   // Fetch `id` from URL params
@@ -31,6 +33,8 @@ const ProjectCostQuotation = () => {
   const [suppId, setSuppId] = useState<number>(0);
   const [description, setDescription] = useState<string>("");
   const { mutate: deleteMaterial } = useDeleteProjectMaterialSupply();
+
+  const { refetch: qohRefetch } = getMaterialQOH(mtlId);
 
   const {
     data: projectCost,
@@ -60,6 +64,7 @@ const ProjectCostQuotation = () => {
         {
           onSuccess: () => {
             refetch();
+            qohRefetch();
           },
         }
       );
@@ -70,6 +75,12 @@ const ProjectCostQuotation = () => {
     isOpen: mtlIsOpen,
     onOpen: mtlOnOpen,
     onClose: mtlOnClose,
+  } = useDisclosure();
+
+  const {
+    isOpen: addIsOpen,
+    onOpen: addOnOpen,
+    onClose: addOnClose,
   } = useDisclosure();
 
   const formatNumber = (number: number) => {
@@ -147,6 +158,22 @@ const ProjectCostQuotation = () => {
     [] // Dependency on editingCell state
   );
 
+  const topContent = useMemo(() => {
+    return (
+      <div className="flex w-full justify-between items-end">
+        <span className="tracking-wider font-semibold">Material Cost</span>
+        <Button
+          className="bg-orange-500 text-background"
+          endContent={<FaPlus />}
+          size="sm"
+          onClick={() => addOnOpen()}
+        >
+          Add Material Supply
+        </Button>
+      </div>
+    );
+  }, []);
+
   return (
     <div className="bg-gray-100 flex items-center justify-center">
       <div className="container mx-auto p-4 bg-white h-full">
@@ -159,6 +186,8 @@ const ProjectCostQuotation = () => {
                 removeWrapper
                 selectionMode="single"
                 isHeaderSticky
+                topContent={topContent}
+                topContentPlacement="outside"
               >
                 <TableHeader columns={project_quotation_columns}>
                   {(column) => (
@@ -191,6 +220,12 @@ const ProjectCostQuotation = () => {
               prevQty={mtlQuantity!}
               isOpen={mtlIsOpen}
               onClose={mtlOnClose}
+            />
+            <AddMaterialSupply
+              isOpen={addIsOpen}
+              onClose={addOnClose}
+              projId={projId!}
+              refetch={refetch}
             />
           </div>
         </div>

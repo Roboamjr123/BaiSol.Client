@@ -482,8 +482,6 @@ const PersonnelTable: React.FC<UserProps> = ({ role }) => {
       <div className="container mx-auto p-4 bg-white h-full">
         <div className="overflow-x-auto overflow-y-hidden scrollbar-thin scrollbar-track-white scrollbar-thumb-orange-100">
           <div className=" min-w-full">
-            <span>Material Cost</span>
-
             <Table
               aria-label="Admins and Facilitators Table"
               isCompact

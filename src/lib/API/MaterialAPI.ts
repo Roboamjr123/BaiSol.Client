@@ -14,9 +14,12 @@ export const getMaterialQOH = (mtlId: number) => {
   });
 };
 
+interface Category {
+  category: string;
+}
 // Get all material categories
 export const getMaterialCategory = () => {
-  return useQuery<{ category: string }, Error>({
+  return useQuery<Category[], Error>({
     queryKey: ["material-category"],
     queryFn: async () => {
       const response = await api.get(`material/Material/Get-Categories`);
@@ -25,7 +28,7 @@ export const getMaterialCategory = () => {
   });
 };
 
-interface AvailMaterials {
+export interface AvailMaterials {
   mtlId: number;
   code: string;
   description: string;
@@ -45,5 +48,6 @@ export const getAvailableMaterials = (projId: string, category: string) => {
       );
       return response.data;
     },
+    enabled: !!projId && !!category,
   });
 };

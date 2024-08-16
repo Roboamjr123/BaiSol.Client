@@ -9,6 +9,7 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
+  Spinner,
 } from "@nextui-org/react";
 import { FaSave } from "react-icons/fa";
 import { getMaterialQOH } from "../../../../lib/API/MaterialAPI";
@@ -34,20 +35,35 @@ const EditQuantityMaterialModal: React.FC<IEdit> = ({
 }) => {
   const [quantity, setQuantity] = useState<number>(prevQty!);
   const [qoh, setQoh] = useState<number>();
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const updateMaterial = updateProjectMaterialSupply();
 
-  const { data: materialQoh, isSuccess } = getMaterialQOH(mtlId);
+  const {
+    data: materialQoh,
+    isSuccess,
+    isLoading,
+    refetch: qohRefetch,
+  } = getMaterialQOH(mtlId);
 
   useEffect(() => {
     // Reset quantity when modal opens and prevQty changes
     if (isOpen) {
+      // Set the quantity immediately
+      qohRefetch();
       setQuantity(prevQty);
     }
-
-    if (isSuccess) {
-      setQoh(materialQoh.qoh);
-    }
   }, [isOpen, prevQty, materialQoh, isSuccess]);
+
+  useEffect(() => {
+    if (isOpen && isSuccess && !isLoading) {
+      // Once QOH data is successfully fetched, update QOH and show the modal
+      setQoh(materialQoh.qoh);
+      setIsModalVisible(true);
+    } else if (!isOpen) {
+      // Close the modal
+      setIsModalVisible(false);
+    }
+  }, [isOpen, isSuccess, isLoading, materialQoh]);
 
   const handleUpdateClick = async () => {
     const data = {
@@ -66,7 +82,9 @@ const EditQuantityMaterialModal: React.FC<IEdit> = ({
       onSuccess: (data) => {
         toast.success(data);
         refetch();
+        qohRefetch();
         onClose();
+        setIsModalVisible(false); // Close modal after success
       },
       onError: (errM: any) => {
         toast.error(errM.response.data);
@@ -92,7 +110,7 @@ const EditQuantityMaterialModal: React.FC<IEdit> = ({
   }, [quantity]);
 
   return (
-    <Modal size="xs" isOpen={isOpen} onClose={onClose}>
+    <Modal size="xs" isOpen={isModalVisible} onClose={onClose}>
       <ModalContent>
         <ModalHeader>
           <span className="text-small text-gray-600">
@@ -116,10 +134,10 @@ const EditQuantityMaterialModal: React.FC<IEdit> = ({
             maxLength={9}
           />
           <Input
-            isDisabled
+            isReadOnly
             defaultValue={String(qoh)}
             type="text"
-            label="QOH"
+            label="Available QOH"
             variant="flat"
             size="sm"
           />
@@ -129,7 +147,9 @@ const EditQuantityMaterialModal: React.FC<IEdit> = ({
             <Button
               className="bg-orange-400 w-max m-auto text-white rounded-lg py-2 px-3 hover:bg-gray-200 hover:text-orange-500 transition-all duration-300 ease-in"
               endContent={<FaSave className="text-small" />}
-              isDisabled={isInvalidQuantity || quantity === 0}
+              isDisabled={
+                isInvalidQuantity || quantity === 0 || quantity === prevQty
+              }
               isLoading={updateMaterial.isPending}
               onClick={() => handleUpdateClick()}
             >
