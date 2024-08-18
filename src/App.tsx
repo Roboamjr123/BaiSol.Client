@@ -19,6 +19,7 @@ import ProjectPage from "./Admin/pages/ProjectPage";
 import ProjectCostQuotation from "./Admin/components/quotation/ProjectCostQuotation";
 import SampleTable from "./Admin/components/quotation/sample";
 import ProjectAndMaterialsCostQuotation from "./Admin/components/quotation/ProjectAndMaterialsCostQuotation";
+import QuotationPage from "./Admin/pages/QuotationPage";
 
 const queryClient = new QueryClient({});
 
@@ -46,10 +47,7 @@ function App() {
           <Route path="/" index element={<Home />}></Route>
           <Route path="Confirm-Email" element={<ConfirmEmail />} />
           <Route path="project" element={<ProjectPage />} />
-          <Route
-            path="project/:projId"
-            element={<ProjectAndMaterialsCostQuotation />}
-          />
+          <Route path="project/:projId" element={<QuotationPage />} />
           <Route path="personnel" element={<Personnel />}></Route>
           <Route path="clients" element={<ClientPage />} />
         </Routes>

@@ -51,7 +51,7 @@ export const getProjectCostQuote = (projectId: string) => {
   });
 };
 
-interface LaborCost {
+export interface LaborCost {
   laborId: string;
   description: string;
   quantity: number;
@@ -70,7 +70,7 @@ interface TotalLaborCost {
 // Get all installers
 export const getLaborCostQuote = (projectId: string) => {
   return useQuery<
-    { LaborCost: LaborCost[]; TotalLaborCost: TotalLaborCost },
+    { laborCost: LaborCost[]; totalLaborCost: TotalLaborCost },
     Error
   >({
     queryKey: ["labor-cost-quote", projectId],

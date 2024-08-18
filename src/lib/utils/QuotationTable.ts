@@ -9,6 +9,7 @@ export const project_quotation_columns = [
   { uid: "ssad", name: "" },
   { uid: "action", name: "Action" },
 ];
+
 export const project_quotation_and_materials_columns = [
   { name: "ITEM NO." },
   { name: "Description" },
@@ -18,6 +19,17 @@ export const project_quotation_and_materials_columns = [
   { name: "Total Cost" },
   { name: "Build Up Cost" },
   { name: "Itemized Cost" },
+  { name: "Action" },
+];
+
+export const labor_columns = [
+  { name: "Item No." },
+  { name: "Description" },
+  { name: "Quantity" },
+  { name: "Unit" },
+  { name: "Unit Cost" },
+  { name: "No. of Units" },
+  { name: "Total Cost" },
   { name: "Action" },
 ];
 

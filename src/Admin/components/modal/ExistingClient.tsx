@@ -11,6 +11,8 @@ import {
   DropdownMenu,
   DropdownItem,
   ModalFooter,
+  Select,
+  SelectItem,
 } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
 import { MdEmail } from "react-icons/md";
@@ -71,6 +73,10 @@ const ExistingClient = ({
     });
   };
 
+  const handleClientIdChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setClientId(e.target.value);
+  };
+
   return (
     <Modal backdrop="blur" isOpen={isOpen} onClose={onClose}>
       <ModalContent>
@@ -82,32 +88,26 @@ const ExistingClient = ({
             </div>
           </ModalHeader>
           <ModalBody>
-            <Dropdown>
-              <DropdownTrigger className="flex">
-                <Button
-                  className="bg-orange-400 text-background h-full w-[50%]"
-                  endContent={<MdEmail className="text-small" />}
-                  size="lg"
-                >
-                  Client Email
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu
-                aria-label="select client"
-                selectionMode="single"
-                variant="shadow"
-                emptyContent="No available clients yet :("
-              >
-                {availableClients?.map((client) => (
-                  <DropdownItem
-                    onClick={() => setClientId(client.clientId)}
-                    key={client.clientId}
-                  >
+            <Select
+              placeholder="Select Client"
+              aria-label="select client"
+              size="lg"
+              className={"text-orange-400 h-full w-[50%]"}
+              onChange={handleClientIdChange}
+              endContent={<MdEmail className="text-lg text-orange-400" />}
+            >
+              {availableClients.length ? (
+                availableClients.map((client) => (
+                  <SelectItem key={client.clientId} value={client.clientId}>
                     {client.clientEmail}
-                  </DropdownItem>
-                ))}
-              </DropdownMenu>
-            </Dropdown>
+                  </SelectItem>
+                ))
+              ) : (
+                <SelectItem key="" isDisabled>
+                  No available clients yet :(
+                </SelectItem>
+              )}
+            </Select>
             <Input
               isRequired
               value={projectName}

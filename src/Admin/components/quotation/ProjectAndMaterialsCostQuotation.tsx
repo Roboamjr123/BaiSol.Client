@@ -11,6 +11,7 @@ import EditQuantityMaterialModal from "../modal/project/EditQuantityMaterialModa
 import AddMaterialSupply from "../modal/project/AddMaterialSupply";
 import { Button, Spinner, useDisclosure } from "@nextui-org/react";
 import { FaEdit, FaPlus, FaTrashAlt } from "react-icons/fa";
+import { formatNumber } from "../../../lib/utils/utils";
 
 const ProjectAndMaterialsCostQuotation = () => {
   // Fetch `id` from URL params
@@ -90,16 +91,6 @@ const ProjectAndMaterialsCostQuotation = () => {
     onClose: addOnClose,
   } = useDisclosure();
 
-  const formatNumber = (number: number) => {
-    // Create an instance of Intl.NumberFormat for the desired format
-    const formatter = new Intl.NumberFormat("en-US", {
-      minimumFractionDigits: 1,
-      maximumFractionDigits: 1,
-      useGrouping: true,
-    });
-
-    return formatter.format(number);
-  };
 
   return (
     <div className="bg-gray-100 flex items-center justify-center">
@@ -112,6 +103,7 @@ const ProjectAndMaterialsCostQuotation = () => {
                   Material Cost
                 </span>
                 <Button
+                  isLoading={isLoading}
                   className="bg-orange-500 text-background"
                   endContent={<FaPlus />}
                   size="sm"
@@ -122,7 +114,7 @@ const ProjectAndMaterialsCostQuotation = () => {
               </div>
               <table className="w-full rounded-lg text-left text-gray-700">
                 <thead className="text-sm text-gray-700 bg-gray-50">
-                  <tr className="border-b">
+                  <tr className="border-b border-gray-400">
                     {project_quotation_and_materials_columns.map((item) => (
                       <th scope="col" className="text-center px-4 py-3">
                         {item.name}
@@ -241,25 +233,27 @@ const ProjectAndMaterialsCostQuotation = () => {
                           </td>
                         </tr>
                       )}
-                      {totalCostItems.map((item, index) => (
-                        <tr className="bg-gray-200" key={index}>
-                          <td
-                            colSpan={5}
-                            className="font-semibold text-sm text-end"
-                          >
-                            {item.label}:
-                          </td>
-                          <td
-                            colSpan={1}
-                            className="font-bold tracking-wide text-xs pl-3 text-start"
-                          >
-                            {/* Conditionally format the value */}
-                            {typeof item.value === "number"
-                              ? `₱ ${formatNumber(item.value)}`
-                              : item.value}
-                          </td>
-                        </tr>
-                      ))}
+                      {projectCost?.materialAndCategoryCostList?.length
+                        ? totalCostItems.map((item, index) => (
+                            <tr className="bg-gray-200" key={index}>
+                              <td
+                                colSpan={5}
+                                className="font-semibold text-sm text-end"
+                              >
+                                {item.label}:
+                              </td>
+                              <td
+                                colSpan={1}
+                                className="font-bold tracking-wide text-xs pl-3 text-start"
+                              >
+                                {/* Conditionally format the value */}
+                                {typeof item.value === "number"
+                                  ? `₱ ${formatNumber(item.value)}`
+                                  : item.value}
+                              </td>
+                            </tr>
+                          ))
+                        : null}
                     </>
                   )}
                 </tbody>

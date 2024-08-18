@@ -1,9 +1,11 @@
-import ProjectCostQuotation from "../components/quotation/ProjectCostQuotation";
+import LaborCostQuotation from "../components/quotation/LaborCostQuotation";
+import ProjectAndMaterialsCostQuotation from "../components/quotation/ProjectAndMaterialsCostQuotation";
 
 const QuotationPage = () => {
   return (
-    <div>
-      <ProjectCostQuotation />
+    <div className="flex flex-col gap-5">
+      <ProjectAndMaterialsCostQuotation />
+      <LaborCostQuotation />
     </div>
   );
 };

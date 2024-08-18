@@ -36,6 +36,7 @@ const NewClient = ({
   const [projectName, setProjectName] = useState<string>();
   const [description, setDescription] = useState<string>();
   const [showPassword, setShowPassword] = useState(false);
+  
   const addNewProject = useAddNewProjectNewClient();
 
   useEffect(() => {
