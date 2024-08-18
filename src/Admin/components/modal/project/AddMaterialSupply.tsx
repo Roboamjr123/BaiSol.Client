@@ -212,7 +212,6 @@ const AddMaterialSupply: React.FC<IAdd> = ({
             isLoading={addProjectSupply.isPending}
             isDisabled={
               isInvalidQuantity ||
-              quantity > availableQuantity ||
               quantity <= 0 ||
               !category
             }

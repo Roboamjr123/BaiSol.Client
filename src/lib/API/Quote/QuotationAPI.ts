@@ -11,6 +11,12 @@ interface ProjectCost {
   totalProjectCost: number;
 }
 
+interface CategoryCost {
+  category: string;
+  totalCategory: number;
+  totalExpense: number;
+}
+
 export interface MaterialCost {
   suppId: number;
   mtlId: number;
@@ -28,7 +34,11 @@ export interface MaterialCost {
 // Get all installers
 export const getProjectCostQuote = (projectId: string) => {
   return useQuery<
-    { materialCostList: MaterialCost[]; totalProjectCostList: ProjectCost },
+    {
+      materialCostList: MaterialCost[];
+      categoryCostList: CategoryCost[];
+      totalProjectCostList: ProjectCost;
+    },
     Error
   >({
     queryKey: ["project-cost-quote", projectId],
@@ -68,6 +78,49 @@ export const getLaborCostQuote = (projectId: string) => {
       const response = await api.get(`api/Quotation/Get-Labor-Cost`, {
         params: { projectId }, // Using params for cleaner query string
       });
+      return response.data;
+    },
+  });
+};
+
+export interface ICategoryCost {
+  category: string;
+  totalCategory: number;
+  totalExpense: number;
+  materialCostDtos: IMaterialCost[];
+}
+
+export interface IMaterialCost {
+  suppId: number;
+  mtlId: number;
+  description: string;
+  quantity: number;
+  unit: string;
+  category: string;
+  unitCost: number;
+  totalUnitCost: number;
+  buildUpCost: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// Get all installers
+export const getProjectAndMaterialsCostQuote = (projectId: string) => {
+  return useQuery<
+    {
+      materialAndCategoryCostList: ICategoryCost[];
+      totalProjectCostList: ProjectCost;
+    },
+    Error
+  >({
+    queryKey: ["project-cost-and-material-quote", projectId],
+    queryFn: async () => {
+      const response = await api.get(
+        `api/Quotation/Get-Project-Material-Cost`,
+        {
+          params: { projectId }, // Using params for cleaner query string
+        }
+      );
       return response.data;
     },
   });
