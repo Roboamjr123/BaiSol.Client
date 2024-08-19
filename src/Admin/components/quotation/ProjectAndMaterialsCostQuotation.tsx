@@ -144,13 +144,13 @@ const ProjectAndMaterialsCostQuotation = () => {
                                 className="border-b text-sm hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap"
                                 key={material.suppId}
                               >
-                                <td className="border-b hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                <td className="border-b text-center hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap">
                                   {currentItemNo}
                                 </td>
                                 <td className="border-b hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap">
                                   {material.description}
                                 </td>
-                                <td className="border-b hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                <td className="border-b text-center hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap">
                                   {material.quantity}
                                 </td>
                                 <td className="border-b hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap">

@@ -7,6 +7,7 @@ import {
 import { Button, Spinner } from "@nextui-org/react";
 import { FaEdit, FaPlus, FaTrashAlt } from "react-icons/fa";
 import { labor_columns } from "../../../lib/utils/QuotationTable";
+import { formatNumber } from "../../../lib/utils/utils";
 
 const LaborCostQuotation = () => {
   const { projId } = useParams<{ projId: string }>();
@@ -36,28 +37,40 @@ const LaborCostQuotation = () => {
     "Tools & Equipment",
   ];
   const lastCategory = "Other Incidental Costs";
-
-  // Define the structure for the accumulator
-  type SortedCosts = {
-    predefined: LaborCost[];
-    new: LaborCost[];
-    last: LaborCost[];
-  };
-
-  // Sort the items in one loop
-  const sortedCosts = laborCost?.laborCost?.reduce<SortedCosts>(
+  
+  // Sort the items in one loop and find missing categories
+  const sortedCosts = laborCost?.laborCost?.reduce(
     (acc, labor) => {
-      if (predefinedCategories.includes(labor.description)) {
-        acc.predefined.push(labor);
-      } else if (labor.description === lastCategory) {
+      const { description } = labor;
+  
+      // Check for the last category first
+      if (description === lastCategory) {
         acc.last.push(labor);
-      } else {
+      }
+      // Then check for predefined categories
+      else if (predefinedCategories.includes(description)) {
+        acc.predefined.push(labor);
+        acc.existingCategories.add(description);
+      } 
+      // Otherwise, categorize as new
+      else {
         acc.new.push(labor);
       }
+  
       return acc;
     },
-    { predefined: [], new: [], last: [] }
-  ) || { predefined: [], new: [], last: [] };
+    {
+      predefined: [] as LaborCost[],
+      new: [] as LaborCost[],
+      last: [] as LaborCost[],
+      existingCategories: new Set<string>(),
+    }
+  ) || { predefined: [], new: [], last: [], existingCategories: new Set<string>() };
+  
+  // Find missing predefined categories
+  const missingCategories = [...predefinedCategories, lastCategory].filter(
+    category => !sortedCosts.existingCategories.has(category)
+  );
 
   return (
     <div className="bg-gray-100 flex items-center justify-center">
@@ -110,26 +123,26 @@ const LaborCostQuotation = () => {
                                 key={labor.laborId}
                                 className="border-b text-sm hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap"
                               >
-                                <td className="border-b hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                <td className="border-b text-center hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap">
                                   {index + 1}
                                 </td>
                                 <td className="border-b hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap">
                                   {labor.description}
                                 </td>
-                                <td className="border-b hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                <td className="border-b text-center hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap">
                                   {labor.quantity}
                                 </td>
                                 <td className="border-b hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap">
                                   {labor.unit}
                                 </td>
                                 <td className="border-b hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap">
-                                  {labor.unitCost}
+                                  ₱ {formatNumber(labor.unitCost)}
                                 </td>
-                                <td className="border-b hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                <td className="border-b text-center hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap">
                                   {labor.unitNum}
                                 </td>
                                 <td className="border-b hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap">
-                                  {labor.totalCost}
+                                  ₱ {formatNumber(labor.totalCost)}
                                 </td>
                                 <td className="border-b hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap">
                                   <div className="flex flex-row justify-center">
@@ -181,6 +194,26 @@ const LaborCostQuotation = () => {
                       )}
                     </>
                   )}
+                  {laborCost?.laborCost?.length
+                    ? totalLaborCost.map((labor, index) => (
+                        <tr className="bg-gray-200" key={index}>
+                          <td
+                            colSpan={6}
+                            className="font-semibold text-sm text-end"
+                          >
+                            {labor.label}
+                          </td>
+                          <td
+                            colSpan={1}
+                            className="font-bold tracking-wide text-xs pl-3 text-start"
+                          >
+                            {typeof labor.value === "number"
+                              ? `₱ ${formatNumber(labor.value)}`
+                              : labor.value}
+                          </td>
+                        </tr>
+                      ))
+                    : null}
                 </tbody>
               </table>
             </div>
