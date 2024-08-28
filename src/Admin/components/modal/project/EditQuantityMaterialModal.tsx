@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { updateProjectMaterialSupply } from "../../../../lib/API/Quote/QuotationAPI";
+import { updateProjectMaterialSupply } from "../../../../lib/API/Quote/ProjectQuotationAPI";
 import { toast } from "react-toastify";
 import {
   Button,
@@ -115,7 +115,7 @@ const EditQuantityMaterialModal: React.FC<IEdit> = ({
         <ModalHeader>
           <span className="text-small text-gray-600">
             Edit quantity of{" "}
-            <span className="text-gray-800 text-base font-semibold">
+            <span className="text-orange-400 text-base font-semibold">
               {mtlDescription}
             </span>
           </span>

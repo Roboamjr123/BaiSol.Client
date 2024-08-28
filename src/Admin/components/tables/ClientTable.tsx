@@ -136,11 +136,11 @@ const ClientTable = () => {
   const [clientName, setclientName] = useState<string>("");
   const [action, setAction] = useState<string>("");
 
-  const {
-    isOpen: addIsOpen,
-    onOpen: addOnOpen,
-    onClose: addOnClose,
-  } = useDisclosure();
+  // const {
+  //   isOpen: addIsOpen,
+  //   onOpen: addOnOpen,
+  //   onClose: addOnClose,
+  // } = useDisclosure();
 
   const handleDropdownActionItemClick = (
     clientId: string,
@@ -336,7 +336,7 @@ const ClientTable = () => {
           />
           <div className="flex gap-3">
             <Dropdown>
-              <DropdownTrigger className="hidden sm:flex">
+              <DropdownTrigger className=" sm:flex">
                 <Button
                   endContent={<FaChevronDown className="text-small" />}
                   size="sm"
@@ -361,7 +361,7 @@ const ClientTable = () => {
               </DropdownMenu>
             </Dropdown>
             <Dropdown>
-              <DropdownTrigger className="hidden sm:flex">
+              <DropdownTrigger className=" sm:flex">
                 <Button
                   endContent={<FaChevronDown className="text-small" />}
                   size="sm"
@@ -385,14 +385,14 @@ const ClientTable = () => {
                 ))}
               </DropdownMenu>
             </Dropdown>
-            <Button
+            {/* <Button
               className="bg-orange-500 text-background"
               endContent={<FaPlus />}
               size="sm"
               onClick={() => addOnOpen()}
             >
               Add New
-            </Button>
+            </Button> */}
           </div>
         </div>
         <div className="flex justify-between items-center">

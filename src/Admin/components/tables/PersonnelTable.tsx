@@ -18,6 +18,7 @@ import {
   SortDescriptor,
   cn,
   useDisclosure,
+  Spinner,
 } from "@nextui-org/react";
 import { BiDotsVertical } from "react-icons/bi";
 import { CiSearch } from "react-icons/ci";
@@ -55,6 +56,10 @@ const PersonnelTable: React.FC<UserProps> = ({ role }) => {
     refetch,
   } = getAllPersonnelUsers(role);
   const userLength = personnelUsers ? personnelUsers.length : 0;
+  // Filter to get the length of admin users who are not "InActive"
+  const adminUsersNotInActive = personnelUsers?.filter(
+    (user) => user.role === "Admin" && user.status !== "InActive"
+  );
   const columns = role === "Admin" ? admin_columns : facilitator_columns;
 
   const [filterValue, setFilterValue] = useState("");
@@ -264,7 +269,9 @@ const PersonnelTable: React.FC<UserProps> = ({ role }) => {
                   ) : (
                     <DropdownItem className="hidden"></DropdownItem>
                   )}
-                  {user.status !== "InActive" ? (
+                  {user.status !== "InActive" &&
+                  (role !== "Admin" ||
+                    (role === "Admin" && (adminUsersNotInActive?.length || 0) > 1)) ? (
                     <DropdownItem
                       onClick={() =>
                         handleDropdownActionItemClick(
@@ -295,7 +302,7 @@ const PersonnelTable: React.FC<UserProps> = ({ role }) => {
           return cellValue;
       }
     },
-    []
+    [userLength]
   );
 
   const onRowsPerPageChange = useCallback(
@@ -518,7 +525,9 @@ const PersonnelTable: React.FC<UserProps> = ({ role }) => {
               <TableBody
                 emptyContent={"No personnel found"}
                 items={items}
-                loadingContent={"Loading personnel..."}
+                loadingContent={
+                  <Spinner color="warning">Loading {role}...</Spinner>
+                }
                 isLoading={isLoading}
               >
                 {(item) => (

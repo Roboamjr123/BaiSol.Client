@@ -3,7 +3,7 @@ import {
   getProjectAndMaterialsCostQuote,
   getProjectCostQuote,
   useDeleteProjectMaterialSupply,
-} from "../../../lib/API/Quote/QuotationAPI";
+} from "../../../lib/API/Quote/ProjectQuotationAPI";
 import { useParams } from "react-router-dom";
 import { getMaterialQOH } from "../../../lib/API/MaterialAPI";
 import { project_quotation_and_materials_columns } from "../../../lib/utils/QuotationTable";
@@ -13,9 +13,21 @@ import { Button, Spinner, useDisclosure } from "@nextui-org/react";
 import { FaEdit, FaPlus, FaTrashAlt } from "react-icons/fa";
 import { formatNumber } from "../../../lib/utils/utils";
 
-const ProjectAndMaterialsCostQuotation = () => {
+interface IProjectAndMAterial {
+  projId: string;
+  projectCost: any;
+  refetch: () => void;
+  isLoading: boolean;
+}
+
+const ProjectAndMaterialsCostQuotation: React.FC<IProjectAndMAterial> = ({
+  projId,
+  projectCost,
+  refetch,
+  isLoading,
+}) => {
   // Fetch `id` from URL params
-  const { projId } = useParams<{ projId: string }>();
+  // const { projId } = useParams<{ projId: string }>();
   const [mtlQuantity, setMtlQuantity] = useState<number>(0);
   const [mtlId, setMtlId] = useState<number>(0);
   const [suppId, setSuppId] = useState<number>(0);
@@ -24,11 +36,11 @@ const ProjectAndMaterialsCostQuotation = () => {
 
   const { mutate: deleteMaterial } = useDeleteProjectMaterialSupply();
   const { refetch: qohRefetch } = getMaterialQOH(mtlId);
-  const {
-    data: projectCost,
-    refetch,
-    isLoading,
-  } = getProjectAndMaterialsCostQuote(projId!);
+  // const {
+  //   data: projectCost,
+  //   refetch,
+  //   isLoading,
+  // } = getProjectAndMaterialsCostQuote(projId!);
 
   const totalCostItems = [
     {
@@ -91,7 +103,6 @@ const ProjectAndMaterialsCostQuotation = () => {
     onClose: addOnClose,
   } = useDisclosure();
 
-
   return (
     <div className="bg-gray-100 flex items-center justify-center">
       <div className="container mx-auto p-4 bg-white h-full">
@@ -134,92 +145,95 @@ const ProjectAndMaterialsCostQuotation = () => {
                   ) : (
                     <>
                       {projectCost?.materialAndCategoryCostList?.length ? (
-                        projectCost.materialAndCategoryCostList.map((ctgry) =>
-                          ctgry.materialCostDtos.map((material, index) => {
-                            const currentItemNo = itemNo; // Store the current itemNo
-                            itemNo++; // Increment itemNo
+                        projectCost.materialAndCategoryCostList.map(
+                          (ctgry: any) =>
+                            ctgry.materialCostDtos.map(
+                              (material: any, index: any) => {
+                                const currentItemNo = itemNo; // Store the current itemNo
+                                itemNo++; // Increment itemNo
 
-                            return (
-                              <tr
-                                className="border-b text-sm hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap"
-                                key={material.suppId}
-                              >
-                                <td className="border-b text-center hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap">
-                                  {currentItemNo}
-                                </td>
-                                <td className="border-b hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap">
-                                  {material.description}
-                                </td>
-                                <td className="border-b text-center hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap">
-                                  {material.quantity}
-                                </td>
-                                <td className="border-b hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap">
-                                  {material.unit}
-                                </td>
-                                <td className="border-b hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap">
-                                  ₱ {formatNumber(material.unitCost)}
-                                </td>
-                                <td className="border-b hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap">
-                                  ₱ {formatNumber(material.totalUnitCost)}
-                                </td>
-                                <td className="border-b hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap">
-                                  ₱ {formatNumber(material.buildUpCost)}
-                                </td>
-
-                                {index === 0 && (
-                                  <td
-                                    className="text-center border-b border-gray-400 bg-gray-200 px-4 py-1 font-medium text-gray-900 whitespace-nowrap h-full"
-                                    rowSpan={ctgry.totalCategory}
+                                return (
+                                  <tr
+                                    className="border-b text-sm hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap"
+                                    key={material.suppId}
                                   >
-                                    <div className="flex flex-col justify-between h-full">
-                                      <span className="text-lg font-bold">
-                                        {ctgry.category}
-                                      </span>
-                                      <br />
-                                      <span className="font-semibold tracking-widest">
-                                        ₱ {formatNumber(ctgry.totalExpense)}
-                                      </span>
-                                    </div>
-                                  </td>
-                                )}
-                                <td className="border-b hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap">
-                                  <div className="flex flex-row justify-center">
-                                    <Button
-                                      variant="light"
-                                      onClick={() =>
-                                        handleEditQuantityClick(
-                                          material.quantity,
-                                          material.mtlId,
-                                          material.suppId,
-                                          material.description
-                                        )
-                                      }
-                                    >
-                                      <FaEdit
-                                        size={20}
-                                        className="text-primary-500"
-                                      />
-                                    </Button>
+                                    <td className="border-b text-center hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                      {currentItemNo}
+                                    </td>
+                                    <td className="border-b hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                      {material.description}
+                                    </td>
+                                    <td className="border-b text-center hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                      {material.quantity}
+                                    </td>
+                                    <td className="border-b hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                      {material.unit}
+                                    </td>
+                                    <td className="border-b hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                      ₱ {formatNumber(material.unitCost)}
+                                    </td>
+                                    <td className="border-b hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                      ₱ {formatNumber(material.totalUnitCost)}
+                                    </td>
+                                    <td className="border-b hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                      ₱ {formatNumber(material.buildUpCost)}
+                                    </td>
 
-                                    <Button
-                                      variant="light"
-                                      onClick={() =>
-                                        handleDeleteItem(
-                                          material.mtlId,
-                                          material.suppId
-                                        )
-                                      }
-                                    >
-                                      <FaTrashAlt
-                                        size={20}
-                                        className="text-danger-500"
-                                      />
-                                    </Button>
-                                  </div>
-                                </td>
-                              </tr>
-                            );
-                          })
+                                    {index === 0 && (
+                                      <td
+                                        className="text-center border-b border-gray-400 bg-gray-200 px-4 py-1 font-medium text-gray-900 whitespace-nowrap h-full"
+                                        rowSpan={ctgry.totalCategory}
+                                      >
+                                        <div className="flex flex-col justify-between h-full">
+                                          <span className="text-lg font-bold">
+                                            {ctgry.category}
+                                          </span>
+                                          <br />
+                                          <span className="font-semibold tracking-widest">
+                                            ₱ {formatNumber(ctgry.totalExpense)}
+                                          </span>
+                                        </div>
+                                      </td>
+                                    )}
+                                    <td className="border-b hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                      <div className="flex flex-row justify-center">
+                                        <Button
+                                          variant="light"
+                                          onClick={() =>
+                                            handleEditQuantityClick(
+                                              material.quantity,
+                                              material.mtlId,
+                                              material.suppId,
+                                              material.description
+                                            )
+                                          }
+                                        >
+                                          <FaEdit
+                                            size={20}
+                                            className="text-primary-500"
+                                          />
+                                        </Button>
+
+                                        <Button
+                                          variant="light"
+                                          onClick={() =>
+                                            handleDeleteItem(
+                                              material.mtlId,
+                                              material.suppId
+                                            )
+                                          }
+                                        >
+                                          <FaTrashAlt
+                                            size={20}
+                                            className="text-danger-500"
+                                          />
+                                        </Button>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                );
+                              }
+                            )
                         )
                       ) : (
                         <tr>

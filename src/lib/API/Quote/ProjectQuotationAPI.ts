@@ -51,38 +51,6 @@ export const getProjectCostQuote = (projectId: string) => {
   });
 };
 
-export interface LaborCost {
-  laborId: string;
-  description: string;
-  quantity: number;
-  unit: string;
-  unitCost: number;
-  unitNum: number;
-  totalCost: number;
-}
-
-interface TotalLaborCost {
-  totalCost: number;
-  profit: number;
-  overallLaborProjectTotal: number;
-}
-
-// Get all installers
-export const getLaborCostQuote = (projectId: string) => {
-  return useQuery<
-    { laborCost: LaborCost[]; totalLaborCost: TotalLaborCost },
-    Error
-  >({
-    queryKey: ["labor-cost-quote", projectId],
-    queryFn: async () => {
-      const response = await api.get(`api/Quotation/Get-Labor-Cost`, {
-        params: { projectId }, // Using params for cleaner query string
-      });
-      return response.data;
-    },
-  });
-};
-
 export interface ICategoryCost {
   category: string;
   totalCategory: number;

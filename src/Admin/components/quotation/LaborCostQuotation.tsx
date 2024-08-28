@@ -1,26 +1,51 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
-import {
-  getLaborCostQuote,
-  LaborCost,
-} from "../../../lib/API/Quote/QuotationAPI";
-import { Button, Spinner } from "@nextui-org/react";
+
+import { Button, Spinner, useDisclosure } from "@nextui-org/react";
 import { FaEdit, FaPlus, FaTrashAlt } from "react-icons/fa";
 import { labor_columns } from "../../../lib/utils/QuotationTable";
 import { formatNumber } from "../../../lib/utils/utils";
+import {
+  LaborCost,
+  useDeleteLaborCost,
+} from "../../../lib/API/Quote/LaborQuotationAPI";
+import AddLaborCost from "../modal/project/AddLaborCost";
+import EditLaborCost from "../modal/project/EditLaborCost";
+import { MdFormatListBulletedAdd } from "react-icons/md";
 
-const LaborCostQuotation = () => {
-  const { projId } = useParams<{ projId: string }>();
+interface ILaborCost {
+  projId: string;
+  laborCost: any;
+  refetch: () => void;
+  refetchPAM: () => void;
+  isLoading: boolean;
+}
+
+const defaultLabor: LaborCost = {
+  laborId: 0,
+  description: "",
+  quantity: 0,
+  unit: "",
+  unitCost: 0,
+  unitNum: 0,
+  totalCost: 0,
+};
+
+const LaborCostQuotation: React.FC<ILaborCost> = ({
+  projId,
+  laborCost,
+  refetch,
+  refetchPAM,
+  isLoading,
+}) => {
   const [description, setDescription] = useState<string>("");
-  const [unit, setUnit] = useState<string>("");
-  const [mtlQuantity, setMtlQuantity] = useState<number>(0);
-  const [unitCost, setUnitCost] = useState<number>(0);
-  const [unitNum, setUnitNum] = useState<number>(0);
-  let itemNo = 1;
+  const [selectedLabor, setSelectedLAbor] = useState<LaborCost>(defaultLabor);
 
-  const { data: laborCost, isLoading } = getLaborCostQuote(projId!);
+  const [isPredefinedAndLastCategory, setIsPredefinedAndLastCategory] =
+    useState<boolean>(false);
 
-  const totalLaborCost = [
+  const deleteLaborCost = useDeleteLaborCost();
+
+  const totalLaborCostRow = [
     { label: "TOTAL", value: laborCost?.totalLaborCost.totalCost },
     { label: "Profit %", value: "30%" },
     { label: "PROFIT", value: laborCost?.totalLaborCost.profit },
@@ -37,12 +62,12 @@ const LaborCostQuotation = () => {
     "Tools & Equipment",
   ];
   const lastCategory = "Other Incidental Costs";
-  
+
   // Sort the items in one loop and find missing categories
   const sortedCosts = laborCost?.laborCost?.reduce(
-    (acc, labor) => {
+    (acc: any, labor: any) => {
       const { description } = labor;
-  
+
       // Check for the last category first
       if (description === lastCategory) {
         acc.last.push(labor);
@@ -51,12 +76,12 @@ const LaborCostQuotation = () => {
       else if (predefinedCategories.includes(description)) {
         acc.predefined.push(labor);
         acc.existingCategories.add(description);
-      } 
+      }
       // Otherwise, categorize as new
       else {
         acc.new.push(labor);
       }
-  
+
       return acc;
     },
     {
@@ -65,12 +90,55 @@ const LaborCostQuotation = () => {
       last: [] as LaborCost[],
       existingCategories: new Set<string>(),
     }
-  ) || { predefined: [], new: [], last: [], existingCategories: new Set<string>() };
-  
+  ) || {
+    predefined: [],
+    new: [],
+    last: [],
+    existingCategories: new Set<string>(),
+  };
+
   // Find missing predefined categories
   const missingCategories = [...predefinedCategories, lastCategory].filter(
-    category => !sortedCosts.existingCategories.has(category)
+    (category) => !sortedCosts.existingCategories.has(category)
   );
+
+  const {
+    isOpen: addIsOpen,
+    onOpen: addOnOpen,
+    onClose: addOnClose,
+  } = useDisclosure();
+
+  const {
+    isOpen: editIsOpen,
+    onOpen: editOnOpen,
+    onClose: editOnClose,
+  } = useDisclosure();
+
+  // Function to handle delete item
+  const handleDeleteItem = (laborId: number) => {
+    if (window.confirm("Delete this item?")) {
+      deleteLaborCost.mutate(
+        { laborId },
+        {
+          onSuccess: () => {
+            refetch();
+            refetchPAM();
+          },
+        }
+      );
+    }
+  };
+
+  const handleEditItem = (labor: LaborCost) => {
+    setSelectedLAbor(labor);
+
+    setIsPredefinedAndLastCategory(
+      predefinedCategories.includes(labor.description) ||
+        labor.description === lastCategory
+    );
+
+    editOnOpen();
+  };
 
   return (
     <div className="bg-gray-100 flex items-center justify-center">
@@ -85,7 +153,7 @@ const LaborCostQuotation = () => {
                   className="bg-orange-500 text-background"
                   endContent={<FaPlus />}
                   size="sm"
-                  // onClick={() => addOnOpen()}
+                  onClick={() => addOnOpen()}
                 >
                   Add Labor Cost
                 </Button>
@@ -114,10 +182,7 @@ const LaborCostQuotation = () => {
                       {laborCost?.laborCost?.length ? (
                         sortedCosts.predefined
                           .concat(sortedCosts.new, sortedCosts.last)
-                          .map((labor, index) => {
-                            const currentItemNo = itemNo; // Store the current itemNo
-                            itemNo++; // Increment itemNo
-
+                          .map((labor: any, index: any) => {
                             return (
                               <tr
                                 key={labor.laborId}
@@ -145,17 +210,10 @@ const LaborCostQuotation = () => {
                                   ₱ {formatNumber(labor.totalCost)}
                                 </td>
                                 <td className="border-b hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap">
-                                  <div className="flex flex-row justify-center">
+                                  <div className="flex flex-row text-center justify-between">
                                     <Button
                                       variant="light"
-                                      // onClick={() =>
-                                      //   handleEditQuantityClick(
-                                      //     material.quantity,
-                                      //     material.mtlId,
-                                      //     material.suppId,
-                                      //     material.description
-                                      //   )
-                                      // }
+                                      onClick={() => handleEditItem(labor)}
                                     >
                                       <FaEdit
                                         size={20}
@@ -163,20 +221,42 @@ const LaborCostQuotation = () => {
                                       />
                                     </Button>
 
-                                    <Button
-                                      variant="light"
-                                      // onClick={() =>
-                                      //   handleDeleteItem(
-                                      //     material.mtlId,
-                                      //     material.suppId
-                                      //   )
-                                      // }
-                                    >
-                                      <FaTrashAlt
-                                        size={20}
-                                        className="text-danger-500"
-                                      />
-                                    </Button>
+                                    {!(
+                                      predefinedCategories.includes(
+                                        labor.description
+                                      ) || labor.description === lastCategory
+                                    ) && (
+                                      <Button
+                                        variant="light"
+                                        onClick={() =>
+                                          handleDeleteItem(labor.laborId)
+                                        }
+                                      >
+                                        <FaTrashAlt
+                                          size={20}
+                                          className="text-danger-500"
+                                        />
+                                      </Button>
+                                    )}
+
+                                    {labor.description == "Manpower" ? (
+                                      <Button variant="light">
+                                        <MdFormatListBulletedAdd
+                                          size={20}
+                                          className="text-success-500"
+                                        />
+                                      </Button>
+                                    ) : null}
+
+                                    {labor.description ==
+                                    "Project Manager - Electrical Engr." ? (
+                                      <Button variant="light">
+                                        <MdFormatListBulletedAdd
+                                          size={20}
+                                          className="text-success-500"
+                                        />
+                                      </Button>
+                                    ) : null}
                                   </div>
                                 </td>
                               </tr>
@@ -195,7 +275,7 @@ const LaborCostQuotation = () => {
                     </>
                   )}
                   {laborCost?.laborCost?.length
-                    ? totalLaborCost.map((labor, index) => (
+                    ? totalLaborCostRow.map((labor, index) => (
                         <tr className="bg-gray-200" key={index}>
                           <td
                             colSpan={6}
@@ -216,6 +296,22 @@ const LaborCostQuotation = () => {
                     : null}
                 </tbody>
               </table>
+              <AddLaborCost
+                isOpen={addIsOpen}
+                onClose={addOnClose}
+                projId={projId!}
+                refetch={refetch}
+                refetchPAM={refetchPAM}
+              />
+
+              <EditLaborCost
+                isOpen={editIsOpen}
+                onClose={editOnClose}
+                refetch={refetch}
+                refetchPAM={refetchPAM}
+                labor={selectedLabor!}
+                isPredefined={isPredefinedAndLastCategory}
+              />
             </div>
           </div>
         </div>

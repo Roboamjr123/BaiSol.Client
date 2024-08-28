@@ -80,6 +80,8 @@ const ProjectPage = () => {
 
   if (isLoading) return <Loader />;
 
+  if(!projects) return (<span className="text-gray-500">No Project Yet...</span>)
+
   return (
     <div className="px-5">
       <div className="flex flex-row gap-4 md:gap-20 justify-between mb-10 px-4 md:px-0">

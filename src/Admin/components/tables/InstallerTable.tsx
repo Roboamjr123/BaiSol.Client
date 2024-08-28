@@ -18,6 +18,7 @@ import {
   SortDescriptor,
   cn,
   useDisclosure,
+  Spinner,
 } from "@nextui-org/react";
 import { BiDotsVertical } from "react-icons/bi";
 import { CiSearch } from "react-icons/ci";
@@ -506,8 +507,7 @@ const InstallerTable = () => {
               <TableBody
                 emptyContent={"No personnel found"}
                 items={items}
-                loadingContent={"Loading personnel..."}
-                isLoading={isLoading}
+                loadingContent={<Spinner color="warning">Loading Installer...</Spinner>}
               >
                 {(item) => (
                   <TableRow key={item.installerId}>

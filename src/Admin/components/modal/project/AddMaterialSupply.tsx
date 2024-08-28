@@ -20,7 +20,7 @@ import {
   SelectItem,
   Spinner,
 } from "@nextui-org/react";
-import { useAddProjectMaterialSupply } from "../../../../lib/API/Quote/QuotationAPI";
+import { useAddProjectMaterialSupply } from "../../../../lib/API/Quote/ProjectQuotationAPI";
 import { toast } from "react-toastify";
 import { error } from "console";
 
@@ -210,11 +210,7 @@ const AddMaterialSupply: React.FC<IAdd> = ({
             onClick={() => handleAddNewMaerial()}
             className="bg-orange-400 w-max m-auto text-white rounded-lg py-2 px-3 hover:bg-gray-200 hover:text-orange-500 transition-all duration-300 ease-in"
             isLoading={addProjectSupply.isPending}
-            isDisabled={
-              isInvalidQuantity ||
-              quantity <= 0 ||
-              !category
-            }
+            isDisabled={isInvalidQuantity || quantity <= 0 || !category}
           >
             {addProjectSupply.isPending ? "Adding..." : "Add"}
           </Button>

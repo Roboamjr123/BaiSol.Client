@@ -132,7 +132,7 @@ export const getAllFacilitatorUsers = () => {
   });
 };
 
-//fetch all facilitator users
+//fetch all admin/facilitator users
 export const getAllPersonnelUsers = (role: string) => {
   return useQuery<PersonnelUser[], Error>({
     queryKey: [`all-${role}-user`],

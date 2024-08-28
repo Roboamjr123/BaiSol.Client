@@ -3,7 +3,7 @@ import {
   getProjectCostQuote,
   MaterialCost,
   useDeleteProjectMaterialSupply,
-} from "../../../lib/API/Quote/QuotationAPI";
+} from "../../../lib/API/Quote/ProjectQuotationAPI";
 import {
   Button,
   getKeyValue,
