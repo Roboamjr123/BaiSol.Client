@@ -29,7 +29,7 @@ export const getAssignedInstallers = (projId: string) => {
   });
 };
 
-interface IAvailableFacilitators {
+export interface IAvailableFacilitators {
   id: string;
   email: string;
   userName: string;

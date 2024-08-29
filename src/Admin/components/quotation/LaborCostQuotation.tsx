@@ -11,6 +11,7 @@ import {
 import AddLaborCost from "../modal/project/AddLaborCost";
 import EditLaborCost from "../modal/project/EditLaborCost";
 import { MdFormatListBulletedAdd } from "react-icons/md";
+import EditFacilitatorAssignation from "../modal/project/EditFacilitatorAssignation";
 
 interface ILaborCost {
   projId: string;
@@ -113,6 +114,18 @@ const LaborCostQuotation: React.FC<ILaborCost> = ({
     onOpen: editOnOpen,
     onClose: editOnClose,
   } = useDisclosure();
+
+  const {
+    isOpen: editAssignFacIsOpen,
+    onOpen: editAssignFacOnOpen,
+    onClose: editAssignFacOnClose,
+  } = useDisclosure();
+
+  // const {
+  //   isOpen: editAssignInstallerIsOpen,
+  //   onOpen: editAssignInstallerOnOpen,
+  //   onClose: editAssignInstallerOnClose,
+  // } = useDisclosure();
 
   // Function to handle delete item
   const handleDeleteItem = (laborId: number) => {
@@ -250,7 +263,10 @@ const LaborCostQuotation: React.FC<ILaborCost> = ({
 
                                     {labor.description ==
                                     "Project Manager - Electrical Engr." ? (
-                                      <Button variant="light">
+                                      <Button
+                                        variant="light"
+                                        onClick={() => editAssignFacOnOpen()}
+                                      >
                                         <MdFormatListBulletedAdd
                                           size={20}
                                           className="text-success-500"
@@ -311,6 +327,10 @@ const LaborCostQuotation: React.FC<ILaborCost> = ({
                 refetchPAM={refetchPAM}
                 labor={selectedLabor!}
                 isPredefined={isPredefinedAndLastCategory}
+              />
+              <EditFacilitatorAssignation
+                isOpen={editAssignFacIsOpen}
+                onClose={editAssignFacOnClose}
               />
             </div>
           </div>
