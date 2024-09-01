@@ -331,6 +331,7 @@ const LaborCostQuotation: React.FC<ILaborCost> = ({
               <EditFacilitatorAssignation
                 isOpen={editAssignFacIsOpen}
                 onClose={editAssignFacOnClose}
+                projId={projId}
               />
             </div>
           </div>

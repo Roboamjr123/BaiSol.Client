@@ -208,7 +208,7 @@ const AddMaterialSupply: React.FC<IAdd> = ({
         <ModalFooter>
           <Button
             onClick={() => handleAddNewMaerial()}
-            className="bg-orange-400 w-max m-auto text-white rounded-lg py-2 px-3 hover:bg-gray-200 hover:text-orange-500 transition-all duration-300 ease-in"
+            className="bg-orange-400 w-max ml-auto text-white rounded-lg py-2 px-3 hover:bg-gray-200 hover:text-orange-500 transition-all duration-300 ease-in"
             isLoading={addProjectSupply.isPending}
             isDisabled={isInvalidQuantity || quantity <= 0 || !category}
           >

@@ -48,7 +48,7 @@ export const getAvailableFacilitators = () => {
 };
 
 export const getAssignedFacilitators = (projId: string) => {
-  return useQuery<IAvailableFacilitators[], Error>({
+  return useQuery<IAvailableFacilitators, Error>({
     queryKey: ["assigned-facilitators"],
     queryFn: async () => {
       const response = await api.get("api/Personnel/Get-Assigned-Facilitator", {

@@ -145,7 +145,7 @@ const EditQuantityMaterialModal: React.FC<IEdit> = ({
         <ModalFooter>
           <div className="flex justify-end w-full">
             <Button
-              className="bg-orange-400 w-max m-auto text-white rounded-lg py-2 px-3 hover:bg-gray-200 hover:text-orange-500 transition-all duration-300 ease-in"
+              className="bg-orange-400 w-max ml-auto text-white rounded-lg py-2 px-3 hover:bg-gray-200 hover:text-orange-500 transition-all duration-300 ease-in"
               endContent={<FaSave className="text-small" />}
               isDisabled={
                 isInvalidQuantity || quantity === 0 || quantity === prevQty
