@@ -21,12 +21,14 @@ const FacilitatorMain: React.FC<{
   projId: string;
   refetchAssign: () => void;
   refetchAvailable: () => void;
+  onClose: () => void;
 }> = ({
   facilitators,
   assignedFacilitator,
   projId,
   refetchAssign,
   refetchAvailable,
+  onClose,
 }) => {
   const removeAssign = removeAssignedFacilitatorToProject();
 
@@ -44,6 +46,7 @@ const FacilitatorMain: React.FC<{
             toast.success(data);
             refetchAssign();
             refetchAvailable();
+            onClose();
           },
           onError: (error: any) => {
             if (error.response) {
@@ -61,15 +64,19 @@ const FacilitatorMain: React.FC<{
   const [filterValue, setFilterValue] = useState<string>("");
   const [dropLocation, setDropLocation] = useState<
     IAvailableFacilitators | undefined
-  >(undefined);
+  >(assignedFacilitator ? assignedFacilitator : undefined);
   const [items, setItems] = useState<IAvailableFacilitators[]>(facilitators);
 
   useEffect(() => {
     if (assignedFacilitator !== undefined) {
       setDropLocation(assignedFacilitator);
+    } else {
+      setDropLocation(undefined);
     }
-  }, [assignedFacilitator]); // Dependency array added
+  }, [assignedFacilitator, setDropLocation]); // Dependency array added
 
+  console.log("ass", assignedFacilitator);
+  console.log("drop", dropLocation);
   // Filtered and sorted items based on the filter value
   const filteredItems = useMemo(() => {
     return items
@@ -89,10 +96,11 @@ const FacilitatorMain: React.FC<{
   // Handles when an item is dropped in the drop location
   const handleDrop = useCallback(
     (draggedItemIndex: number) => {
-      // Check if the drop zone is empty before allowing the drop
+      console.log("Item dropped with index:", draggedItemIndex); // Debug
       if (dropLocation) return;
 
       const newDropLocation = filteredItems[draggedItemIndex];
+      console.log("New drop location:", newDropLocation); // Debug
       setDropLocation(newDropLocation);
       const newItems = filteredItems.filter(
         (_, index) => index !== draggedItemIndex
@@ -110,7 +118,7 @@ const FacilitatorMain: React.FC<{
           "Are you sure you want to remove this assigned facilitator?"
         )
       ) {
-        if (assignedFacilitator !== undefined) {
+        if (assignedFacilitator) {
           removeAssign.mutateAsync(
             {
               facilitatorId: facilitatorId,
@@ -119,8 +127,10 @@ const FacilitatorMain: React.FC<{
             {
               onSuccess: (data) => {
                 toast.info(data);
+                setDropLocation(undefined);
                 refetchAssign();
                 refetchAvailable();
+                onClose();
               },
             }
           );
@@ -132,17 +142,24 @@ const FacilitatorMain: React.FC<{
         }
       }
     },
-    [dropLocation]
+    [
+      assignedFacilitator,
+      dropLocation,
+      removeAssign,
+      projId,
+      refetchAssign,
+      refetchAvailable,
+    ]
   );
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="grid sm:grid-flow-row grid-flow-col gap-2">
+      <div className="grid grid-flow-row gap-2">
         {/* Search Input */}
         <Input
           isClearable
           classNames={{
-            base: "w-full sm:max-w-[44%]",
+            base: "w-full sm:max-w-[45%]",
             inputWrapper: "border-1",
           }}
           placeholder="Search by name..."
@@ -154,13 +171,18 @@ const FacilitatorMain: React.FC<{
           onValueChange={onSearchChange}
         />
 
-        <span className=" border p-2 rounded block max-w-full  mb-2 text-xs text-gray-600 font-semibold">
-          Available Facilitators
-        </span>
+        <div className="flex flex-row max-w-full gap-4 justify-between tracking-wider">
+          <span className=" border text-center p-2 rounded block w-full  mb-2 text-xs text-gray-600 font-semibold">
+            Available Facilitators
+          </span>
+          <span className=" border text-center p-2 rounded block w-full  mb-2 text-xs text-gray-600 font-semibold">
+            Assigned Facilitator
+          </span>
+        </div>
 
-        <div className="flex flex-row justify-evenly">
+        <div className="flex flex-row max-w-full gap-4 justify-between items-center">
           {/* Drag Item */}
-          <div className="max-w-full justify-items-start overflow-y-auto h-40">
+          <div className="w-full justify-items-start overflow-y-auto scrollbar-thin scrollbar-track-white scrollbar-thumb-orange-100 h-40">
             {filteredItems.map((facilitator, index) => (
               <FacilitatorDragItem
                 key={index}
@@ -171,7 +193,7 @@ const FacilitatorMain: React.FC<{
           </div>
 
           {/* Drop Zone */}
-          <div>
+          <div className="w-full justify-center">
             <FacilitatorDropZone
               facilitator={dropLocation}
               prevFacilitator={assignedFacilitator}

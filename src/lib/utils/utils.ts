@@ -13,3 +13,5 @@ export const formatNumber = (number: number) => {
 
   return formatter.format(number);
 };
+
+

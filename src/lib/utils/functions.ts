@@ -5,7 +5,9 @@ export const clearToken = () => {
 };
 
 export const capitalizeFirstLetter = (str: string) => {
-  return (
-    str.trim().charAt(0).toUpperCase() + str.trim().slice(1).toLowerCase()
-  );
+  return str.trim().charAt(0).toUpperCase() + str.trim().slice(1).toLowerCase();
+};
+
+export const formatName = (Name: string): string => {
+  return Name.replace(/[-_]/g, " ");
 };

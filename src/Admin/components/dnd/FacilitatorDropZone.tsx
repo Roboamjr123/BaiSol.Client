@@ -4,6 +4,7 @@ import { ItemType } from "./FacilitatorMain";
 import { useDrop } from "react-dnd";
 import { Button } from "@nextui-org/react";
 import { FaTimes } from "react-icons/fa";
+import { formatName } from "../../../lib/utils/functions";
 
 const FacilitatorDropZone: React.FC<{
   facilitator?: IAvailableFacilitators;
@@ -24,6 +25,7 @@ const FacilitatorDropZone: React.FC<{
     accept: ItemType,
     drop: (draggedItem: { index: number }) => onDrop(draggedItem.index),
   }));
+  
 
   return (
     <div>
@@ -34,12 +36,13 @@ const FacilitatorDropZone: React.FC<{
         {facilitator ? (
           <div className="flex rounded p-2">
             <Button
+              className="max-w-full"
               onClick={() => onRemove(facilitator.id)}
               endContent={<FaTimes />}
             >
-              <div className="flex flex-col">
-                <span className="font-semibold tracking-widest">
-                  {facilitator.userName}
+              <div className="flex flex-col items-start">
+                <span className="font-semibold text-xs tracking-widest">
+                  {formatName(facilitator.userName)}
                 </span>
                 <span className="text-xs text-gray-400 tracking-tight">
                   {facilitator.email}

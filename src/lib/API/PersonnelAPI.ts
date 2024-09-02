@@ -49,7 +49,7 @@ export const getAvailableFacilitators = () => {
 
 export const getAssignedFacilitators = (projId: string) => {
   return useQuery<IAvailableFacilitators, Error>({
-    queryKey: ["assigned-facilitators"],
+    queryKey: ["assigned-facilitators", projId],
     queryFn: async () => {
       const response = await api.get("api/Personnel/Get-Assigned-Facilitator", {
         params: { projId },

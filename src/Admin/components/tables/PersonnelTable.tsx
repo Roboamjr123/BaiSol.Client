@@ -269,9 +269,10 @@ const PersonnelTable: React.FC<UserProps> = ({ role }) => {
                   ) : (
                     <DropdownItem className="hidden"></DropdownItem>
                   )}
-                  {user.status !== "InActive" &&
+                  {(user.status !== "OnWork" && user.status !== "InActive") &&
                   (role !== "Admin" ||
-                    (role === "Admin" && (adminUsersNotInActive?.length || 0) > 1)) ? (
+                    (role === "Admin" &&
+                      (adminUsersNotInActive?.length || 0) > 1)) ? (
                     <DropdownItem
                       onClick={() =>
                         handleDropdownActionItemClick(

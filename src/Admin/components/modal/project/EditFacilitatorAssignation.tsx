@@ -34,10 +34,14 @@ const EditFacilitatorAssignation: React.FC<IEdit> = ({
   // Fetch all available facilitators
   const availableFacilitators = getAvailableFacilitators();
 
-
-
   return (
-    <Modal placement="center" size="xl" isOpen={isOpen} onClose={onClose}>
+    <Modal
+      placement="center"
+      size="2xl"
+      isOpen={isOpen}
+      onClose={onClose}
+      className="m-2 overflow-x-auto  scrollbar-thin scrollbar-track-white scrollbar-thumb-orange-100"
+    >
       <ModalContent>
         <ModalHeader>
           <span className="text-sm text-gray-600">
@@ -57,6 +61,7 @@ const EditFacilitatorAssignation: React.FC<IEdit> = ({
               availableFacilitators.data ? availableFacilitators.data : []
             }
             assignedFacilitator={assginedFacilitator.data}
+            onClose={onClose}
           />
         </ModalBody>
       </ModalContent>

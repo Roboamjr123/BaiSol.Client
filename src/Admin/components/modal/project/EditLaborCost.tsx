@@ -84,7 +84,9 @@ const EditLaborCost: React.FC<IEdit> = ({
     await updateLaborCost.mutateAsync(
       {
         laborId: labor.laborId,
-        description: capitalizeFirstLetter(description),
+        description: isPredefined
+          ? description
+          : capitalizeFirstLetter(description),
         unit: capitalizeFirstLetter(unit),
         quantity,
         unitCost: Number(unitCost),
@@ -148,19 +150,23 @@ const EditLaborCost: React.FC<IEdit> = ({
                 onChange={handleChange}
               />
             )}
-            <Input
-              isRequired
-              name="quantity"
-              value={String(formData.quantity)}
-              type="text"
-              label="Quantity"
-              isInvalid={isInvalidQuantity}
-              variant="flat"
-              errorMessage="Invalid quantity number!"
-              onChange={handleChange}
-              size="sm"
-              maxLength={9}
-            />
+
+            {labor.description !== "Project Manager - Electrical Engr." && (
+              <Input
+                isRequired
+                name="quantity"
+                value={String(formData.quantity)}
+                type="text"
+                label="Quantity"
+                isInvalid={isInvalidQuantity}
+                variant="flat"
+                errorMessage="Invalid quantity number!"
+                onChange={handleChange}
+                size="sm"
+                maxLength={9}
+              />
+            )}
+
             <Input
               isRequired
               type="text"

@@ -3,6 +3,7 @@ import { getAllClientsProjects } from "../../../lib/API/Project/ProjectApi";
 import { Link } from "react-router-dom";
 import { Card, CardBody, Chip } from "@nextui-org/react";
 import { projectStatusColorMap } from "../../../lib/utils/project";
+import { formatName } from "../../../lib/utils/functions";
 
 const ProjectCards = ({
   projects,
@@ -23,12 +24,6 @@ const ProjectCards = ({
   return (
     <div className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-8 mb-auto w-full">
       {filteredProjects?.map((project: any) => {
-        // Ensure clientName is a string and remove dashes and underscores
-        const formattedClientName = (project.clientName || "").replace(
-          /[-_]/g,
-          " "
-        );
-
         return (
           <Link
             key={project.projId}
@@ -50,7 +45,7 @@ const ProjectCards = ({
               {project.projDescript}
             </p>
             <p className="text-sm text-gray-600 font-medium">
-              Client: {formattedClientName}
+              Client: {formatName(project.clientName)}
             </p>
             <p className="pl-2 text-xs text-gray-500">
               Address: {project.clientAddress}
