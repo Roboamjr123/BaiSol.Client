@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
-  getAvailableFacilitators,
   IAvailableFacilitators,
   removeAssignedFacilitatorToProject,
   useAssignFacilitatorToProject,
@@ -12,6 +11,8 @@ import { DndProvider } from "react-dnd";
 import FacilitatorDragItem from "./FacilitatorDragItem";
 import FacilitatorDropZone from "./FacilitatorDropZone";
 import { toast } from "react-toastify";
+import { FaTimes } from "react-icons/fa";
+import { formatName } from "../../../lib/utils/functions";
 
 export const ItemType = "FACILITATOR";
 
@@ -21,14 +22,12 @@ const FacilitatorMain: React.FC<{
   projId: string;
   refetchAssign: () => void;
   refetchAvailable: () => void;
-  onClose: () => void;
 }> = ({
   facilitators,
   assignedFacilitator,
   projId,
   refetchAssign,
   refetchAvailable,
-  onClose,
 }) => {
   const removeAssign = removeAssignedFacilitatorToProject();
 
@@ -46,7 +45,6 @@ const FacilitatorMain: React.FC<{
             toast.success(data);
             refetchAssign();
             refetchAvailable();
-            onClose();
           },
           onError: (error: any) => {
             if (error.response) {
@@ -126,11 +124,10 @@ const FacilitatorMain: React.FC<{
             },
             {
               onSuccess: (data) => {
-                toast.info(data);
+                toast.warning(data);
                 setDropLocation(undefined);
                 refetchAssign();
                 refetchAvailable();
-                onClose();
               },
             }
           );
@@ -173,7 +170,7 @@ const FacilitatorMain: React.FC<{
 
         <div className="flex flex-row max-w-full gap-4 justify-between tracking-wider">
           <span className=" border text-center p-2 rounded block w-full  mb-2 text-xs text-gray-600 font-semibold">
-            Available Facilitators
+            Available Facilitators <span className="text-gray-400">{facilitators.length}</span>
           </span>
           <span className=" border text-center p-2 rounded block w-full  mb-2 text-xs text-gray-600 font-semibold">
             Assigned Facilitator
@@ -194,14 +191,34 @@ const FacilitatorMain: React.FC<{
 
           {/* Drop Zone */}
           <div className="w-full justify-center">
-            <FacilitatorDropZone
-              facilitator={dropLocation}
-              prevFacilitator={assignedFacilitator}
-              isPending={assignToProject.isPending}
-              assignFacilitator={handleAssign}
-              onDrop={handleDrop}
-              onRemove={handleRemove}
-            />
+            {assignedFacilitator ? (
+              <div className="flex rounded px-2">
+                <Button
+                  variant="light"
+                  className="max-w-full"
+                  onClick={() => handleRemove(assignedFacilitator.id)}
+                  endContent={<FaTimes />}
+                >
+                  <div className="flex flex-col items-start">
+                    <span className="font-semibold text-xs tracking-widest">
+                      {formatName(assignedFacilitator.userName)}
+                    </span>
+                    <span className="text-xs text-gray-400 tracking-tight">
+                      {assignedFacilitator.email}
+                    </span>
+                  </div>
+                </Button>
+              </div>
+            ) : (
+              <FacilitatorDropZone
+                facilitator={dropLocation}
+                prevFacilitator={assignedFacilitator}
+                isPending={assignToProject.isPending}
+                assignFacilitator={handleAssign}
+                onDrop={handleDrop}
+                onRemove={handleRemove}
+              />
+            )}
           </div>
         </div>
       </div>

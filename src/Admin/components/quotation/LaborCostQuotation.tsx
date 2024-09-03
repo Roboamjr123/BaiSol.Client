@@ -12,6 +12,7 @@ import AddLaborCost from "../modal/project/AddLaborCost";
 import EditLaborCost from "../modal/project/EditLaborCost";
 import { MdFormatListBulletedAdd } from "react-icons/md";
 import EditFacilitatorAssignation from "../modal/project/EditFacilitatorAssignation";
+import EditInstallerAssignation from "../modal/project/EditInstallerAssignation";
 
 interface ILaborCost {
   projId: string;
@@ -121,11 +122,11 @@ const LaborCostQuotation: React.FC<ILaborCost> = ({
     onClose: editAssignFacOnClose,
   } = useDisclosure();
 
-  // const {
-  //   isOpen: editAssignInstallerIsOpen,
-  //   onOpen: editAssignInstallerOnOpen,
-  //   onClose: editAssignInstallerOnClose,
-  // } = useDisclosure();
+  const {
+    isOpen: editAssignInstallerIsOpen,
+    onOpen: editAssignInstallerOnOpen,
+    onClose: editAssignInstallerOnClose,
+  } = useDisclosure();
 
   // Function to handle delete item
   const handleDeleteItem = (laborId: number) => {
@@ -253,7 +254,12 @@ const LaborCostQuotation: React.FC<ILaborCost> = ({
                                     )}
 
                                     {labor.description == "Manpower" ? (
-                                      <Button variant="light">
+                                      <Button
+                                        variant="light"
+                                        onClick={() =>
+                                          editAssignInstallerOnOpen()
+                                        }
+                                      >
                                         <MdFormatListBulletedAdd
                                           size={20}
                                           className="text-success-500"
@@ -331,6 +337,12 @@ const LaborCostQuotation: React.FC<ILaborCost> = ({
               <EditFacilitatorAssignation
                 isOpen={editAssignFacIsOpen}
                 onClose={editAssignFacOnClose}
+                projId={projId}
+              />
+
+              <EditInstallerAssignation
+                isOpen={editAssignInstallerIsOpen}
+                onClose={editAssignInstallerOnClose}
                 projId={projId}
               />
             </div>

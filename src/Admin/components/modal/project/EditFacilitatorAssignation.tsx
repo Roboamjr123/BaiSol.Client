@@ -1,21 +1,15 @@
 import {
-  Button,
   Modal,
   ModalBody,
   ModalContent,
-  ModalFooter,
   ModalHeader,
 } from "@nextui-org/react";
-import React, { useCallback } from "react";
-import AvailableFacilitatorTable from "../../tables/AvailableFacilitatorTable";
+import React from "react";
 import FacilitatorMain from "../../dnd/FacilitatorMain";
 import {
   getAssignedFacilitators,
   getAvailableFacilitators,
-  useAssignFacilitatorToProject,
 } from "../../../../lib/API/PersonnelAPI";
-import { useParams } from "react-router-dom";
-import { toast } from "react-toastify";
 
 interface IEdit {
   projId: string;
@@ -61,7 +55,6 @@ const EditFacilitatorAssignation: React.FC<IEdit> = ({
               availableFacilitators.data ? availableFacilitators.data : []
             }
             assignedFacilitator={assginedFacilitator.data}
-            onClose={onClose}
           />
         </ModalBody>
       </ModalContent>

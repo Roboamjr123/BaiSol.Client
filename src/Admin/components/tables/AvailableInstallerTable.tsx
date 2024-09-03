@@ -9,28 +9,26 @@ import {
   Spinner,
 } from "@nextui-org/react";
 import {
-  getAvailableFacilitators,
-  IAvailableFacilitators,
+  getAvailableInstallers,
+  IAvailableInstallers,
 } from "../../../lib/API/PersonnelAPI";
 import React, { useCallback, useMemo, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 
-const AvailableFacilitatorTable = () => {
-  const allFacilitators = getAvailableFacilitators();
+const AvailableInstrallerTable = () => {
+  const allInstallers = getAvailableInstallers();
 
   const [filterValue, setFilterValue] = useState("");
 
   const filteredItems = useMemo(() => {
-    let filteredFacilitator = allFacilitators.data ?? [];
+    let filteredInstaller = allInstallers.data ?? [];
 
-    filteredFacilitator = filteredFacilitator.filter(
-      (fac) =>
-        fac.userName.toLowerCase().includes(filterValue.toLowerCase()) ||
-        fac.email.toLowerCase().includes(filterValue.toLowerCase())
+    filteredInstaller = filteredInstaller.filter((inst) =>
+      inst.name.toLowerCase().includes(filterValue.toLowerCase())
     );
 
-    return filteredFacilitator;
-  }, [allFacilitators.data, filterValue]);
+    return filteredInstaller;
+  }, [allInstallers.data, filterValue]);
 
   const onSearchChange = useCallback((value?: string) => {
     if (value) {
@@ -62,18 +60,16 @@ const AvailableFacilitatorTable = () => {
   }, [filterValue, onSearchChange]);
 
   const renderCell = useCallback(
-    (fac: IAvailableFacilitators, columnKey: React.Key) => {
-      const cellValue = fac[columnKey as keyof IAvailableFacilitators];
+    (inst: IAvailableInstallers, columnKey: React.Key) => {
+      const cellValue = inst[columnKey as keyof IAvailableInstallers];
 
       switch (columnKey) {
-        case "facilitator":
+        case "installer":
           return (
             <div className="flex flex-col">
-              <span className="font-semibold tracking-widest">
-                {fac.userName}
-              </span>
+              <span className="font-semibold tracking-widest">{inst.name}</span>
               <span className="text-xs text-gray-400 tracking-tight">
-                {fac.email}
+                {inst.position}
               </span>
             </div>
           );
@@ -92,25 +88,34 @@ const AvailableFacilitatorTable = () => {
           <div className=" min-w-full">
             <Table
               isHeaderSticky
-              aria-label="Available Facilitators"
-              classNames={{ base: "overflow-scroll", th: "bg-transparent" }}
+              isCompact
+              aria-label="Available Installers"
+              classNames={{
+                // base: "overflow-scroll",
+                th: ["bg-transparent", "border-divider"],
+              }}
+              checkboxesProps={{
+                classNames: {
+                  wrapper:
+                    "after:bg-orange-400 after:text-background text-background",
+                },
+              }}
               topContent={topContent}
-              selectionMode="single"
+              selectionMode="multiple"
+            
             >
               <TableHeader>
-                <TableColumn key="facilitator">
-                  Available Facilitators
-                </TableColumn>
+                <TableColumn key="installer">Available Installers</TableColumn>
               </TableHeader>
               <TableBody
-                isLoading={allFacilitators.isLoading}
+                isLoading={allInstallers.isLoading}
                 loadingContent={
-                  <Spinner color="warning">Loading facilitators...</Spinner>
+                  <Spinner color="warning">Loading installers...</Spinner>
                 }
                 items={filteredItems}
               >
                 {(item) => (
-                  <TableRow key={item.id}>
+                  <TableRow key={item.installerId}>
                     {(columnKey) => (
                       <TableCell>{renderCell(item, columnKey)}</TableCell>
                     )}
@@ -125,4 +130,4 @@ const AvailableFacilitatorTable = () => {
   );
 };
 
-export default AvailableFacilitatorTable;
+export default AvailableInstrallerTable;

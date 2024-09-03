@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "./AuthAPI";
 
-interface IAvailableInstallers {
+export interface IAvailableInstallers {
   installerId: number;
   name: string;
   position: string;
