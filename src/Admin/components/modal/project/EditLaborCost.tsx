@@ -46,9 +46,12 @@ const EditLaborCost: React.FC<IEdit> = ({
   const updateLaborCost = useUpdateLaborCost();
   const assignedInstallers = getAssignedInstallers(projId);
 
-  const assignedInstallersLength = assignedInstallers.data?.length
-    ? assignedInstallers.data?.length
-    : 0;
+  const assignedInstallersLength = assignedInstallers.data?.length || 0;
+
+  const checkManPower =
+    labor.description === "Manpower"
+      ? assignedInstallersLength > formData.quantity
+      : false;
 
   useEffect(() => {
     setFormData({
@@ -208,7 +211,8 @@ const EditLaborCost: React.FC<IEdit> = ({
               !formData.description ||
               !formData.unit ||
               formData.unitNum === 0 ||
-              !formData.unitCost
+              !formData.unitCost ||
+              checkManPower
             }
           >
             {updateLaborCost.isPending ? "Saving Update..." : "Save"}
