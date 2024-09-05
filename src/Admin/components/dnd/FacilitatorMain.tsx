@@ -73,8 +73,6 @@ const FacilitatorMain: React.FC<{
     }
   }, [assignedFacilitator, setDropLocation]); // Dependency array added
 
-  console.log("ass", assignedFacilitator);
-  console.log("drop", dropLocation);
   // Filtered and sorted items based on the filter value
   const filteredItems = useMemo(() => {
     return items

@@ -253,7 +253,8 @@ const InstallerTable = () => {
                   ) : (
                     <DropdownItem className="hidden"></DropdownItem>
                   )}
-                  {installer.status !== "InActive" ? (
+                  {installer.status !== "OnWork" &&
+                  installer.status !== "InActive" ? (
                     <DropdownItem
                       onClick={() =>
                         handleDropdownActionItemClick(
@@ -507,7 +508,9 @@ const InstallerTable = () => {
               <TableBody
                 emptyContent={"No personnel found"}
                 items={items}
-                loadingContent={<Spinner color="warning">Loading Installer...</Spinner>}
+                loadingContent={
+                  <Spinner color="warning">Loading Installer...</Spinner>
+                }
               >
                 {(item) => (
                   <TableRow key={item.installerId}>

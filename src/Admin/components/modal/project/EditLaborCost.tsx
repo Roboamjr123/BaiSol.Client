@@ -15,11 +15,13 @@ import {
   ModalHeader,
   Textarea,
 } from "@nextui-org/react";
+import { getAssignedInstallers } from "../../../../lib/API/PersonnelAPI";
 
 interface IEdit {
   labor: LaborCost;
   isPredefined: boolean;
   isOpen: boolean;
+  projId: string;
   onClose: () => void;
   refetch: () => void;
   refetchPAM: () => void;
@@ -32,6 +34,7 @@ const EditLaborCost: React.FC<IEdit> = ({
   onClose,
   refetch,
   refetchPAM,
+  projId,
 }) => {
   const [formData, setFormData] = useState({
     description: labor.description,
@@ -41,6 +44,11 @@ const EditLaborCost: React.FC<IEdit> = ({
     unitNum: labor.unitNum,
   });
   const updateLaborCost = useUpdateLaborCost();
+  const assignedInstallers = getAssignedInstallers(projId);
+
+  const assignedInstallersLength = assignedInstallers.data?.length
+    ? assignedInstallers.data?.length
+    : 0;
 
   useEffect(() => {
     setFormData({

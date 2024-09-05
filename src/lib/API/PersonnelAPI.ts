@@ -128,16 +128,16 @@ export const useAssignFacilitatorToProject = () => {
 };
 
 interface IRemoveInstallers {
-  installerIds: number[];
+  installerIds: number;
   projectId: string;
 }
 
-export const removeAssignedInstallersToProject = () => {
+export const removeAssignedInstallerToProject = () => {
   return useMutation({
     mutationFn: async (formData: IRemoveInstallers) => {
       try {
         const response = await api.delete(
-          "api/Personnel/Remove-Assigned-Installers",
+          "api/Personnel/Remove-Assigned-Installer",
           {
             headers: {
               "Content-Type": "application/json",

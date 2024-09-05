@@ -39,7 +39,7 @@ const LaborCostQuotation: React.FC<ILaborCost> = ({
   refetchPAM,
   isLoading,
 }) => {
-  const [description, setDescription] = useState<string>("");
+  const [installerQuantity, setInstallerQuantity] = useState<number>(0);
   const [selectedLabor, setSelectedLAbor] = useState<LaborCost>(defaultLabor);
 
   const [isPredefinedAndLastCategory, setIsPredefinedAndLastCategory] =
@@ -253,12 +253,14 @@ const LaborCostQuotation: React.FC<ILaborCost> = ({
                                       </Button>
                                     )}
 
-                                    {labor.description == "Manpower" ? (
+                                    {labor.quantity > 0 &&
+                                    labor.description == "Manpower" ? (
                                       <Button
                                         variant="light"
-                                        onClick={() =>
-                                          editAssignInstallerOnOpen()
-                                        }
+                                        onClick={() => {
+                                          editAssignInstallerOnOpen();
+                                          setInstallerQuantity(labor.quantity);
+                                        }}
                                       >
                                         <MdFormatListBulletedAdd
                                           size={20}
@@ -333,6 +335,7 @@ const LaborCostQuotation: React.FC<ILaborCost> = ({
                 refetchPAM={refetchPAM}
                 labor={selectedLabor!}
                 isPredefined={isPredefinedAndLastCategory}
+                projId={projId}
               />
               <EditFacilitatorAssignation
                 isOpen={editAssignFacIsOpen}
@@ -344,6 +347,7 @@ const LaborCostQuotation: React.FC<ILaborCost> = ({
                 isOpen={editAssignInstallerIsOpen}
                 onClose={editAssignInstallerOnClose}
                 projId={projId}
+                quantity={installerQuantity}
               />
             </div>
           </div>
