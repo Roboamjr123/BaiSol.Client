@@ -96,7 +96,7 @@ const Verify2FA: React.FC = () => {
         onSuccess: (data) => {
           console.log("Response data:", data);
           toast.success("Login Succesfully!");
-          navigate("/home");
+          navigate("/");
         },
         onError: (err) => {
           toast.error(err.message);

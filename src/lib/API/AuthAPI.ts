@@ -11,6 +11,14 @@ export const api = axios.create({
   baseURL,
 });
 
+api.interceptors.request.use((config) => {
+  const token = Cookies.get("accessToken"); // Or however you store the token
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
 // Login
 export const useLoginMutation = () => {
   return useMutation({

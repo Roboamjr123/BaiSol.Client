@@ -43,6 +43,7 @@ const Home = () => {
     };
     validateAndSetUser();
   }, [dispatch]);
+  
   if (isLoading) return <p>Loading weather data...</p>;
   if (error) return <p>Error loading weather data: {error.message}</p>;
 

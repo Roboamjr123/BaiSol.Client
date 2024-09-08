@@ -110,10 +110,23 @@ const LoginPage = () => {
               errorMessage={"Your password entered is incorrect"}
             />
           </div>
-          <div>
-            <NavLink className="text-sm text-orange-300 hover:text-orange-500" to="/forgot-password">
+          <div className="flex flex-col gap-2 pb-2">
+            <NavLink
+              className="text-sm text-orange-300 hover:text-orange-500"
+              to="/forgot-password"
+            >
               Forgot your password?
             </NavLink>
+            <span className="text-sm text-[#1e0e4b]">
+              Don't have an account?
+              <NavLink
+                className="text-sm text-orange-300 hover:text-orange-500"
+                to="/register-client"
+              >
+                {" "}
+                Register now
+              </NavLink>
+            </span>
           </div>
           <Button
             isDisabled={email === "" || password === ""}
@@ -121,7 +134,7 @@ const LoginPage = () => {
             type="submit"
             className="bg-orange-400 w-max m-auto text-white rounded-lg py-2 px-3 hover:bg-gray-200 hover:text-orange-500 transition-all duration-300 ease-in"
           >
-            {loginMutation.isPending ? "Loading..." : "Sign up"}
+            {loginMutation.isPending ? "Loading..." : "Sign in"}
           </Button>
         </form>
       </div>

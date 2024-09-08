@@ -71,7 +71,7 @@ const ChangePass = () => {
   };
 
   if (successChange) {
-    navigate("/LogIn");
+    navigate("/");
   }
 
   return (

@@ -66,11 +66,11 @@ const ProjectPage = () => {
     return filteredProjects;
   }, [projects, filterValue, hasSearchFilter]);
 
-  const {
-    isOpen: newIsOpen,
-    onOpen: newOnOpen,
-    onClose: newOnClose,
-  } = useDisclosure();
+  // const {
+  //   isOpen: newIsOpen,
+  //   onOpen: newOnOpen,
+  //   onClose: newOnClose,
+  // } = useDisclosure();
 
   const {
     isOpen: existingIsOpen,
@@ -125,7 +125,7 @@ const ProjectPage = () => {
               <DropdownItem onClick={() => existingOnOpen()}>
                 Existing
               </DropdownItem>
-              <DropdownItem onClick={() => newOnOpen()}>New</DropdownItem>
+              {/* <DropdownItem onClick={() => newOnOpen()}>New</DropdownItem> */}
             </DropdownMenu>
           </Dropdown>
         </div>
@@ -160,7 +160,7 @@ const ProjectPage = () => {
         refetch={refetch}
       />
 
-      <NewClient isOpen={newIsOpen} onClose={newOnClose} refetch={refetch} />
+      {/* <NewClient isOpen={newIsOpen} onClose={newOnClose} refetch={refetch} /> */}
     </div>
   );
 };

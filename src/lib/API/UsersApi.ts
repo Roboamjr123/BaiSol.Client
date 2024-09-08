@@ -24,8 +24,12 @@ export const useRegisterAdminMutation = () => {
       email: string;
       password: string;
     }) => {
+      const data = {
+        ...formData,
+        adminEmail: "user@example.com",
+      };
       try {
-        const response = await api.post("user/User/Register-Admin", formData, {
+        const response = await api.post("user/User/Register-Admin", data, {
           headers: {
             "Content-Type": "application/json", // Ensure it matches the server requirements
           },

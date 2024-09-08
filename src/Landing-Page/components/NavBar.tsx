@@ -16,7 +16,7 @@ function NavBar() {
     <nav className="sticky top-0 z-50 py-3 backdrop-blur-lg border-neutral-700/80">
       <div className="container mx-auto relative px-5 lg:text-sm">
         <div className="flex justify-between items-center">
-        <NavLink to='/'>
+        <NavLink to='/BaiSol'>
           <div className="flex items-center flex-shrink-0">
               <img className="h-10 w-10 mr-2" src={logo} alt="logo" />
               <div className="flex flex-col">
@@ -40,14 +40,14 @@ function NavBar() {
                   offset={-100}
                   duration={500}
                 >
-                  <NavLink to="/">{item.label}</NavLink>
+                  <NavLink to="/BaiSol">{item.label}</NavLink>
                 </Link>
               </li>
             ))}
           </ul>
           <div className="hidden lg:flex justify-center mr-16 items-center ">
             <NavLink
-              to="/LogIn"
+              to="/"
               className="bg-orange-400 text-white rounded-lg py-2 px-3 hover:bg-gray-200 hover:text-orange-500 transition-all duration-300 ease-in"
             >
               Sign In

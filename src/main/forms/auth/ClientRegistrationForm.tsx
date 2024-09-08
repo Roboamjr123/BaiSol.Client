@@ -1,29 +1,17 @@
-import {
-  Input,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  Textarea,
-  Button,
-} from "@nextui-org/react";
-import React, { useEffect, useMemo, useState } from "react";
-import { FaEye, FaEyeSlash, FaPlus } from "react-icons/fa";
+import React, { useMemo, useState } from "react";
+import { Button, Input, Textarea } from "@nextui-org/react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
-import { useAddNewProjectNewClient } from "../../../lib/API/Project/ProjectApi";
-import { capitalizeFirstLetter } from "../../../lib/utils/functions";
 import { toast } from "react-toastify";
+import {
+  useRegisterAdminMutation,
+  useRegisterPersonnelUserMutation,
+} from "../../../lib/API/UsersApi";
+import { Navigate, useNavigate } from "react-router-dom";
 
-const NewClient = ({
-  isOpen,
-  onClose,
-  refetch,
-}: {
-  isOpen: boolean;
-  onClose: () => void;
-  refetch: () => void;
-}) => {
+const ClientRegistrationForm = () => {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [conPassword, setConPassword] = useState<string>("");
@@ -34,26 +22,8 @@ const NewClient = ({
   const [address, setAddress] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [showPassword, setShowPassword] = useState(false);
-  const [projectName, setProjectName] = useState<string>();
-  const [description, setDescription] = useState<string>();
-  
-  const addNewProject = useAddNewProjectNewClient();
 
-  useEffect(() => {
-    if (!isOpen) {
-      setEmail("");
-      setPassword("");
-      setConPassword("");
-      setCNum("");
-      setClientMonthlyElectricBill("");
-      setFirstName("");
-      setAddress("");
-      setLastName("");
-      setProjectName("");
-      setDescription("");
-      setShowPassword(false);
-    }
-  }, [isOpen]);
+  const registerClient = useRegisterPersonnelUserMutation("Client"); // State to store the response
 
   const validateEmail = (value: string) =>
     value.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i);
@@ -116,6 +86,13 @@ const NewClient = ({
     }
   };
 
+  // Utility function to capitalize first letter and convert rest to lowercase
+  const capitalizeFirstLetter = (str: string) => {
+    return (
+      str.trim().charAt(0).toUpperCase() + str.trim().slice(1).toLowerCase()
+    );
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -128,17 +105,12 @@ const NewClient = ({
       clientAddress: capitalizeFirstLetter(address.trim()),
       clientMonthlyElectricBill:
         parseFloat(clientMonthlyElectricBill.trim()) || 0, // Convert to number and default to 0 if empty
-      projName: capitalizeFirstLetter(projectName!.trim()) || "",
-      projDescript: capitalizeFirstLetter(description!.trim()) || "",
     };
 
     try {
-      addNewProject.mutate(formData, {
-        onSuccess: (data) => {
-          toast.success("New Client and Project added successfully!");
+      registerClient.mutate(formData, {
+        onSuccess: (data: any) => {
           toast.success(data);
-          refetch();
-          onClose();
           setEmail("");
           setPassword("");
           setConPassword("");
@@ -147,9 +119,7 @@ const NewClient = ({
           setFirstName("");
           setAddress("");
           setLastName("");
-          setProjectName("");
-          setDescription("");
-          setShowPassword(false);
+          navigate("/");
         },
         onError: (error: any) => {
           if (error.response) {
@@ -165,18 +135,18 @@ const NewClient = ({
   };
 
   return (
-    <Modal backdrop="blur" isOpen={isOpen} onClose={onClose} size="3xl">
-      <form className="flex flex-row gap-3" onSubmit={handleSubmit}>
-        <ModalContent>
-          <ModalHeader>
-            <div className="text-xl font-bold mb-2  text-center">
-              Add New <span className="text-orange-500">Project</span> with new
-              Client
-            </div>
-          </ModalHeader>
-          <ModalBody>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-              <div className="flex flex-col">
+    <>
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="max-w-screen-fi relative flex flex-col p-4 m-4 rounded-md text-black bg-gray-200">
+          <div className="text-2xl font-bold mb-2 text-[#1e0e4b] text-center">
+            Welcome to <span className="text-orange-500">BaiSol</span>
+          </div>
+          <div className="text-sm font-normal mb-4 text-center text-[#1e0e4b]">
+            Register your account
+          </div>
+          <form className="flex flex-col w-full" onSubmit={handleSubmit}>
+            <div className="grid grid-cols-1 w-full">
+              <div className="flex flex-col gap-3">
                 <div className="flex flex-row gap-2">
                   <Input
                     isRequired
@@ -220,6 +190,50 @@ const NewClient = ({
                     size="sm"
                   />
                 </div>
+                <div>
+                  <Input
+                    isRequired
+                    value={cNum}
+                    type="text"
+                    label="Contact #"
+                    isInvalid={isInvalidCNum}
+                    variant="flat"
+                    startContent={
+                      <div className="pointer-events-none flex items-center">
+                        <span className="text-default-400 text-xs">+639</span>
+                      </div>
+                    }
+                    errorMessage={"Invalid contact number!"}
+                    onChange={handleCNumChange}
+                    size="sm"
+                    maxLength={9}
+                  />
+                </div>
+                <div>
+                  <Input
+                    isRequired
+                    value={clientMonthlyElectricBill}
+                    type="text"
+                    label="Monthly Electric Bill"
+                    variant="flat"
+                    errorMessage={
+                      isInvalidBill ? "Must be a non-zero amount!" : ""
+                    }
+                    onChange={handleMBillChange}
+                    size="sm"
+                    isInvalid={isInvalidBill}
+                  />
+                </div>
+                <Textarea
+                  isRequired
+                  value={address}
+                  type="text"
+                  label="Address"
+                  variant="flat"
+                  size="sm"
+                  errorMessage={"Please fill the blank!"}
+                  onChange={(e) => setAddress(e.target.value)}
+                />
                 <div>
                   <Input
                     type={showPassword ? "text" : "password"}
@@ -275,98 +289,32 @@ const NewClient = ({
                   />
                 </div>
               </div>
-              <div className="flex flex-col">
-                <div className="flex flex-row gap-2">
-                  <Input
-                    isRequired
-                    value={cNum}
-                    type="text"
-                    label="Contact #"
-                    isInvalid={isInvalidCNum}
-                    variant="flat"
-                    startContent={
-                      <div className="pointer-events-none flex items-center">
-                        <span className="text-default-400 text-xs">+639</span>
-                      </div>
-                    }
-                    errorMessage={"Invalid contact number!"}
-                    onChange={handleCNumChange}
-                    size="sm"
-                    maxLength={9}
-                  />
-                  <Input
-                    isRequired
-                    value={clientMonthlyElectricBill}
-                    type="text"
-                    label="Monthly Electric Bill"
-                    variant="flat"
-                    errorMessage={
-                      isInvalidBill ? "Must be a non-zero amount!" : ""
-                    }
-                    onChange={handleMBillChange}
-                    size="sm"
-                    isInvalid={isInvalidBill}
-                  />
-                </div>
-                <Input
-                  isRequired
-                  value={address}
-                  type="text"
-                  label="Address"
-                  variant="flat"
-                  errorMessage={"Please fill the blank!"}
-                  size="sm"
-                  onChange={(e) => setAddress(e.target.value)}
-                />
-                <Input
-                  isRequired
-                  value={projectName}
-                  type="text"
-                  label="Project Name"
-                  variant="flat"
-                  errorMessage={"Please fill the blank!"}
-                  onChange={(e) => setProjectName(e.target.value)}
-                />
-
-                <Textarea
-                  isRequired
-                  value={description}
-                  type="text"
-                  label="Project Description..."
-                  variant="flat"
-                  errorMessage={"Please fill the blank!"}
-                  onChange={(e) => setDescription(e.target.value)}
-                />
-              </div>
             </div>
-          </ModalBody>
-          <ModalFooter>
             <Button
-              className="bg-orange-400 w-max ml-auto text-white rounded-lg py-2 px-3 hover:bg-gray-200 hover:text-orange-500 transition-all duration-300 ease-in"
-              type="submit"
-              endContent={<FaPlus className="text-small" />}
               isDisabled={
-                description === "" ||
-                projectName === "" ||
                 isInvalidConPassword ||
                 isInvalidPassword ||
                 isInvalidEmail ||
-                isInvalidCNum ||
-                isInvalidBill ||
                 firstName === "" ||
                 lastName === "" ||
                 email === "" ||
-                password === ""
+                password === "" ||
+                isInvalidBill ||
+                isInvalidCNum ||
+                cNum === "" ||
+                clientMonthlyElectricBill === ""
               }
-              isLoading={addNewProject.isPending}
+              isLoading={registerClient.isPending}
+              type="submit"
+              className="bg-orange-400 w-max m-auto text-white rounded-lg py-2 px-3 hover:bg-gray-200 hover:text-orange-500 transition-all duration-300 ease-in"
             >
-              {addNewProject.isPending ? "Creating..." : "Add new project"}
+              {registerClient.isPending ? "Loading..." : "Register"}
             </Button>
-          </ModalFooter>
-        </ModalContent>
-      </form>
-    </Modal>
+          </form>
+        </div>
+      </div>
+    </>
   );
 };
 
-export default NewClient;
+export default ClientRegistrationForm;
