@@ -36,7 +36,7 @@ function App() {
       <ToastContainer />
 
       <Routes>
-        {userRole === "Admin" ? (
+        {/* {userRole === "Admin" ? (
           <Route element={<AdminLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="Confirm-Email" element={<ConfirmEmail />} />
@@ -46,7 +46,7 @@ function App() {
             <Route path="clients" element={<ClientPage />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>
-        ) : (
+        ) : ( */}
           <Route path="/*" element={<LandingPage />}>
             <Route index element={<LoginPage />} />
             <Route path="BaiSol" element={<Body />} />
@@ -55,7 +55,7 @@ function App() {
             <Route path="change-password" element={<ChangePass />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>
-        )}
+       {/* )} */}
 
         <Route path="/verify-2FA" element={<Verify2FA />} />
         <Route path="/home" element={<Home />} />
