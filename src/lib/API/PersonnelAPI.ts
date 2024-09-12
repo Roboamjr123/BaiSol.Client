@@ -71,7 +71,7 @@ export const useAssignInstallersToProject = () => {
       const data = {
         ...formData,
         adminEmail: "richardquirante98@gmail.com",
-        // adminEmail: admin.email, // Add adminEmail dynamically
+        // adminEmail: admin?.email, // Add adminEmail dynamically
       };
 
       try {

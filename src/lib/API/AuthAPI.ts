@@ -47,10 +47,20 @@ export const use2FAMutation = () => {
       localStorage.setItem("refreshToken", refreshToken);
       const decoded: any = jwtDecode(accessToken);
       const user = {
-        userId: decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"],
-        email: decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"],
-        userName: decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],
-        userRole: decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]
+        userId:
+          decoded[
+            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+          ],
+        email:
+          decoded[
+            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
+          ],
+        userName:
+          decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],
+        userRole:
+          decoded[
+            "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+          ],
       };
 
       dispatch(setUser(user));

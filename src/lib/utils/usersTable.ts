@@ -80,12 +80,14 @@ export const clientStatusOptions = [
   { name: "Active", uid: "Active" },
   { name: "OnGoing", uid: "OnGoing" },
   { name: "Finished", uid: "Finished" },
+  { name: "Pending", uid: "Pending" },
 ];
 
 export const clientStatusColorMap: Record<string, ChipProps["color"]> = {
   Active: "success",
   OnGoing: "primary",
   Finished: "secondary",
+  Pending: "default"
 };
 
 export const INITIAL_VISIBLE_COLUMNS = ["name", "status", "actions"];

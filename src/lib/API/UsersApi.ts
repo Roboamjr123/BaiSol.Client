@@ -98,19 +98,6 @@ export const getAllAdminUsers = () => {
     },
   });
 };
-// export const getAllAdminUsers = async () => {
-//   const response = await api.get("user/User/Users-By-Role?role=Admin");
-//   return response.data.map((user: any) => ({
-//     id: user.id,
-//     email: user.email,
-//     userName: user.userName,
-//     role: user.role,
-//     adminEmail: user.adminEmail,
-//     status: user.status,
-//     updatedAt: new Date(user.updatedAt).toLocaleString(),
-//     createdAt: new Date(user.createdAt).toLocaleString(),
-//   }));
-// };
 
 //fetch all facilitator users
 export const getAllFacilitatorUsers = () => {
@@ -259,6 +246,21 @@ export const useAddNewInstaller = () => {
         console.error("Error adding installer:", error);
         throw error; // Ensure the error is thrown so it can be handled by react-query
       }
+    },
+  });
+};
+
+// Approve Email
+export const useApproveClientAccount = () => {
+  return useMutation({
+    mutationFn: async (clientId: string) => {
+      const response = await api.put("user/User/Approve-Client-Account", null, {
+        headers: {
+          "Content-Type": "application/json", // Ensure it matches the server requirements
+        },
+        params: { clientId },
+      });
+      return response.data;
     },
   });
 };

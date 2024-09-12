@@ -1,5 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "./AuthAPI";
+import { toast } from "react-toastify";
 
 // Get material qoh
 export const getMaterialQOH = (mtlId: number) => {
@@ -49,5 +50,138 @@ export const getAvailableMaterials = (projId: string, category: string) => {
       return response.data;
     },
     enabled: !!projId && !!category,
+  });
+};
+
+interface IAddMaterial {
+  mtlDescript: string;
+  mtlPrice: number;
+  mtlqoh: number;
+  mtlCategory: string;
+  mtlUnit: string;
+  userEmail: string;
+}
+
+// Add new Material
+export const useAddMaterial = () => {
+  return useMutation({
+    mutationFn: async (formData: IAddMaterial) => {
+      try {
+        const response = await api.post(
+          "material/Material/Add-Material",
+          formData,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        return response.data;
+      } catch (error) {
+        console.error("Error adding material:", error);
+        throw error; // Ensure the error is thrown for react-query to handle
+      }
+    },
+  });
+};
+
+interface IAllMaterials {
+  mtlId: number;
+  mtlCode: string;
+  mtlDescript: string;
+  mtlCtgry: string;
+  mtlPrice: number;
+  mtlqoh: number;
+  mtlUnit: string;
+  mtlStatus: string;
+  updatedAt: string;
+  createdAt: string;
+}
+
+// Get materials
+export const getAllMaterials = () => {
+  return useQuery<IAllMaterials[], Error>({
+    queryKey: ["all-materials"],
+    queryFn: async () => {
+      const response = await api.get("material/Material/Get-Materials");
+      return response.data;
+    },
+  });
+};
+
+interface IUpdateMaterialPAndQ {
+  mtlId: number;
+  mtlPrice: number;
+  mtlqoh: number;
+  userEmail: string;
+}
+
+// Update Material Price and Quantity
+export const useUpdatMaterialPAndQ = () => {
+  return useMutation({
+    mutationFn: async (data: IUpdateMaterialPAndQ) => {
+      const response = await api.put(
+        `material/Material/Update-MaterialPAndQ`,
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json", // Ensure it matches the server requirements
+          },
+        }
+      );
+      return response.data;
+    },
+  });
+};
+
+interface IUpdateMaterialUAndD {
+  mtlCode: string;
+  mtlDescript: string;
+  mtlUnit: string;
+  userEmail: string;
+}
+
+// Update Material Unit and Description
+export const useUpdatMaterialUAndD = () => {
+  return useMutation({
+    mutationFn: async (data: IUpdateMaterialUAndD) => {
+      const response = await api.put(
+        `material/Material/Update-MaterialUAndD`,
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json", // Ensure it matches the server requirements
+          },
+        }
+      );
+      return response.data;
+    },
+  });
+};
+
+// Delete Material
+export const useDeleteMaterial = () => {
+  //   const admin = useSelector(selectUser);
+  //   const adminEmail = admin?.email;
+  const adminEmail = "richardquirante98@gmail.com";
+
+  return useMutation({
+    mutationFn: async ({ mtlId }: { mtlId: number }) => {
+      try {
+        const response = await api.delete("material/Material/Delete-Material", {
+          params: { mtlId, adminEmail },
+        });
+        return response.data;
+      } catch (error) {
+        toast.error("Failed to delete material.");
+        throw error; // Ensure to propagate the error for proper handling
+      }
+    },
+    onSuccess: (data) => {
+      toast.success(data);
+    },
+    onError: (error) => {
+      console.error("Error deleting material:", error);
+    },
   });
 };

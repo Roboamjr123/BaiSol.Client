@@ -16,13 +16,10 @@ import {
   Pagination,
   Selection,
   SortDescriptor,
-  cn,
-  useDisclosure,
 } from "@nextui-org/react";
 import { BiDotsVertical } from "react-icons/bi";
 import { CiSearch } from "react-icons/ci";
 import { FaChevronDown } from "react-icons/fa6";
-import { FaPlus } from "react-icons/fa6";
 import { capitalize } from "../../../lib/utils/utils";
 import { getAllClientUsers } from "../../../lib/API/Client/ClientApi";
 import {
@@ -30,14 +27,15 @@ import {
   clientStatusColorMap,
   clientStatusOptions,
   ClientTableProps,
-  iconClasses,
   INITIAL_CLIENT_VISIBLE_COLUMNS,
 } from "../../../lib/utils/usersTable";
-import { MdOutlineDeleteForever } from "react-icons/md";
+import { useApproveClientAccount } from "../../../lib/API/UsersApi";
+import { toast } from "react-toastify";
 
 const ClientTable = () => {
   const { data: clients, isLoading, error, refetch } = getAllClientUsers();
   const clientLength = clients ? clients.length : 0;
+  const activateClient = useApproveClientAccount();
 
   const [filterValue, setFilterValue] = useState("");
   const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
@@ -126,15 +124,15 @@ const ClientTable = () => {
     return sortedItems.slice(start, end);
   }, [page, sortedItems, rowsPerPage]);
 
-  const {
-    isOpen: actionIsOpen,
-    onOpen: actionOnOpen,
-    onClose: actionOnClose,
-  } = useDisclosure();
+  // const {
+  //   isOpen: actionIsOpen,
+  //   onOpen: actionOnOpen,
+  //   onClose: actionOnClose,
+  // } = useDisclosure();
 
-  const [clientId, setclientId] = useState<string>("");
-  const [clientName, setclientName] = useState<string>("");
-  const [action, setAction] = useState<string>("");
+  // const [clientId, setclientId] = useState<string>("");
+  // const [clientName, setclientName] = useState<string>("");
+  // const [action, setAction] = useState<string>("");
 
   // const {
   //   isOpen: addIsOpen,
@@ -142,15 +140,31 @@ const ClientTable = () => {
   //   onClose: addOnClose,
   // } = useDisclosure();
 
-  const handleDropdownActionItemClick = (
-    clientId: string,
-    clientName: string,
-    action: string
-  ) => {
-    setclientId(clientId);
-    setclientName(clientName);
-    setAction(action);
-    actionOnOpen();
+  const handleDropdownActionItemClick = (clientId: string) => {
+    // setclientId(clientId);
+    // setclientName(clientName);
+    // setAction(action);
+    // actionOnOpen();
+    if (
+      window.confirm(
+        "Are you sure you want to activate the client account? Press OK to confirm."
+      )
+    ) {
+
+      activateClient.mutateAsync(clientId, {
+        onSuccess: (mess) => {
+          toast.success(mess);
+          refetch();
+        },
+        onError: (error: any) => {
+          if (error.response) {
+            toast.error(error.response.data.message);
+          } else {
+            toast.error(error.response.data.message);
+          }
+        },
+      });
+    }
   };
 
   const renderCell = useCallback(
@@ -231,28 +245,13 @@ const ClientTable = () => {
                 </DropdownTrigger>
                 <DropdownMenu variant="shadow">
                   <DropdownItem>View</DropdownItem>
-                  {client.status === "Active" ? (
+                  {client.status === "Pending" ? (
                     <DropdownItem
                       onClick={() =>
                         handleDropdownActionItemClick(
-                          client.id,
-                          client.userName,
-                          "Suspend"
-                        )
-                      }
-                      key={client.id}
-                      className="text-warning"
-                      color="warning"
-                    >
-                      Suspend
-                    </DropdownItem>
-                  ) : client.status === "Suspended" ? (
-                    <DropdownItem
-                      onClick={() =>
-                        handleDropdownActionItemClick(
-                          client.id,
-                          client.userName,
-                          "Activate"
+                          client.id
+                          // client.userName,
+                          // "Activate"
                         )
                       }
                       key={client.id}
@@ -264,7 +263,7 @@ const ClientTable = () => {
                   ) : (
                     <DropdownItem className="hidden"></DropdownItem>
                   )}
-                  {client.status !== "InActive" ? (
+                  {/* {client.status !== "InActive" ? (
                     <DropdownItem
                       onClick={() =>
                         handleDropdownActionItemClick(
@@ -286,7 +285,7 @@ const ClientTable = () => {
                     </DropdownItem>
                   ) : (
                     <DropdownItem className="hidden"></DropdownItem>
-                  )}
+                  )} */}
                 </DropdownMenu>
               </Dropdown>
             </div>
@@ -518,7 +517,7 @@ const ClientTable = () => {
               <TableBody
                 emptyContent={"No personnel found"}
                 items={items}
-                loadingContent={"Loading personnel..."}
+                loadingContent={"Loading clients..."}
                 isLoading={isLoading}
               >
                 {(item) => (

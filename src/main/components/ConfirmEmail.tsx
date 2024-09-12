@@ -14,8 +14,15 @@ const ConfirmEmail = () => {
     const email = queryParams.get("email");
 
     if (token && email) {
-      confirmEmail.mutate({ token, email });
-      toast.success("Your email is successfully verified!");
+      confirmEmail.mutate(
+        { token, email },
+        {
+          onSuccess: (data) => {
+            // toast.success("Your email is successfully verified!");
+            toast.success(data.message);
+          },
+        }
+      );
     }
   }, [location.search, confirmEmail.mutate]);
 
