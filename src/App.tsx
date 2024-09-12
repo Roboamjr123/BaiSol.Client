@@ -22,6 +22,7 @@ import { useSelector } from "react-redux";
 import { selectUser } from "./state/authSlice";
 import ClientRegistrationForm from "./main/forms/auth/ClientRegistrationForm";
 import PageNotFound from "./main/pages/PageNotFound";
+import Supply from "./Admin/pages/Supply";
 
 const queryClient = new QueryClient({});
 
@@ -43,6 +44,7 @@ function App() {
           <Route path="project/:projId" element={<QuotationPage />} />
           <Route path="personnel" element={<Personnel />} />
           <Route path="clients" element={<ClientPage />} />
+          <Route path="supply" element={<Supply />} />
           <Route path="*" element={<PageNotFound />} />
         </Route>
 

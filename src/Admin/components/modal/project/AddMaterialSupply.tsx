@@ -44,8 +44,11 @@ const AddMaterialSupply: React.FC<IAdd> = ({
   const [selectedMaterialCode, setSelectedMaterialCode] = useState<string>("");
 
   const { data: allMaterialCategories } = getMaterialCategory();
-  const { data: availableMaterialsData, refetch: refetchMaterials } =
-    getAvailableMaterials(projId, category);
+  const {
+    data: availableMaterialsData,
+    refetch: refetchMaterials,
+    isLoading,
+  } = getAvailableMaterials(projId, category);
   const addProjectSupply = useAddProjectMaterialSupply();
 
   const availableMaterials = availableMaterialsData || [];
@@ -152,6 +155,7 @@ const AddMaterialSupply: React.FC<IAdd> = ({
           <Select
             label="Select Material"
             size="sm"
+            isLoading={isLoading}
             disabled={!availableMaterials.length}
             value={selectedMaterialCode}
             onSelectionChange={(keys) => {
@@ -210,7 +214,12 @@ const AddMaterialSupply: React.FC<IAdd> = ({
             onClick={() => handleAddNewMaerial()}
             className="bg-orange-400 w-max ml-auto text-white rounded-lg py-2 px-3 hover:bg-gray-200 hover:text-orange-500 transition-all duration-300 ease-in"
             isLoading={addProjectSupply.isPending}
-            isDisabled={isInvalidQuantity || quantity <= 0 || !category}
+            isDisabled={
+              isInvalidQuantity ||
+              quantity <= 0 ||
+              availableQuantity < quantity ||
+              !category
+            }
           >
             {addProjectSupply.isPending ? "Adding..." : "Add"}
           </Button>

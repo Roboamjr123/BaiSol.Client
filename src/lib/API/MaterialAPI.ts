@@ -1,6 +1,10 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "./AuthAPI";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../state/authSlice";
+
+// const userEmail = useSelector(selectUser);
 
 // Get material qoh
 export const getMaterialQOH = (mtlId: number) => {
@@ -59,7 +63,6 @@ interface IAddMaterial {
   mtlqoh: number;
   mtlCategory: string;
   mtlUnit: string;
-  userEmail: string;
 }
 
 // Add new Material
@@ -69,7 +72,11 @@ export const useAddMaterial = () => {
       try {
         const response = await api.post(
           "material/Material/Add-Material",
-          formData,
+          {
+            ...formData,
+            userEmail: "user@example.com",
+            // userEmail: userEmail,
+          },
           {
             headers: {
               "Content-Type": "application/json",
@@ -85,7 +92,7 @@ export const useAddMaterial = () => {
   });
 };
 
-interface IAllMaterials {
+export interface IAllMaterials {
   mtlId: number;
   mtlCode: string;
   mtlDescript: string;
@@ -113,7 +120,6 @@ interface IUpdateMaterialPAndQ {
   mtlId: number;
   mtlPrice: number;
   mtlqoh: number;
-  userEmail: string;
 }
 
 // Update Material Price and Quantity
@@ -122,7 +128,11 @@ export const useUpdatMaterialPAndQ = () => {
     mutationFn: async (data: IUpdateMaterialPAndQ) => {
       const response = await api.put(
         `material/Material/Update-MaterialPAndQ`,
-        data,
+        {
+          ...data,
+          userEmail: "richardquirante98@gmail.com",
+          // userEmail: userEmail,
+        },
         {
           headers: {
             "Content-Type": "application/json", // Ensure it matches the server requirements
@@ -138,7 +148,6 @@ interface IUpdateMaterialUAndD {
   mtlCode: string;
   mtlDescript: string;
   mtlUnit: string;
-  userEmail: string;
 }
 
 // Update Material Unit and Description
@@ -147,7 +156,11 @@ export const useUpdatMaterialUAndD = () => {
     mutationFn: async (data: IUpdateMaterialUAndD) => {
       const response = await api.put(
         `material/Material/Update-MaterialUAndD`,
-        data,
+        {
+          ...data,
+          userEmail: "richardquirante98@gmail.com",
+          // userEmail: userEmail,
+        },
         {
           headers: {
             "Content-Type": "application/json", // Ensure it matches the server requirements

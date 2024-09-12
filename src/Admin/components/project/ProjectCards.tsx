@@ -31,7 +31,7 @@ const ProjectCards = ({
             className="p-5 shadow-lg rounded-lg cursor-pointer bg-white hover:scale-105 duration-300"
           >
             <div className="flex flex-row justify-between">
-              <span className="text-lg font-bold tracking-widest">
+              <span className="text-lg font-bold tracking-widest flex-grow overflow-hidden text-ellipsis">
                 {project.projName}
               </span>
               <Chip

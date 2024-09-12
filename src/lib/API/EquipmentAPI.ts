@@ -4,13 +4,14 @@ import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../state/authSlice";
 
+// const userEmail = useSelector(selectUser);
+
 interface IAddEquipment {
   eqptDescript: string;
   eqptPrice: number;
   eqptqoh: number;
   eqptUnit: string;
   eqptCategory: string;
-  userEmail: string;
 }
 
 // Add new Equipment
@@ -20,7 +21,11 @@ export const useAddEquipment = () => {
       try {
         const response = await api.post(
           "api/Equipment/Add-Equipment",
-          formData,
+          {
+            ...formData,
+            userEmail: "richardquirante98@gmail.com",
+            // userEmail: userEmail,
+          },
           {
             headers: {
               "Content-Type": "application/json",
@@ -36,7 +41,7 @@ export const useAddEquipment = () => {
   });
 };
 
-interface IAllEquipment {
+export interface IAllEquipment {
   eqptId: number;
   eqptCode: string;
   eqptDescript: string;
@@ -102,7 +107,6 @@ interface IUpdatEquipmentPAndQ {
   eqptId: number;
   eqptPrice: number;
   eqptqoh: number;
-  userEmail: string;
 }
 
 // Update Equipment Price and Quantity
@@ -111,7 +115,11 @@ export const useUpdatEquipmentPAndQ = () => {
     mutationFn: async (data: IUpdatEquipmentPAndQ) => {
       const response = await api.put(
         `api/Equipment/Update-EquipmentPAndQ`,
-        data,
+        {
+          ...data,
+          userEmail: "richardquirante98@gmail.com",
+          // userEmail: userEmail,
+        },
         {
           headers: {
             "Content-Type": "application/json", // Ensure it matches the server requirements
@@ -127,7 +135,6 @@ interface IUpdateEquipmentUAndD {
   eqptCode: string;
   eqptDescript: string;
   eqptUnit: string;
-  userEmail: string;
 }
 
 // Update Equipment Unit and Description
@@ -136,7 +143,11 @@ export const useUpdatEquipmentUAndD = () => {
     mutationFn: async (data: IUpdateEquipmentUAndD) => {
       const response = await api.put(
         `api/Equipment/Update-EquipmentUAndD`,
-        data,
+        {
+          data,
+          userEmail: "richardquirante98@gmail.com",
+          // userEmail: userEmail,
+        },
         {
           headers: {
             "Content-Type": "application/json", // Ensure it matches the server requirements
