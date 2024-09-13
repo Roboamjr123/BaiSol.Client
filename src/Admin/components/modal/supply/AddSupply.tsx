@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import {
   getMaterialCategory,
+  IAddMaterial,
   useAddMaterial,
 } from "../../../../lib/API/MaterialAPI";
 import {
@@ -15,20 +16,24 @@ import {
   Textarea,
 } from "@nextui-org/react";
 import { toast } from "react-toastify";
+import {
+  getEquipmentCategory,
+  IAddEquipment,
+  useAddEquipment,
+} from "../../../../lib/API/EquipmentAPI";
 
-const AddMaterial: React.FC<{
+const AddSupply: React.FC<{
   isExistCategory?: boolean;
   isOpen: boolean;
+  isMaterial: boolean;
   onClose: () => void;
   refetch: () => void;
-}> = ({ isExistCategory, isOpen, onClose, refetch }) => {
+}> = ({ isExistCategory, isMaterial, isOpen, onClose, refetch }) => {
   const [description, setDescription] = useState<string>("");
   const [price, setPrice] = useState<string>("");
   const [quantity, setQuantity] = useState<number>(0);
   const [category, setCategory] = useState<string>("");
   const [unit, setUnit] = useState<string>("");
-
-  const validateQuantity = (value: string) => /^\d{9}$/.test(value);
 
   const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -37,18 +42,15 @@ const AddMaterial: React.FC<{
     }
   };
 
-  const isInvalidPrice = useMemo(() => {
-    const parsedPrice = parseFloat(price);
-    return price !== "" && (isNaN(parsedPrice) || parsedPrice <= 0);
-  }, [price]);
-
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     if (/^\d*\.?\d{0,2}$/.test(value)) setPrice(value);
   };
 
-  const addNewMaterial = useAddMaterial();
-  const { data: allMaterialCategories } = getMaterialCategory();
+  const addNewSupply = isMaterial ? useAddMaterial() : useAddEquipment();
+  const { data: allMaterialCategories } = isMaterial
+    ? getMaterialCategory()
+    : getEquipmentCategory();
 
   useEffect(() => {
     if (!isOpen) {
@@ -60,38 +62,49 @@ const AddMaterial: React.FC<{
     }
   }, [isOpen]);
 
-  const handleSubmitNewMaterial = (e: React.FormEvent) => {
+  const handleSubmitNewMaterial = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Correctly type formData based on isMaterial
+    let formData: IAddMaterial | IAddEquipment;
+    if (isMaterial) {
+      formData = {
+        mtlDescript: description,
+        mtlPrice: Number(price),
+        mtlqoh: quantity,
+        mtlCategory: category,
+        mtlUnit: unit,
+      } as IAddMaterial;
+    } else {
+      formData = {
+        eqptDescript: description,
+        eqptPrice: Number(price),
+        eqptqoh: quantity,
+        eqptCategory: category,
+        eqptUnit: unit,
+      } as IAddEquipment;
+    }
+
     try {
-      addNewMaterial.mutateAsync(
-        {
-          mtlDescript: description,
-          mtlPrice: Number(price),
-          mtlqoh: quantity,
-          mtlCategory: category,
-          mtlUnit: unit,
+      await addNewSupply.mutateAsync(formData as IAddMaterial & IAddEquipment, {
+        onSuccess: (data) => {
+          toast.success(data);
+          refetch();
+          onClose();
+          setDescription("");
+          setPrice("");
+          setQuantity(0);
+          setCategory("");
+          setUnit("");
         },
-        {
-          onSuccess: (data) => {
-            toast.success(data);
-            refetch();
-            onClose();
-            setDescription("");
-            setPrice("");
-            setQuantity(0);
-            setCategory("");
-            setUnit("");
-          },
-          onError: (error: any) => {
-            if (error.response) {
-              toast.error(error.response.data.message);
-            } else {
-              toast.error(error.response.data.message);
-            }
-          },
-        }
-      );
+        onError: (error: any) => {
+          if (error.response) {
+            toast.error(error.response.data.message);
+          } else {
+            toast.error("An error occurred");
+          }
+        },
+      });
     } catch (error) {
       console.error("Error submitting form:", error);
     }
@@ -102,7 +115,10 @@ const AddMaterial: React.FC<{
       <ModalContent>
         <ModalHeader>
           <div className="text-2xl font-bold mb-2 text-[#1e0e4b] text-center">
-            Add New <span className="text-orange-500">Installer</span>
+            Add New{" "}
+            <span className="text-orange-500">
+              {isMaterial ? "Material" : "Equipment"}
+            </span>
           </div>
         </ModalHeader>
         <ModalBody>
@@ -194,11 +210,11 @@ const AddMaterial: React.FC<{
                 quantity <= 0 ||
                 Number(price) <= 0
               }
-              isLoading={addNewMaterial.isPending}
+              isLoading={addNewSupply.isPending}
               type="submit"
               className="bg-orange-400 w-max ml-auto text-white rounded-lg py-2 px-3 hover:bg-gray-200 hover:text-orange-500 transition-all duration-300 ease-in"
             >
-              {addNewMaterial.isPending ? "Loading..." : "Add"}
+              {addNewSupply.isPending ? "Loading..." : "Add"}
             </Button>
           </form>
         </ModalBody>
@@ -207,4 +223,4 @@ const AddMaterial: React.FC<{
   );
 };
 
-export default AddMaterial;
+export default AddSupply;

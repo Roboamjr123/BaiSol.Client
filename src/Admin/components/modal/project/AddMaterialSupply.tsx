@@ -43,11 +43,12 @@ const AddMaterialSupply: React.FC<IAdd> = ({
   const [category, setCategory] = useState<string>("");
   const [selectedMaterialCode, setSelectedMaterialCode] = useState<string>("");
 
-  const { data: allMaterialCategories } = getMaterialCategory();
+  const { data: allMaterialCategories, isLoading: categoryIsLoading } =
+    getMaterialCategory();
   const {
     data: availableMaterialsData,
     refetch: refetchMaterials,
-    isLoading,
+    isLoading: availableIsLoading,
   } = getAvailableMaterials(projId, category);
   const addProjectSupply = useAddProjectMaterialSupply();
 
@@ -135,6 +136,7 @@ const AddMaterialSupply: React.FC<IAdd> = ({
             label="Select category"
             size="sm"
             value={[category]}
+            isLoading={categoryIsLoading}
             onChange={handleCategoryChange}
           >
             {allMaterialCategories && allMaterialCategories.length > 0 ? (
@@ -155,7 +157,7 @@ const AddMaterialSupply: React.FC<IAdd> = ({
           <Select
             label="Select Material"
             size="sm"
-            isLoading={isLoading}
+            isLoading={availableIsLoading}
             disabled={!availableMaterials.length}
             value={selectedMaterialCode}
             onSelectionChange={(keys) => {

@@ -57,7 +57,7 @@ export const getAvailableMaterials = (projId: string, category: string) => {
   });
 };
 
-interface IAddMaterial {
+export interface IAddMaterial {
   mtlDescript: string;
   mtlPrice: number;
   mtlqoh: number;
@@ -123,14 +123,14 @@ interface IUpdateMaterialPAndQ {
 }
 
 // Update Material Price and Quantity
-export const useUpdatMaterialPAndQ = () => {
+export const useUpdateMaterialPAndQ = () => {
   return useMutation({
     mutationFn: async (data: IUpdateMaterialPAndQ) => {
       const response = await api.put(
         `material/Material/Update-MaterialPAndQ`,
         {
           ...data,
-          userEmail: "richardquirante98@gmail.com",
+          userEmail: "user@example.com",
           // userEmail: userEmail,
         },
         {
@@ -151,14 +151,14 @@ interface IUpdateMaterialUAndD {
 }
 
 // Update Material Unit and Description
-export const useUpdatMaterialUAndD = () => {
+export const useUpdateMaterialUAndD = () => {
   return useMutation({
     mutationFn: async (data: IUpdateMaterialUAndD) => {
       const response = await api.put(
         `material/Material/Update-MaterialUAndD`,
         {
           ...data,
-          userEmail: "richardquirante98@gmail.com",
+          userEmail: "user@example.com",
           // userEmail: userEmail,
         },
         {
@@ -176,24 +176,17 @@ export const useUpdatMaterialUAndD = () => {
 export const useDeleteMaterial = () => {
   //   const admin = useSelector(selectUser);
   //   const adminEmail = admin?.email;
-  const adminEmail = "richardquirante98@gmail.com";
+  const adminEmail = "user@example.com";
 
   return useMutation({
     mutationFn: async ({ mtlId }: { mtlId: number }) => {
-      try {
-        const response = await api.delete("material/Material/Delete-Material", {
-          params: { mtlId, adminEmail },
-        });
-        return response.data;
-      } catch (error) {
-        toast.error("Failed to delete material.");
-        throw error; // Ensure to propagate the error for proper handling
-      }
+      const response = await api.delete("material/Material/Delete-Material", {
+        params: { mtlId, adminEmail },
+      });
+      return response.data;
     },
-    onSuccess: (data) => {
-      toast.success(data);
-    },
-    onError: (error) => {
+    onError: (error: any) => {
+      toast.error(error.response.data);
       console.error("Error deleting material:", error);
     },
   });

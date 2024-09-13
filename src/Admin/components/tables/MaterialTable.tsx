@@ -1,7 +1,12 @@
 import React, { useCallback, useMemo, useState } from "react";
-import { getAllMaterials, IAllMaterials } from "../../../lib/API/MaterialAPI";
+import {
+  getAllMaterials,
+  IAllMaterials,
+  useDeleteMaterial,
+} from "../../../lib/API/MaterialAPI";
 import {
   Button,
+  cn,
   Dropdown,
   DropdownItem,
   DropdownMenu,
@@ -20,14 +25,34 @@ import {
 import { BiDotsVertical } from "react-icons/bi";
 import { CiSearch } from "react-icons/ci";
 import { FaPlus } from "react-icons/fa";
-import { material_columns } from "../../../lib/utils/supplyTable";
-import AddMaterial from "../modal/material/AddMaterial";
-import { table } from "console";
+import { supply_columns } from "../../../lib/utils/supplyTable";
+import { MdOutlineDeleteForever } from "react-icons/md";
+import { iconClasses } from "../../../lib/utils/usersTable";
+import { toast } from "react-toastify";
+import { formatNumber } from "../../../lib/utils/utils";
+import AddSupply from "../modal/supply/AddSupply";
+import EditSupply from "../modal/supply/EditSupply";
+
+export const defaultMaterial: IAllMaterials = {
+  mtlId: 0,
+  mtlCode: "",
+  mtlDescript: "",
+  mtlCtgry: "",
+  mtlPrice: 0,
+  mtlqoh: 0,
+  mtlUnit: "",
+  mtlStatus: "active", // or another appropriate status
+  updatedAt: new Date().toISOString(),
+  createdAt: new Date().toISOString(),
+};
 
 const MaterialTable = () => {
+  const deleteMaterial = useDeleteMaterial();
   const { data: materials, isLoading, refetch } = getAllMaterials();
   const materiaLength = materials ? materials.length : 0;
 
+  const [materialData, setMaterialData] =
+    useState<IAllMaterials>(defaultMaterial);
   const [filterValue, setFilterValue] = useState("");
   const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
   const hasSearchFilter = Boolean(filterValue);
@@ -55,6 +80,26 @@ const MaterialTable = () => {
     }
   }, []);
 
+  const handleDeleteMaterial = (id: number) => {
+    if (window.confirm("Click Ok to delete this material.")) {
+      deleteMaterial.mutateAsync(
+        { mtlId: id },
+        {
+          onSuccess: (data) => {
+            toast.info(data);
+            refetch();
+          },
+        }
+      );
+    }
+  };
+
+  const handleEditMaterial = (material: IAllMaterials) => {
+    setMaterialData(material);
+
+    editOnOpen();
+  };
+
   const renderCell = useCallback(
     (material: IAllMaterials, columnKey: React.Key) => {
       const cellValue = material[columnKey as keyof IAllMaterials];
@@ -73,6 +118,12 @@ const MaterialTable = () => {
                 {material.mtlCtgry}
               </span>
             </div>
+          );
+        case "price":
+          return (
+            <span className="font-semibold tracking-widest">
+              ₱ {formatNumber(material.mtlPrice)}
+            </span>
           );
         case "quantity":
           return material.mtlqoh;
@@ -104,7 +155,25 @@ const MaterialTable = () => {
                 </Button>
               </DropdownTrigger>
               <DropdownMenu variant="shadow">
-                <DropdownItem>Edit</DropdownItem>
+                <DropdownItem
+                  onClick={() => {
+                    handleEditMaterial(material);
+                  }}
+                >
+                  Edit
+                </DropdownItem>
+                <DropdownItem
+                  onClick={() => handleDeleteMaterial(material.mtlId)}
+                  color="danger"
+                  className="text-danger"
+                  startContent={
+                    <MdOutlineDeleteForever
+                      className={cn(iconClasses, "text-danger")}
+                    />
+                  }
+                >
+                  Delete
+                </DropdownItem>
               </DropdownMenu>
             </Dropdown>
           );
@@ -146,13 +215,15 @@ const MaterialTable = () => {
             </DropdownTrigger>
             <DropdownMenu variant="shadow">
               <DropdownItem onClick={() => addOnOpen()}>New</DropdownItem>
-              <DropdownItem onClick={() => addExistOnOpen()}>Exist</DropdownItem>
+              <DropdownItem onClick={() => addExistOnOpen()}>
+                Exist
+              </DropdownItem>
             </DropdownMenu>
           </Dropdown>
         </div>
         <div className="flex justify-between items-start">
           <span className="text-default-400 text-small">
-            Total {materiaLength} material
+            Total {materiaLength} material/s
           </span>
         </div>
       </div>
@@ -191,6 +262,12 @@ const MaterialTable = () => {
     onClose: addExistOnClose,
   } = useDisclosure();
 
+  const {
+    isOpen: editIsOpen,
+    onOpen: editOnOpen,
+    onClose: editOnClose,
+  } = useDisclosure();
+
   return (
     <div className="bg-gray-100 flex items-center justify-center">
       <div className="container mx-auto p-4 bg-white h-full">
@@ -207,7 +284,7 @@ const MaterialTable = () => {
               topContentPlacement="outside"
               onSelectionChange={setSelectedKeys}
             >
-              <TableHeader columns={material_columns}>
+              <TableHeader columns={supply_columns}>
                 {(column) => (
                   <TableColumn
                     key={column.uid}
@@ -218,10 +295,11 @@ const MaterialTable = () => {
                 )}
               </TableHeader>
               <TableBody
-                emptyContent={"No personnel found"}
+                emptyContent={"No material found"}
+                isLoading={isLoading}
                 items={filteredItems}
                 loadingContent={
-                  <Spinner color="warning">Loading Installer...</Spinner>
+                  <Spinner color="warning">Loading Material...</Spinner>
                 }
               >
                 {(item) => (
@@ -234,13 +312,22 @@ const MaterialTable = () => {
               </TableBody>
             </Table>
           </div>
-          <AddMaterial
+          <EditSupply
+            prevSupply={materialData!}
+            isMaterial={true}
+            isOpen={editIsOpen}
+            onClose={editOnClose}
+            refetch={refetch}
+          />
+          <AddSupply
+            isMaterial={true}
             isOpen={addIsOpen}
             onClose={addOnClose}
             refetch={refetch}
           />
-          <AddMaterial
+          <AddSupply
             isExistCategory={true}
+            isMaterial={true}
             isOpen={addExistIsOpen}
             onClose={addExistOnClose}
             refetch={refetch}

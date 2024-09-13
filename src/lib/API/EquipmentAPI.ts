@@ -6,7 +6,7 @@ import { selectUser } from "../../state/authSlice";
 
 // const userEmail = useSelector(selectUser);
 
-interface IAddEquipment {
+export interface IAddEquipment {
   eqptDescript: string;
   eqptPrice: number;
   eqptqoh: number;
@@ -23,7 +23,7 @@ export const useAddEquipment = () => {
           "api/Equipment/Add-Equipment",
           {
             ...formData,
-            userEmail: "richardquirante98@gmail.com",
+            userEmail: "user@example.com",
             // userEmail: userEmail,
           },
           {
@@ -77,12 +77,9 @@ export const getAvailableEquipment = (projId: string, category: string) => {
   return useQuery<AvailEquipment[], Error>({
     queryKey: ["available-equipment", projId],
     queryFn: async () => {
-      const response = await api.get(
-        `material/Equipment/Get-Available-Equipment`,
-        {
-          params: { projId, category }, // Using params for cleaner query string
-        }
-      );
+      const response = await api.get(`qpi/Equipment/Get-Available-Equipment`, {
+        params: { projId, category }, // Using params for cleaner query string
+      });
       return response.data;
     },
     enabled: !!projId && !!category,
@@ -110,14 +107,14 @@ interface IUpdatEquipmentPAndQ {
 }
 
 // Update Equipment Price and Quantity
-export const useUpdatEquipmentPAndQ = () => {
+export const useUpdateEquipmentPAndQ = () => {
   return useMutation({
     mutationFn: async (data: IUpdatEquipmentPAndQ) => {
       const response = await api.put(
         `api/Equipment/Update-EquipmentPAndQ`,
         {
           ...data,
-          userEmail: "richardquirante98@gmail.com",
+          userEmail: "user@example.com",
           // userEmail: userEmail,
         },
         {
@@ -138,14 +135,14 @@ interface IUpdateEquipmentUAndD {
 }
 
 // Update Equipment Unit and Description
-export const useUpdatEquipmentUAndD = () => {
+export const useUpdateEquipmentUAndD = () => {
   return useMutation({
     mutationFn: async (data: IUpdateEquipmentUAndD) => {
       const response = await api.put(
         `api/Equipment/Update-EquipmentUAndD`,
         {
-          data,
-          userEmail: "richardquirante98@gmail.com",
+          ...data,
+          userEmail: "user@example.com",
           // userEmail: userEmail,
         },
         {
@@ -163,28 +160,25 @@ export const useUpdatEquipmentUAndD = () => {
 export const useDeleteEquipment = () => {
   //   const admin = useSelector(selectUser);
   //   const adminEmail = admin?.email;
-  const adminEmail = "richardquirante98@gmail.com";
+  const adminEmail = "user@example.com";
 
   return useMutation({
     mutationFn: async ({ eqptId }: { eqptId: number }) => {
       try {
-        const response = await api.delete(
-          "material/Equipment/Delete-Equipment",
-          {
-            params: { eqptId, adminEmail },
-          }
-        );
+        const response = await api.delete("api/Equipment/Delete-Equipment", {
+          params: { eqptId, adminEmail },
+        });
         return response.data;
       } catch (error) {
-        toast.error("Failed to delete material.");
+        toast.error("Failed to delete equipment.");
         throw error; // Ensure to propagate the error for proper handling
       }
     },
-    onSuccess: (data) => {
-      toast.success(data);
-    },
+    // onSuccess: (data) => {
+    //   toast.success(data);
+    // },
     onError: (error) => {
-      console.error("Error deleting material:", error);
+      console.error("Error deleting equipment:", error);
     },
   });
 };
@@ -212,7 +206,7 @@ export const useReturnDamageEquipment = () => {
           "api/Equipment/Return-Damaged-Equipment",
           {
             ...formData,
-            userEmail: "richardquirante98@gmail.com",
+            userEmail: "user@example.com",
             // ,userEmail: admin?.email
           },
           {
@@ -241,7 +235,7 @@ export const useReturnGoodquipment = () => {
           "api/Equipment/Return-Good-Equipment",
           {
             ...formData,
-            userEmail: "richardquirante98@gmail.com",
+            userEmail: "user@example.com",
             // ,userEmail: admin?.email
           },
           {
