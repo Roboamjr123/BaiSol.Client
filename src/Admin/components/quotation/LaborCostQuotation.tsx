@@ -20,6 +20,7 @@ interface ILaborCost {
   refetch: () => void;
   refetchPAM: () => void;
   isLoading: boolean;
+  isEditMode: boolean;
 }
 
 const defaultLabor: LaborCost = {
@@ -38,6 +39,7 @@ const LaborCostQuotation: React.FC<ILaborCost> = ({
   refetch,
   refetchPAM,
   isLoading,
+  isEditMode,
 }) => {
   const [installerQuantity, setInstallerQuantity] = useState<number>(0);
   const [selectedLabor, setSelectedLAbor] = useState<LaborCost>(defaultLabor);
@@ -162,24 +164,30 @@ const LaborCostQuotation: React.FC<ILaborCost> = ({
             <div className="w-full">
               <div className="flex w-full mb-4 justify-between items-end">
                 <span className="tracking-wider font-semibold">Labor Cost</span>
-                <Button
-                  isLoading={isLoading}
-                  className="bg-orange-500 text-background"
-                  endContent={<FaPlus />}
-                  size="sm"
-                  onClick={() => addOnOpen()}
-                >
-                  Add Labor Cost
-                </Button>
+                {isEditMode && (
+                  <Button
+                    isLoading={isLoading}
+                    className="bg-orange-500 text-background"
+                    endContent={<FaPlus />}
+                    size="sm"
+                    onClick={() => addOnOpen()}
+                  >
+                    Add Labor Cost
+                  </Button>
+                )}
               </div>
               <table className="w-full rounded-lg text-left text-gray-700">
                 <thead className="text-sm text-gray-700 bg-gray-50">
                   <tr className="border-b border-gray-400">
-                    {labor_columns.map((item) => (
-                      <th scope="col" className="text-center px-4 py-3">
-                        {item.name}
-                      </th>
-                    ))}
+                    {labor_columns
+                      .filter(
+                        (item) => !(!isEditMode && item.name === "Action")
+                      ) // Remove "Action" in edit mode
+                      .map((item) => (
+                        <th scope="col" className="text-center px-4 py-3">
+                          {item.name}
+                        </th>
+                      ))}
                   </tr>
                 </thead>
                 <tbody>
@@ -223,66 +231,70 @@ const LaborCostQuotation: React.FC<ILaborCost> = ({
                                 <td className="border-b hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap">
                                   ₱ {formatNumber(labor.totalCost)}
                                 </td>
-                                <td className="border-b hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap">
-                                  <div className="flex flex-row text-center justify-between">
-                                    <Button
-                                      variant="light"
-                                      onClick={() => handleEditItem(labor)}
-                                    >
-                                      <FaEdit
-                                        size={20}
-                                        className="text-primary-500"
-                                      />
-                                    </Button>
-
-                                    {!(
-                                      predefinedCategories.includes(
-                                        labor.description
-                                      ) || labor.description === lastCategory
-                                    ) && (
+                                {isEditMode && (
+                                  <td className="border-b hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                    <div className="flex flex-row text-center justify-between">
                                       <Button
                                         variant="light"
-                                        onClick={() =>
-                                          handleDeleteItem(labor.laborId)
-                                        }
+                                        onClick={() => handleEditItem(labor)}
                                       >
-                                        <FaTrashAlt
+                                        <FaEdit
                                           size={20}
-                                          className="text-danger-500"
+                                          className="text-primary-500"
                                         />
                                       </Button>
-                                    )}
 
-                                    {labor.quantity > 0 &&
-                                    labor.description == "Manpower" ? (
-                                      <Button
-                                        variant="light"
-                                        onClick={() => {
-                                          editAssignInstallerOnOpen();
-                                          setInstallerQuantity(labor.quantity);
-                                        }}
-                                      >
-                                        <MdFormatListBulletedAdd
-                                          size={20}
-                                          className="text-success-500"
-                                        />
-                                      </Button>
-                                    ) : null}
+                                      {!(
+                                        predefinedCategories.includes(
+                                          labor.description
+                                        ) || labor.description === lastCategory
+                                      ) && (
+                                        <Button
+                                          variant="light"
+                                          onClick={() =>
+                                            handleDeleteItem(labor.laborId)
+                                          }
+                                        >
+                                          <FaTrashAlt
+                                            size={20}
+                                            className="text-danger-500"
+                                          />
+                                        </Button>
+                                      )}
 
-                                    {labor.description ==
-                                    "Project Manager - Electrical Engr." ? (
-                                      <Button
-                                        variant="light"
-                                        onClick={() => editAssignFacOnOpen()}
-                                      >
-                                        <MdFormatListBulletedAdd
-                                          size={20}
-                                          className="text-success-500"
-                                        />
-                                      </Button>
-                                    ) : null}
-                                  </div>
-                                </td>
+                                      {labor.quantity > 0 &&
+                                      labor.description == "Manpower" ? (
+                                        <Button
+                                          variant="light"
+                                          onClick={() => {
+                                            editAssignInstallerOnOpen();
+                                            setInstallerQuantity(
+                                              labor.quantity
+                                            );
+                                          }}
+                                        >
+                                          <MdFormatListBulletedAdd
+                                            size={20}
+                                            className="text-success-500"
+                                          />
+                                        </Button>
+                                      ) : null}
+
+                                      {labor.description ==
+                                      "Project Manager - Electrical Engr." ? (
+                                        <Button
+                                          variant="light"
+                                          onClick={() => editAssignFacOnOpen()}
+                                        >
+                                          <MdFormatListBulletedAdd
+                                            size={20}
+                                            className="text-success-500"
+                                          />
+                                        </Button>
+                                      ) : null}
+                                    </div>
+                                  </td>
+                                )}
                               </tr>
                             );
                           })

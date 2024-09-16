@@ -109,13 +109,13 @@ const Sidebar: React.FC<SidebarProps> = ({ links, isOpen, setOpen }) => {
       <div
         onClick={() => setOpen(false)}
         className={`md:hidden fixed inset-0 max-h-screen z-[998] bg-black/50 ${
-          isOpen  ? "block" : "hidden"
+          isOpen ? "block" : "hidden"
         } `}
       ></div>
       <motion.div
         variants={Nav_animation}
         initial={{ x: isTabletMid ? -250 : 0 }}
-        animate={isOpen  ? "open" : "closed"}
+        animate={isOpen ? "open" : "closed"}
         className=" bg-white text-gray shadow-xl z-[999] max-w-[16rem]  w-[16rem] 
             overflow-hidden md:relative fixed h-screen "
       >
@@ -139,7 +139,7 @@ const Sidebar: React.FC<SidebarProps> = ({ links, isOpen, setOpen }) => {
               </li>
             ))}
 
-            {(isOpen  || isTabletMid) && (
+            {(isOpen || isTabletMid) && (
               <div className="border-y py-5 border-orange-300 ">
                 <small className="pl-3 text-slate-500 inline-block mb-2">
                   Product categories
@@ -164,10 +164,12 @@ const Sidebar: React.FC<SidebarProps> = ({ links, isOpen, setOpen }) => {
             </li>
           </ul>
 
-          {isOpen  && (
+          {isOpen && (
             <div className="flex-1 text-sm z-50  max-h-48 my-auto  whitespace-pre   w-full  font-medium  ">
               <div className="flex border-y border-orange-300 p-4 items-center justify-between">
-              <span className="text-gray-700 text-base font-semibold">{currentTime}</span>
+                <span className="text-gray-700 text-base font-semibold">
+                  {currentTime}
+                </span>
               </div>
             </div>
           )}
@@ -177,16 +179,14 @@ const Sidebar: React.FC<SidebarProps> = ({ links, isOpen, setOpen }) => {
             setOpen(!isOpen);
           }}
           animate={
-            isOpen 
+            isOpen
               ? {
-                  x: 0,
-                  y: 0,
-                  rotate: 0,
+                  x: 0, // Keep the arrow in its default x position when open
+                  rotate: 0, // Default rotation when open
                 }
               : {
-                  x: -10,
-                  y: -200,
-                  rotate: 180,
+                  x: -10, // Move it slightly to the left when closed
+                  rotate: 180, // Rotate the arrow when closed
                 }
           }
           transition={{ duration: 0 }}

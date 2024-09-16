@@ -18,6 +18,7 @@ interface IProjectAndMAterial {
   projectCost: any;
   refetch: () => void;
   isLoading: boolean;
+  isEditMode: boolean;
 }
 
 const ProjectAndMaterialsCostQuotation: React.FC<IProjectAndMAterial> = ({
@@ -25,6 +26,7 @@ const ProjectAndMaterialsCostQuotation: React.FC<IProjectAndMAterial> = ({
   projectCost,
   refetch,
   isLoading,
+  isEditMode,
 }) => {
   // Fetch `id` from URL params
   // const { projId } = useParams<{ projId: string }>();
@@ -113,24 +115,28 @@ const ProjectAndMaterialsCostQuotation: React.FC<IProjectAndMAterial> = ({
                 <span className="tracking-wider font-semibold">
                   Material Cost
                 </span>
-                <Button
-                  isLoading={isLoading}
-                  className="bg-orange-500 text-background"
-                  endContent={<FaPlus />}
-                  size="sm"
-                  onClick={() => addOnOpen()}
-                >
-                  Add Material Supply
-                </Button>
+                {isEditMode && (
+                  <Button
+                    isLoading={isLoading}
+                    className="bg-orange-500 text-background"
+                    endContent={<FaPlus />}
+                    size="sm"
+                    onClick={() => addOnOpen()}
+                  >
+                    Add Material Supply
+                  </Button>
+                )}
               </div>
               <table className="w-full rounded-lg text-left text-gray-700">
                 <thead className="text-sm text-gray-700 bg-gray-50">
                   <tr className="border-b border-gray-400">
-                    {project_quotation_and_materials_columns.map((item) => (
-                      <th scope="col" className="text-center px-4 py-3">
-                        {item.name}
-                      </th>
-                    ))}
+                    {project_quotation_and_materials_columns
+                      .filter((item) => !(!isEditMode && item.name === "Action")) // Remove "Action" in edit mode
+                      .map((item) => (
+                        <th scope="col" className="text-center px-4 py-3">
+                          {item.name}
+                        </th>
+                      ))}
                   </tr>
                 </thead>
                 <tbody>
@@ -195,41 +201,43 @@ const ProjectAndMaterialsCostQuotation: React.FC<IProjectAndMAterial> = ({
                                         </div>
                                       </td>
                                     )}
-                                    <td className="border-b hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap">
-                                      <div className="flex flex-row justify-center">
-                                        <Button
-                                          variant="light"
-                                          onClick={() =>
-                                            handleEditQuantityClick(
-                                              material.quantity,
-                                              material.mtlId,
-                                              material.suppId,
-                                              material.description
-                                            )
-                                          }
-                                        >
-                                          <FaEdit
-                                            size={20}
-                                            className="text-primary-500"
-                                          />
-                                        </Button>
+                                    {isEditMode && (
+                                      <td className="border-b hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                        <div className="flex flex-row justify-center">
+                                          <Button
+                                            variant="light"
+                                            onClick={() =>
+                                              handleEditQuantityClick(
+                                                material.quantity,
+                                                material.mtlId,
+                                                material.suppId,
+                                                material.description
+                                              )
+                                            }
+                                          >
+                                            <FaEdit
+                                              size={20}
+                                              className="text-primary-500"
+                                            />
+                                          </Button>
 
-                                        <Button
-                                          variant="light"
-                                          onClick={() =>
-                                            handleDeleteItem(
-                                              material.mtlId,
-                                              material.suppId
-                                            )
-                                          }
-                                        >
-                                          <FaTrashAlt
-                                            size={20}
-                                            className="text-danger-500"
-                                          />
-                                        </Button>
-                                      </div>
-                                    </td>
+                                          <Button
+                                            variant="light"
+                                            onClick={() =>
+                                              handleDeleteItem(
+                                                material.mtlId,
+                                                material.suppId
+                                              )
+                                            }
+                                          >
+                                            <FaTrashAlt
+                                              size={20}
+                                              className="text-danger-500"
+                                            />
+                                          </Button>
+                                        </div>
+                                      </td>
+                                    )}
                                   </tr>
                                 );
                               }

@@ -3,13 +3,18 @@ import LaborCostQuotation from "../components/quotation/LaborCostQuotation";
 import ProjectAndMaterialsCostQuotation from "../components/quotation/ProjectAndMaterialsCostQuotation";
 import { getProjectAndMaterialsCostQuote } from "../../lib/API/Quote/ProjectQuotationAPI";
 import { getLaborCostQuote } from "../../lib/API/Quote/LaborQuotationAPI";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Loader from "../../main/components/Loader";
+import { Switch } from "@nextui-org/react";
+import { FileEdit } from "lucide-react";
+import { IoIosSave } from "react-icons/io";
+import { FaEdit } from "react-icons/fa";
 
 const QuotationPage = () => {
   // Fetch `id` from URL params
   const { projId } = useParams<{ projId: string }>();
   const navigate = useNavigate();
+  const [isEditMode, setIsEditMode] = useState(false);
 
   const {
     data: projectCost,
@@ -35,16 +40,39 @@ const QuotationPage = () => {
 
   return (
     <div className="flex flex-col gap-5">
+      <div className="flex justify-between">
+        <div className="ml-auto">
+          <Switch
+            className="items-center"
+            color="warning"
+            size="lg"
+            isSelected={isEditMode}
+            onValueChange={setIsEditMode}
+            thumbIcon={({ isSelected, className }) =>
+              isSelected ? (
+                <FaEdit className={className} />
+              ) : (
+                <IoIosSave className={className} />
+              )
+            }
+          >
+            {isEditMode ? "Edit" : "Saved"}
+          </Switch>
+        </div>
+      </div>
+
       <ProjectAndMaterialsCostQuotation
         projId={projId!}
         projectCost={projectCost}
         isLoading={isLoadingPAM}
         refetch={refetchPAM}
+        isEditMode={isEditMode}
       />
       <LaborCostQuotation
         projId={projId!}
         laborCost={laborCost}
         isLoading={isLoadingLabor}
+        isEditMode={isEditMode}
         refetch={refetchLabor}
         refetchPAM={refetchPAM}
       />

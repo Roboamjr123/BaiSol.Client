@@ -23,6 +23,7 @@ import { selectUser } from "./state/authSlice";
 import ClientRegistrationForm from "./main/forms/auth/ClientRegistrationForm";
 import PageNotFound from "./main/pages/PageNotFound";
 import Supply from "./Admin/pages/Supply";
+import ClientQuotePage from "./Admin/pages/ClientQuotePage";
 
 const queryClient = new QueryClient({});
 
@@ -41,7 +42,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="Confirm-Email" element={<ConfirmEmail />} />
           <Route path="project" element={<ProjectPage />} />
-          <Route path="project/:projId" element={<QuotationPage />} />
+          <Route path="project/:projId" element={<ClientQuotePage />} />
           <Route path="personnel" element={<Personnel />} />
           <Route path="clients" element={<ClientPage />} />
           <Route path="supply" element={<Supply />} />
