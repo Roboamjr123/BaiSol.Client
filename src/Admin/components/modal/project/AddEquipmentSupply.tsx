@@ -1,8 +1,3 @@
-import React, { useEffect, useMemo, useState } from "react";
-import {
-  getAvailableMaterials,
-  getMaterialCategory,
-} from "../../../../lib/API/MaterialAPI";
 import {
   Button,
   Input,
@@ -14,62 +9,57 @@ import {
   Select,
   SelectItem,
 } from "@nextui-org/react";
-import { useAddProjectMaterialSupply } from "../../../../lib/API/Quote/ProjectQuotationAPI";
+import React, { useEffect, useMemo, useState } from "react";
+import {
+  getAvailableEquipment,
+  getEquipmentCategory,
+} from "../../../../lib/API/EquipmentAPI";
+import { useAssignEquipment } from "../../../../lib/API/Quote/EquipmentAssignationAPI";
 import { toast } from "react-toastify";
-
 interface IAdd {
   projId: string;
   isOpen: boolean;
   onClose: () => void;
   refetch: () => void;
 }
-
-const AddMaterialSupply: React.FC<IAdd> = ({
+const AddEquipmentSupply: React.FC<IAdd> = ({
   projId,
   isOpen,
   onClose,
   refetch,
 }) => {
   const [quantity, setQuantity] = useState<number>(0);
-
   const [availableQuantity, setAvailableQuantity] = useState<number>(0);
   const [category, setCategory] = useState<string>("");
-  const [selectedMaterialCode, setSelectedMaterialCode] = useState<string>("");
+  const [selectedEquipmentId, setSelectedEquipmentId] = useState<number>(0);
 
-  const { data: allMaterialCategories, isLoading: categoryIsLoading } =
-    getMaterialCategory();
+  const { data: allEquipmentCategories, isLoading: categoryIsLoading } =
+    getEquipmentCategory();
   const {
-    data: availableMaterialsData,
-    refetch: refetchMaterials,
+    data: availableEquipmentsData,
+    refetch: refetchEquipment,
     isLoading: availableIsLoading,
-  } = getAvailableMaterials(projId, category);
-  const addProjectSupply = useAddProjectMaterialSupply();
+  } = getAvailableEquipment(projId, category);
+  const assignEquipment = useAssignEquipment();
 
-  const availableMaterials = availableMaterialsData || [];
+  const availableEquipment = availableEquipmentsData || [];
 
   useEffect(() => {
     if (category) {
-      // Reset selected material when category changes
-      setSelectedMaterialCode("");
-      // Refetch available materials whenever the category changes
-      refetchMaterials();
+      setSelectedEquipmentId(0);
+      refetchEquipment();
     }
-  }, [category, refetchMaterials]);
+  }, [category, refetchEquipment]);
 
   useEffect(() => {
     if (!isOpen) {
       setCategory("");
-      setSelectedMaterialCode("");
+      setSelectedEquipmentId(0);
       setQuantity(0);
       setAvailableQuantity(0);
-      refetchMaterials();
+      refetchEquipment();
     }
-  }, [isOpen, refetchMaterials]);
-
-  // const handleMaterialChange = (value: string, qty: number) => {
-  //   setSelectedMaterialCode(value);
-  //   setAvailableQuantity(qty);
-  // };
+  }, [isOpen, refetchEquipment]);
 
   const validateQtyNumber = (value: number | undefined) => {
     // Convert the value to string for validation
@@ -91,20 +81,16 @@ const AddMaterialSupply: React.FC<IAdd> = ({
     setCategory(e.target.value);
   };
 
-  const handleAddNewMaerial = () => {
-    addProjectSupply.mutate(
-      {
-        mtlCode: selectedMaterialCode,
-        projId: projId,
-        mtlQuantity: quantity,
-      },
+  const handleAssignNewEquipment = () => {
+    assignEquipment.mutate(
+      { eqptId: selectedEquipmentId, projId: projId, eqptQuantity: quantity },
       {
         onSuccess: (data: any) => {
           toast.success(data);
           refetch();
 
           setCategory("");
-          setSelectedMaterialCode("");
+          setSelectedEquipmentId(0);
           setQuantity(0);
           setAvailableQuantity(0);
 
@@ -122,7 +108,7 @@ const AddMaterialSupply: React.FC<IAdd> = ({
     <Modal placement="center" isOpen={isOpen} onClose={onClose}>
       <ModalContent>
         <ModalHeader>
-          <span>Add New Material Supply</span>
+          <span>Add New Equipment Supply</span>
         </ModalHeader>
         <ModalBody className="grid grid-cols-2 gap-5">
           <Select
@@ -132,8 +118,8 @@ const AddMaterialSupply: React.FC<IAdd> = ({
             isLoading={categoryIsLoading}
             onChange={handleCategoryChange}
           >
-            {allMaterialCategories && allMaterialCategories.length > 0 ? (
-              allMaterialCategories.map((item) => (
+            {allEquipmentCategories && allEquipmentCategories.length > 0 ? (
+              allEquipmentCategories.map((item) => (
                 <SelectItem
                   key={item.category}
                   // onClick={() => setCategory(item.category)}
@@ -148,35 +134,35 @@ const AddMaterialSupply: React.FC<IAdd> = ({
             )}
           </Select>
           <Select
-            label="Select Material"
+            label="Select Equipment"
             size="sm"
             isLoading={availableIsLoading}
-            disabled={!availableMaterials.length}
-            value={selectedMaterialCode}
+            disabled={!availableEquipment.length}
+            value={selectedEquipmentId}
             onSelectionChange={(keys) => {
               const value = Array.from(keys)[0]; // Extract the first selected key from the Set
-              const selectedMaterial = availableMaterials.find(
-                (material) => material.code === value
+              const selectedEquipment = availableEquipment.find(
+                (equipment) => equipment.eqptId === Number(value) // Convert value back to number
               );
-              setSelectedMaterialCode(String(value) || "");
-              setAvailableQuantity(selectedMaterial?.quantity || 0);
+              setSelectedEquipmentId(Number(value)); // Store it as a number
+              setAvailableQuantity(selectedEquipment?.quantity || 0);
             }}
           >
-            {availableMaterials.length > 0 ? (
-              availableMaterials.map((material) => (
+            {availableEquipment.length > 0 ? (
+              availableEquipment.map((equipment) => (
                 <SelectItem
-                  key={material.code}
-                  value={material.code}
+                  key={equipment.eqptId}
+                  value={equipment.eqptId}
                   // onClick={() =>
-                  //   handleMaterialChange(material.code, material.quantity)
+                  //   handleEquipmentChange(equipment.code, equipment.quantity)
                   // }
                 >
-                  {material.description}
+                  {equipment.description}
                 </SelectItem>
               ))
             ) : (
-              <SelectItem key="no-materials" isDisabled>
-                No Materials
+              <SelectItem key="no-equipments" isDisabled>
+                No Equipments
               </SelectItem>
             )}
           </Select>
@@ -206,9 +192,9 @@ const AddMaterialSupply: React.FC<IAdd> = ({
         </ModalBody>
         <ModalFooter>
           <Button
-            onClick={() => handleAddNewMaerial()}
+            onClick={() => handleAssignNewEquipment()}
             className="bg-orange-400 w-max ml-auto text-white rounded-lg py-2 px-3 hover:bg-gray-200 hover:text-orange-500 transition-all duration-300 ease-in"
-            isLoading={addProjectSupply.isPending}
+            isLoading={assignEquipment.isPending}
             isDisabled={
               isInvalidQuantity ||
               quantity <= 0 ||
@@ -216,7 +202,7 @@ const AddMaterialSupply: React.FC<IAdd> = ({
               !category
             }
           >
-            {addProjectSupply.isPending ? "Adding..." : "Add"}
+            {assignEquipment.isPending ? "Adding..." : "Add"}
           </Button>
         </ModalFooter>
       </ModalContent>
@@ -224,4 +210,4 @@ const AddMaterialSupply: React.FC<IAdd> = ({
   );
 };
 
-export default AddMaterialSupply;
+export default AddEquipmentSupply;

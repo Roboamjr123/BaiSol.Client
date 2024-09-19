@@ -9,6 +9,8 @@ import { Switch } from "@nextui-org/react";
 import { FileEdit } from "lucide-react";
 import { IoIosSave } from "react-icons/io";
 import { FaEdit } from "react-icons/fa";
+import { getAssignedEquipment } from "../../lib/API/Quote/EquipmentAssignationAPI";
+import ProvideEquipmentSupply from "../components/quotation/ProvideEquipmentSupply";
 
 const QuotationPage = () => {
   // Fetch `id` from URL params
@@ -27,6 +29,12 @@ const QuotationPage = () => {
     isLoading: isLoadingLabor,
     refetch: refetchLabor,
   } = getLaborCostQuote(projId!);
+
+  const {
+    data: assignedEquipment,
+    refetch: refetchEquipment,
+    isLoading: isLoadingEquipment,
+  } = getAssignedEquipment(projId!);
 
   useEffect(() => {
     if (laborCost && laborCost.laborCost.length === 0) {
@@ -75,6 +83,13 @@ const QuotationPage = () => {
         isEditMode={isEditMode}
         refetch={refetchLabor}
         refetchPAM={refetchPAM}
+      />
+      <ProvideEquipmentSupply
+        projId={projId!}
+        isEditMode={isEditMode}
+        assignedEquipment={assignedEquipment!}
+        isLoading={isLoadingEquipment}
+        refetch={refetchEquipment}
       />
     </div>
   );

@@ -77,7 +77,7 @@ export const getAvailableEquipment = (projId: string, category: string) => {
   return useQuery<AvailEquipment[], Error>({
     queryKey: ["available-equipment", projId],
     queryFn: async () => {
-      const response = await api.get(`qpi/Equipment/Get-Available-Equipment`, {
+      const response = await api.get(`api/Equipment/Get-Available-Equipment`, {
         params: { projId, category }, // Using params for cleaner query string
       });
       return response.data;
@@ -252,3 +252,17 @@ export const useReturnGoodquipment = () => {
     },
   });
 };
+
+// Get equipment qoh
+export const getEquipmentQOH = (eqptId: number) => {
+  return useQuery<{ qoh: number }, Error>({
+    queryKey: ["equipment-qoh", eqptId],
+    queryFn: async () => {
+      const response = await api.get(`api/Equipment/Get-Equipment-QOH`, {
+        params: { eqptId }, // Using params for cleaner query string
+      });
+      return response.data;
+    },
+  });
+};
+

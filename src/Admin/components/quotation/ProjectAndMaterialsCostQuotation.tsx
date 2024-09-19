@@ -201,6 +201,7 @@ const ProjectAndMaterialsCostQuotation: React.FC<IProjectAndMAterial> = ({
                                         </div>
                                       </td>
                                     )}
+
                                     {isEditMode && (
                                       <td className="border-b hover:bg-gray-100 px-4 py-1 font-medium text-gray-900 whitespace-nowrap">
                                         <div className="flex flex-row justify-center">
@@ -238,6 +239,7 @@ const ProjectAndMaterialsCostQuotation: React.FC<IProjectAndMAterial> = ({
                                         </div>
                                       </td>
                                     )}
+                                    
                                   </tr>
                                 );
                               }

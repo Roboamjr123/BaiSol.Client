@@ -11,7 +11,7 @@ export const project_quotation_columns = [
 ];
 
 export const project_quotation_and_materials_columns = [
-  { name: "ITEM NO." },
+  { name: "Item No." },
   { name: "Description" },
   { name: "Quantity" },
   { name: "Unit" },
@@ -33,3 +33,11 @@ export const labor_columns = [
   { name: "Action" },
 ];
 
+export const assigned_equipment_columns = [
+  { name: "Category" },
+  { name: "Item No." },
+  { name: "Description" },
+  { name: "Quantity" },
+  { name: "Unit" },
+  { name: "Action" },
+];

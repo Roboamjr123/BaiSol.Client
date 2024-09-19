@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { updateProjectMaterialSupply } from "../../../../lib/API/Quote/ProjectQuotationAPI";
 import { toast } from "react-toastify";
 import {
   Button,
@@ -11,22 +10,23 @@ import {
   ModalHeader,
 } from "@nextui-org/react";
 import { FaSave } from "react-icons/fa";
-import { getMaterialQOH } from "../../../../lib/API/MaterialAPI";
+import { useUpdateEquipmentAssigned } from "../../../../lib/API/Quote/EquipmentAssignationAPI";
+import { getEquipmentQOH } from "../../../../lib/API/EquipmentAPI";
 
 interface IEdit {
   suppId: number;
-  mtlId: number;
-  mtlDescription: string;
+  eqptId: number;
+  eqptDescription: string;
   prevQty: number;
   isOpen: boolean;
   onClose: () => void;
   refetch: () => void;
 }
 
-const EditQuantityMaterialModal: React.FC<IEdit> = ({
+const EditQuantityEquipment: React.FC<IEdit> = ({
   suppId,
-  mtlId,
-  mtlDescription,
+  eqptId,
+  eqptDescription,
   prevQty,
   isOpen,
   onClose,
@@ -35,14 +35,14 @@ const EditQuantityMaterialModal: React.FC<IEdit> = ({
   const [quantity, setQuantity] = useState<number>(prevQty!);
   const [qoh, setQoh] = useState<number>();
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const updateMaterial = updateProjectMaterialSupply();
+  const updateEquipment = useUpdateEquipmentAssigned();
 
   const {
-    data: materialQoh,
+    data: equipmentQoh,
     isSuccess,
     isLoading,
     refetch: qohRefetch,
-  } = getMaterialQOH(mtlId);
+  } = getEquipmentQOH(eqptId);
 
   useEffect(() => {
     // Reset quantity when modal opens and prevQty changes
@@ -51,44 +51,43 @@ const EditQuantityMaterialModal: React.FC<IEdit> = ({
       qohRefetch();
       setQuantity(prevQty);
     }
-  }, [isOpen, prevQty, materialQoh, isSuccess]);
+  }, [isOpen, prevQty]);
 
   useEffect(() => {
     if (isOpen && isSuccess && !isLoading) {
       // Once QOH data is successfully fetched, update QOH and show the modal
-      setQoh(materialQoh.qoh);
+      setQoh(equipmentQoh.qoh);
       setIsModalVisible(true);
     } else if (!isOpen) {
       // Close the modal
       setIsModalVisible(false);
     }
-  }, [isOpen, isSuccess, isLoading, materialQoh]);
+  }, [isOpen, isSuccess, isLoading, equipmentQoh]);
 
   const handleUpdateClick = async () => {
-    const data = {
-      suppId: suppId,
-      mtlId: mtlId,
-      quantity: quantity!,
-    };
-
+    console.log(suppId + " " + eqptId);
     if (quantity === prevQty) {
-      toast.success("Material quantity updated successfully");
+      toast.success("Equipment quantity updated successfully");
       onClose();
       return;
     }
 
-    await updateMaterial.mutateAsync(data, {
-      onSuccess: (data) => {
-        toast.success(data);
-        refetch();
-        qohRefetch();
-        onClose();
-        setIsModalVisible(false); // Close modal after success
+    await updateEquipment.mutateAsync(
+      {
+        eqptId: eqptId,
+        suppId: suppId,
+        quantity: quantity,
       },
-      onError: (errM: any) => {
-        toast.error(errM.response.data);
-      },
-    });
+      {
+        onSuccess: (data) => {
+          toast.success(data);
+          refetch();
+          qohRefetch();
+          onClose();
+          setIsModalVisible(false); // Close modal after success
+        }
+      }
+    );
   };
 
   const handleQuantity = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -115,7 +114,7 @@ const EditQuantityMaterialModal: React.FC<IEdit> = ({
           <span className="text-small text-gray-600">
             Edit quantity of{" "}
             <span className="text-orange-400 text-base font-semibold">
-              {mtlDescription}
+              {eqptDescription}
             </span>
           </span>
         </ModalHeader>
@@ -149,10 +148,10 @@ const EditQuantityMaterialModal: React.FC<IEdit> = ({
               isDisabled={
                 isInvalidQuantity || quantity === 0 || quantity === prevQty
               }
-              isLoading={updateMaterial.isPending}
+              isLoading={updateEquipment.isPending}
               onClick={() => handleUpdateClick()}
             >
-              {updateMaterial.isPending ? "Saving..." : "Save"}
+              {updateEquipment.isPending ? "Saving..." : "Save"}
             </Button>
           </div>
         </ModalFooter>
@@ -161,4 +160,4 @@ const EditQuantityMaterialModal: React.FC<IEdit> = ({
   );
 };
 
-export default EditQuantityMaterialModal;
+export default EditQuantityEquipment;
