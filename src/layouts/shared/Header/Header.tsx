@@ -10,6 +10,9 @@ import {
   Avatar,
 } from "@nextui-org/react";
 import { MdMenu } from "react-icons/md";
+import Cookies from "js-cookie";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUser } from "../../../state/authSlice";
 
 interface HeaderProps {
   isSidebarOpen: boolean;
@@ -56,7 +59,15 @@ function Header({ isSidebarOpen, setIsSidebarOpen }: HeaderProps) {
             <DropdownItem key="system">System</DropdownItem>
             <DropdownItem key="configurations">Configurations</DropdownItem>
             <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
-            <DropdownItem key="logout" color="danger">
+            <DropdownItem
+              key="logout"
+              onClick={() => {
+                localStorage.removeItem("refreshToken");
+                Cookies.remove("accessToken");
+                window.location.reload();
+              }}
+              color="danger"
+            >
               Log Out
             </DropdownItem>
           </DropdownMenu>
@@ -85,7 +96,15 @@ function Header({ isSidebarOpen, setIsSidebarOpen }: HeaderProps) {
             <DropdownItem key="system">System</DropdownItem>
             <DropdownItem key="configurations">Configurations</DropdownItem>
             <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
-            <DropdownItem key="logout" color="danger">
+            <DropdownItem
+              onClick={() => {
+                localStorage.removeItem("refreshToken");
+                Cookies.remove("accessToken");
+                window.location.reload();
+              }}
+              key="logout"
+              color="danger"
+            >
               Log Out
             </DropdownItem>
           </DropdownMenu>

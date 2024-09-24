@@ -5,11 +5,19 @@ import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser, setUser } from "../../state/authSlice";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const dispatch = useDispatch();
   const { data: weatherData, isLoading, error } = useWeatherUpdate();
   const user = useSelector(selectUser);
+  const navigate = useNavigate();
+
+  useEffect(()=>{
+    if(user ===null){
+      navigate("/")
+    }
+  })
 
   useEffect(() => {
     const validateAndSetUser = async () => {

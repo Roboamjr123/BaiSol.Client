@@ -26,7 +26,7 @@ export const useRegisterAdminMutation = () => {
     }) => {
       const data = {
         ...formData,
-        adminEmail: "user@example.com",
+        adminEmail: "richardquirante98@gmail.com",
       };
       try {
         const response = await api.post("user/User/Register-Admin", data, {
@@ -58,7 +58,7 @@ export const useRegisterPersonnelUserMutation = (role: string) => {
     }) => {
       const data = {
         ...formData,
-        adminEmail: "user@example.com",
+        adminEmail: "richardquirante98@gmail.com",
         // adminEmail: admin.email, // Add adminEmail dynamically
       };
 
@@ -231,7 +231,7 @@ export const useAddNewInstaller = () => {
     mutationFn: async (formData: { name: string; position: string }) => {
       const data = {
         ...formData,
-        adminEmail: "user@example.com",
+        adminEmail: "richardquirante98@gmail.com",
         // adminEmail: admin.email, // Add adminEmail dynamically
       };
 
