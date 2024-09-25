@@ -14,7 +14,7 @@ interface ClientUser {
   clientMonthlyElectricBill: number;
 }
 
-//fetch all facilitator users
+//fetch all client users
 export const getAllClientUsers = () => {
   return useQuery<ClientUser[], Error>({
     queryKey: [`all-client-user`],

@@ -31,6 +31,7 @@ import {
 } from "../../../lib/utils/usersTable";
 import { useApproveClientAccount } from "../../../lib/API/UsersApi";
 import { toast } from "react-toastify";
+import Loader from "../../../main/components/Loader";
 
 const ClientTable = () => {
   const { data: clients, isLoading, error, refetch } = getAllClientUsers();
@@ -475,6 +476,8 @@ const ClientTable = () => {
   //   )
   //   .map((row) => row.installerId)
   //   .toString();
+
+  if(activateClient.isPending) return <Loader label="Activating"/>
 
   return (
     <div className="bg-gray-100 flex items-center justify-center">

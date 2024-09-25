@@ -1,7 +1,7 @@
 import ReactLoading from "react-loading";
 const Loader = ({ label = "Loading..." }) => {
   return (
-    <div className="w-full h-full bg-white rounded-lg flex items-center justify-center">
+    <div className="w-full h-full bg-white/50 backdrop-blur-md rounded-lg flex items-center justify-center">
       <div className="flex flex-col items-center ">
         <ReactLoading
           type="bubbles"

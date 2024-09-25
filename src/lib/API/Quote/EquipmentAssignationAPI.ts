@@ -45,7 +45,7 @@ export const useAssignEquipment = () => {
         "api/Quotation/Assign-Equipment",
         {
           ...formData,
-          userEmail: "user@example.com",
+          userEmail: "richardquirante98@gmail.com",
           // userEmail: userEmail,
         },
         {
@@ -78,7 +78,7 @@ export const useUpdateEquipmentAssigned = () => {
         "api/Quotation/Update-Equipment-Quantity",
         {
           ...data,
-          userEmail: "user@example.com",
+          userEmail: "richardquirante98@gmail.com",
           // userEmail: userEmail,
         },
         {
@@ -110,7 +110,7 @@ export const useDeleteAssignedEquipment = () => {
         {
           data: {
             ...data,
-            userEmail: "user@example.com",
+            userEmail: "richardquirante98@gmail.com",
             // userEmail: userEmail, // Uncomment if using a dynamic userEmail variable
           },
           headers: {
