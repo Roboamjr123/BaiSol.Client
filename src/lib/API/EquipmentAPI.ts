@@ -125,6 +125,10 @@ export const useUpdateEquipmentPAndQ = () => {
       );
       return response.data;
     },
+    onError: (error: any) => {
+      toast.error(error.response.data.message);
+      console.error("Error update:", error);
+    },
   });
 };
 
@@ -265,4 +269,3 @@ export const getEquipmentQOH = (eqptId: number) => {
     },
   });
 };
-
