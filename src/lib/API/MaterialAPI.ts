@@ -74,7 +74,7 @@ export const useAddMaterial = () => {
           "material/Material/Add-Material",
           {
             ...formData,
-            userEmail: "user@example.com",
+            userEmail: "richardquirante98@gmail.com",
             // userEmail: userEmail,
           },
           {
@@ -130,7 +130,7 @@ export const useUpdateMaterialPAndQ = () => {
         `material/Material/Update-MaterialPAndQ`,
         {
           ...data,
-          userEmail: "user@example.com",
+          userEmail: "richardquirante98@gmail.com",
           // userEmail: userEmail,
         },
         {
@@ -158,7 +158,7 @@ export const useUpdateMaterialUAndD = () => {
         `material/Material/Update-MaterialUAndD`,
         {
           ...data,
-          userEmail: "user@example.com",
+          userEmail: "richardquirante98@gmail.com",
           // userEmail: userEmail,
         },
         {
@@ -176,7 +176,7 @@ export const useUpdateMaterialUAndD = () => {
 export const useDeleteMaterial = () => {
   //   const admin = useSelector(selectUser);
   //   const adminEmail = admin?.email;
-  const adminEmail = "user@example.com";
+  const adminEmail = "richardquirante98@gmail.com";
 
   return useMutation({
     mutationFn: async ({ mtlId }: { mtlId: number }) => {

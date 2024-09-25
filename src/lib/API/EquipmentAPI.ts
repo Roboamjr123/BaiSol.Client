@@ -23,7 +23,7 @@ export const useAddEquipment = () => {
           "api/Equipment/Add-Equipment",
           {
             ...formData,
-            userEmail: "user@example.com",
+            userEmail: "richardquirante98@gmail.com",
             // userEmail: userEmail,
           },
           {
@@ -114,7 +114,7 @@ export const useUpdateEquipmentPAndQ = () => {
         `api/Equipment/Update-EquipmentPAndQ`,
         {
           ...data,
-          userEmail: "user@example.com",
+          userEmail: "richardquirante98@gmail.com",
           // userEmail: userEmail,
         },
         {
@@ -142,7 +142,7 @@ export const useUpdateEquipmentUAndD = () => {
         `api/Equipment/Update-EquipmentUAndD`,
         {
           ...data,
-          userEmail: "user@example.com",
+          userEmail: "richardquirante98@gmail.com",
           // userEmail: userEmail,
         },
         {
@@ -160,7 +160,7 @@ export const useUpdateEquipmentUAndD = () => {
 export const useDeleteEquipment = () => {
   //   const admin = useSelector(selectUser);
   //   const adminEmail = admin?.email;
-  const adminEmail = "user@example.com";
+  const adminEmail = "richardquirante98@gmail.com";
 
   return useMutation({
     mutationFn: async ({ eqptId }: { eqptId: number }) => {
@@ -206,7 +206,7 @@ export const useReturnDamageEquipment = () => {
           "api/Equipment/Return-Damaged-Equipment",
           {
             ...formData,
-            userEmail: "user@example.com",
+            userEmail: "richardquirante98@gmail.com",
             // ,userEmail: admin?.email
           },
           {
@@ -235,7 +235,7 @@ export const useReturnGoodquipment = () => {
           "api/Equipment/Return-Good-Equipment",
           {
             ...formData,
-            userEmail: "user@example.com",
+            userEmail: "richardquirante98@gmail.com",
             // ,userEmail: admin?.email
           },
           {

@@ -5,7 +5,7 @@ import { jwtDecode } from "jwt-decode";
 import { setUser } from "../../state/authSlice";
 import { useDispatch } from "react-redux";
 
-const baseURL = "https://localhost:7233/";
+const baseURL = import.meta.env.VITE_APP_SERVER_API_URL;
 
 export const api = axios.create({
   baseURL,

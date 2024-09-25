@@ -1,4 +1,3 @@
-import React from 'react'
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Home from "./main/pages/Home";
@@ -29,17 +28,17 @@ import ClientQuotePage from "./Admin/pages/ClientQuotePage";
 const queryClient = new QueryClient({});
 
 function App() {
-  const user = useSelector(selectUser) || {}; // Ensure user is not null
+  // const user = useSelector(selectUser) || {}; // Ensure user is not null
 
-  // Default to empty object if user is null to avoid errors
-  const userRole = user.userRole || ""; // Ensure user is not null
+  // // Default to empty object if user is null to avoid errors
+  // const userRole = user?.userRole || null; // Ensure user is not null
 
   return (
     <QueryClientProvider client={queryClient}>
       <ToastContainer />
 
       <Routes>
-        {/* <Route element={<AdminLayout />}>
+        <Route element={<AdminLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="Confirm-Email" element={<ConfirmEmail />} />
           <Route path="project" element={<ProjectPage />} />
@@ -48,9 +47,9 @@ function App() {
           <Route path="clients" element={<ClientPage />} />
           <Route path="supply" element={<Supply />} />
           <Route path="*" element={<PageNotFound />} />
-        </Route> */}
+        </Route>
 
-        {userRole === "Admin" ? (
+        {/* {userRole === "Admin" ? (
           <Route element={<AdminLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="Confirm-Email" element={<ConfirmEmail />} />
@@ -60,34 +59,21 @@ function App() {
             <Route path="clients" element={<ClientPage />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>
-        ) : (
-        <Route path="/*" element={<LandingPage />}>
-            <Route index element={<LoginPage />} />
-            <Route path="BaiSol" element={<Body />} />
-            <Route path="confirm-email" element={<ConfirmEmail />} />
-            <Route path="forgot-password" element={<ForgotPass />} />
-            <Route path="change-password" element={<ChangePass />} />
-            <Route path="*" element={<PageNotFound />} />
-          </Route>
-        )}
+        ) : ( */}
+        {/* <Route path="/*" element={<LandingPage />}>
+          <Route index element={<LoginPage />} />
+          <Route path="BaiSol" element={<Body />} />
+          <Route path="confirm-email" element={<ConfirmEmail />} />
+          <Route path="forgot-password" element={<ForgotPass />} />
+          <Route path="change-password" element={<ChangePass />} />
+          <Route path="*" element={<PageNotFound />} />
+          </Route> */}
+        {/* )} */}
 
         <Route path="/verify-2FA" element={<Verify2FA />} />
         <Route path="/home" element={<Home />} />
         <Route path="/register-client" element={<ClientRegistrationForm />} />
       </Routes>
-
-      {/* <Route path="/" element={<RegistrationForm />} /> */}
-
-      {/* <AdminLayout>
-        <Routes>
-          <Route path="/" index element={<Home />}></Route>
-          <Route path="Confirm-Email" element={<ConfirmEmail />} />
-          <Route path="project" element={<ProjectPage />} />
-          <Route path="project/:projId" element={<QuotationPage />} />
-          <Route path="personnel" element={<Personnel />}></Route>
-          <Route path="clients" element={<ClientPage />} />
-        </Routes>
-      </AdminLayout> */}
 
       <ReactQueryDevtools initialIsOpen={true} />
     </QueryClientProvider>
