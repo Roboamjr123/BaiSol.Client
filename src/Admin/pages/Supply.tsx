@@ -3,6 +3,7 @@ import EquipmentTable from "../components/tables/EquipmentTable";
 import MaterialTable from "../components/tables/MaterialTable";
 import { Button } from "@nextui-org/react";
 import { RiArrowRightWideFill } from "react-icons/ri";
+import AllRequesitionTable from "../components/tables/AllRequesitionTable";
 
 const Supply = () => {
   const components = [
@@ -15,6 +16,11 @@ const Supply = () => {
       component: <EquipmentTable />,
       name: "Equipment",
       index: 2,
+    },
+    {
+      component: <AllRequesitionTable />,
+      name: "Requests",
+      index: 3,
     },
   ];
 

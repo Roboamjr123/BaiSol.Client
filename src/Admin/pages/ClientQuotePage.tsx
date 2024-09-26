@@ -5,6 +5,7 @@ import QuotationPage from "./QuotationPage";
 import FinalQuotePrice from "./FinalQuotePrice";
 import Scheduler from "./Scheduler";
 import ProjectPayment from "../components/quotation/ProjectPayment";
+import RequestSupply from "../components/modal/supply/RequestSupply";
 
 const ClientQuotePage = () => {
   const components = [
@@ -27,6 +28,11 @@ const ClientQuotePage = () => {
       component: <ProjectPayment />,
       name: "Payment",
       index: 4,
+    },
+    {
+      component: <RequestSupply />,
+      name: "Request",
+      index: 5,
     },
   ];
 
@@ -55,7 +61,7 @@ const ClientQuotePage = () => {
         </span>
         {activeName}
       </h1>
-      <div className="flex gap-x-6 my-8">
+      <div className="grid grid-cols-3 sm:grid-cols-5 gap-4 sm:gap-2 my-8">
         {components.map((item) => (
           <Button
             variant="shadow"

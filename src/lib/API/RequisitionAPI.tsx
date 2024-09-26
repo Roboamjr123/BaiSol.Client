@@ -6,14 +6,16 @@ import { selectUser } from "../../state/authSlice";
 
 // const userEmail = useSelector(selectUser);
 
-interface IAllRequest {
+export interface IAllRequest {
   reqId: number;
   submittedAt: string;
   reviewedAt: string;
   status: string;
   quantityRequested: number;
+  qoh: number;
   requestSupply: string;
   supplyCategory: string;
+  projectName: string;
   submittedBy: string;
   reviewedBy: string;
 }
@@ -30,10 +32,10 @@ export const getAllRequests = () => {
 
 export const getRequestsByProj = (projId: string) => {
   return useQuery<IAllRequest[], Error>({
-    queryKey: ["request-by-project"],
+    queryKey: ["request-by-project", projId],
     queryFn: async () => {
       const response = await api.get("api/Requisition/SentRequestByProj", {
-        params: projId,
+        params: { projId },
       });
       return response.data;
     },
@@ -102,7 +104,7 @@ export const useRequestSupply = () => {
       return response.data;
     },
     onError: (error: any) => {
-      toast.error(error.response.data.message);
+      toast.error(error.response.data);
       console.error("Error request supply:", error);
     },
   });
@@ -131,7 +133,7 @@ export const useApproveRequest = () => {
       return response.data;
     },
     onError: (error: any) => {
-      toast.error(error.response.data.message);
+      toast.error(error.response.data);
       console.error("Error approve request:", error);
     },
   });
@@ -156,7 +158,7 @@ export const useDeclineRequest = () => {
       return response.data;
     },
     onError: (error: any) => {
-      toast.error(error.response.data.message);
+      toast.error(error.response.data);
       console.error("Error decline request:", error);
     },
   });
@@ -186,7 +188,7 @@ export const useUpdateRequestQuantity = () => {
       return response.data;
     },
     onError: (error: any) => {
-      toast.error(error.response.data.message);
+      toast.error(error.response.data);
       console.error("Error decline request:", error);
     },
   });
@@ -209,7 +211,7 @@ export const useDeleteRequest = () => {
       return response.data;
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || "An error occurred");
+      toast.error(error.response?.data || "An error occurred");
       console.error("Error delete request:", error);
     },
   });

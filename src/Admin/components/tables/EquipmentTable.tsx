@@ -33,7 +33,7 @@ import { toast } from "react-toastify";
 import AddSupply from "../modal/supply/AddSupply";
 import EditSupply from "../modal/supply/EditSupply";
 
-export const defaultEquipment: IAllEquipment = {
+const defaultEquipment: IAllEquipment = {
   eqptId: 0,
   eqptCode: "",
   eqptDescript: "",
