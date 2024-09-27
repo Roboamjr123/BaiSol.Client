@@ -13,6 +13,7 @@ import { MdMenu } from "react-icons/md";
 import Cookies from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../../../state/authSlice";
+import { useNavigate } from "react-router-dom";
 
 interface HeaderProps {
   isSidebarOpen: boolean;
@@ -20,6 +21,8 @@ interface HeaderProps {
 }
 
 function Header({ isSidebarOpen, setIsSidebarOpen }: HeaderProps) {
+  const navigate = useNavigate();
+
   return (
     <Navbar isBordered className="border-orange-200">
       <NavbarContent justify="start">
@@ -100,6 +103,7 @@ function Header({ isSidebarOpen, setIsSidebarOpen }: HeaderProps) {
               onClick={() => {
                 localStorage.removeItem("refreshToken");
                 Cookies.remove("accessToken");
+                navigate("/");
                 window.location.reload();
               }}
               key="logout"

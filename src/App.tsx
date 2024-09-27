@@ -24,20 +24,32 @@ import ClientRegistrationForm from "./main/forms/auth/ClientRegistrationForm";
 import PageNotFound from "./main/pages/PageNotFound";
 import Supply from "./Admin/pages/Supply";
 import ClientQuotePage from "./Admin/pages/ClientQuotePage";
+import FacilitatorLayout from "./layouts/FacilitatorLayout";
+import ClientLayout from "./layouts/ClientLayout";
+import FacilitatorDashboard from "./Facilitator/pages/FacilitatorDashboard";
 
 const queryClient = new QueryClient({});
 
 function App() {
-  // const user = useSelector(selectUser) || {}; // Ensure user is not null
+  const user = useSelector(selectUser) || {}; // Ensure user is not null
 
-  // // Default to empty object if user is null to avoid errors
-  // const userRole = user?.userRole || null; // Ensure user is not null
+  // Default to empty object if user is null to avoid errors
+  const userRole = user?.userRole || null; // Ensure user is not null
 
   return (
     <QueryClientProvider client={queryClient}>
       <ToastContainer />
 
       <Routes>
+        {/* <Route path="/*" element={<LandingPage />}>
+          <Route index element={<LoginPage />} />
+          <Route path="BaiSol" element={<Body />} />
+          <Route path="confirm-email" element={<ConfirmEmail />} />
+          <Route path="forgot-password" element={<ForgotPass />} />
+          <Route path="change-password" element={<ChangePass />} />
+          <Route path="*" element={<PageNotFound />} />
+        </Route> */}
+
         <Route element={<AdminLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="Confirm-Email" element={<ConfirmEmail />} />
@@ -49,26 +61,41 @@ function App() {
           <Route path="*" element={<PageNotFound />} />
         </Route>
 
+        {/* <Route element={<FacilitatorLayout />}>
+          <Route path="/" element={<FacilitatorDashboard />} />
+          <Route path="*" element={<PageNotFound />} />
+        </Route> */}
+
         {/* {userRole === "Admin" ? (
           <Route element={<AdminLayout />}>
             <Route path="/" element={<Home />} />
-            <Route path="Confirm-Email" element={<ConfirmEmail />} />
             <Route path="project" element={<ProjectPage />} />
-            <Route path="project/:projId" element={<QuotationPage />} />
+            <Route path="project/:projId" element={<ClientQuotePage />} />
             <Route path="personnel" element={<Personnel />} />
             <Route path="clients" element={<ClientPage />} />
+            <Route path="supply" element={<Supply />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>
-        ) : ( */}
-        {/* <Route path="/*" element={<LandingPage />}>
-          <Route index element={<LoginPage />} />
-          <Route path="BaiSol" element={<Body />} />
-          <Route path="confirm-email" element={<ConfirmEmail />} />
-          <Route path="forgot-password" element={<ForgotPass />} />
-          <Route path="change-password" element={<ChangePass />} />
-          <Route path="*" element={<PageNotFound />} />
-          </Route> */}
-        {/* )} */}
+        ) : userRole === "Facilitator" ? (
+          <Route element={<FacilitatorLayout />}>
+            <Route path="/" element={<FacilitatorDashboard />} />
+            <Route path="*" element={<PageNotFound />} />
+          </Route>
+        ) : userRole === "Client" ? (
+          <Route element={<ClientLayout />}>
+            <Route path="/" element={<ClientPage />} />
+            <Route path="*" element={<PageNotFound />} />
+          </Route>
+        ) : (
+          <Route path="/*" element={<LandingPage />}>
+            <Route index element={<LoginPage />} />
+            <Route path="BaiSol" element={<Body />} />
+            <Route path="confirm-email" element={<ConfirmEmail />} />
+            <Route path="forgot-password" element={<ForgotPass />} />
+            <Route path="change-password" element={<ChangePass />} />
+            <Route path="*" element={<PageNotFound />} />
+          </Route>
+        )} */}
 
         <Route path="/verify-2FA" element={<Verify2FA />} />
         <Route path="/home" element={<Home />} />

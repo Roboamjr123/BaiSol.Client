@@ -143,7 +143,11 @@ const RequestSupply = () => {
 
         case "quantity":
           return (
-            <span className="text-xs text-center font-bold tracking-tight">
+            <span
+              className={`text-xs text-center font-bold tracking-tight ${
+                request.quantityRequested === 0 ? "text-danger" : ""
+              }`}
+            >
               {request.quantityRequested}
             </span>
           );
