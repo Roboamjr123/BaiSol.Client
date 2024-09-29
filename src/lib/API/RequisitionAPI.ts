@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../state/authSlice";
 
+const userEmail = "richardquirante98@gmail.com";
 // const userEmail = useSelector(selectUser);
 
 export interface IAllRequest {
@@ -121,8 +122,8 @@ export const useApproveRequest = () => {
         "api/Requisition/ApproveRequest",
         {
           ...data,
-          userEmail: "richardquirante98@gmail.com",
-          // userEmail: userEmail,
+
+          userEmail: userEmail,
         },
         {
           headers: {
@@ -146,8 +147,8 @@ export const useDeclineRequest = () => {
         "api/Requisition/DeclineRequest",
         {
           ...data,
-          userEmail: "richardquirante98@gmail.com",
-          // userEmail: userEmail,
+
+          userEmail: userEmail,
         },
         {
           headers: {
@@ -176,8 +177,8 @@ export const useUpdateRequestQuantity = () => {
         "api/Requisition/UpdateRequestQuantity",
         {
           ...data,
-          userEmail: "richardquirante98@gmail.com",
-          // userEmail: userEmail,
+
+          userEmail: userEmail,
         },
         {
           headers: {
@@ -204,8 +205,7 @@ export const useDeleteRequest = () => {
       const response = await api.delete("api/Requisition/DeleteRequest", {
         data: {
           reqId: data.reqId, // Include the reqId in the body
-          userEmail: "richardquirante98@gmail.com", // Include the userEmail in the body
-          // userEmail: userEmail,
+          userEmail: userEmail,
         },
       });
       return response.data;

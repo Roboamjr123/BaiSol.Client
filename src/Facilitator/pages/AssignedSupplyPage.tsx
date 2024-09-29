@@ -1,25 +1,24 @@
-import { useState } from "react";
-import EquipmentTable from "../components/tables/EquipmentTable";
-import MaterialTable from "../components/tables/MaterialTable";
-import { Button } from "@nextui-org/react";
+import React, { useState } from "react";
+import AssignedSupplyTable from "../components/tables/AssignedSupplyTable";
 import { RiArrowRightWideFill } from "react-icons/ri";
-import AllRequesitionTable from "../components/tables/AllRequesitionTable";
+import { Button } from "@nextui-org/react";
+import RequestsSupplyTable from "../components/tables/RequestsSupplyTable";
 
-const Supply = () => {
+const AssignedSupplyPage = () => {
   const components = [
     {
-      component: <MaterialTable />,
+      component: <AssignedSupplyTable isMaterial={true} />,
       name: "Material",
       index: 1,
     },
     {
-      component: <EquipmentTable />,
+      component: <AssignedSupplyTable />,
       name: "Equipment",
       index: 2,
     },
     {
-      component: <AllRequesitionTable />,
-      name: "Requests",
+      component: <RequestsSupplyTable />,
+      name: "Request",
       index: 3,
     },
   ];
@@ -39,6 +38,7 @@ const Supply = () => {
     setActiveName(name);
     setActiveButton(buttonIndex);
   };
+
   return (
     <div>
       <h1 className="flex items-center mb-4">
@@ -71,4 +71,4 @@ const Supply = () => {
   );
 };
 
-export default Supply;
+export default AssignedSupplyPage;

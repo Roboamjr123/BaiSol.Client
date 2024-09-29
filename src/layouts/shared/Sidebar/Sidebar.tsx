@@ -10,6 +10,8 @@ import { useMediaQuery } from "react-responsive";
 import { MdMenu, MdPeopleAlt } from "react-icons/md";
 import { NavLink, useLocation } from "react-router-dom";
 import { BiSolidReport } from "react-icons/bi";
+import { selectUser } from "../../../state/authSlice";
+import { useSelector } from "react-redux";
 
 // Define the type for a sidebar link
 interface SidebarLink {
@@ -27,6 +29,11 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ links, isOpen, setOpen }) => {
+  const user = useSelector(selectUser) || {}; // Ensure user is not null
+
+  // Default to empty object if user is null to avoid errors
+  const userRole = user?.userRole || null; // Ensure user is not null
+
   let isTabletMid = useMediaQuery({ query: "(max-width: 768px)" });
   const { pathname } = useLocation();
 
@@ -139,29 +146,33 @@ const Sidebar: React.FC<SidebarProps> = ({ links, isOpen, setOpen }) => {
               </li>
             ))}
 
-            {(isOpen || isTabletMid) && (
-              <div className="border-y py-5 border-orange-300 ">
-                <small className="pl-3 text-slate-500 inline-block mb-2">
-                  Product categories
-                </small>
-                {subMenusList?.map((menu) => (
-                  <div key={menu.name} className="flex flex-col gap-1">
-                    <SubMenu data={menu} />
+            {userRole === "Admin" && (
+              <>
+                {(isOpen || isTabletMid) && (
+                  <div className="border-y py-5 border-orange-300">
+                    <small className="pl-3 text-slate-500 inline-block mb-2">
+                      Product categories
+                    </small>
+                    {subMenusList?.map((menu) => (
+                      <div key={menu.name} className="flex flex-col gap-1">
+                        <SubMenu data={menu} />
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+                )}
+                <li>
+                  <NavLink
+                    to={"/clients"}
+                    className={({ isActive }) =>
+                      `link ${isActive ? "sidebar-active" : ""}`
+                    }
+                  >
+                    <MdPeopleAlt size={23} className="min-w-max" />
+                    Clients
+                  </NavLink>
+                </li>
+              </>
             )}
-            <li>
-              <NavLink
-                to={"/clients"}
-                className={({ isActive }) =>
-                  `link ${isActive ? "sidebar-active" : ""}`
-                }
-              >
-                <MdPeopleAlt size={23} className="min-w-max" />
-                Clients
-              </NavLink>
-            </li>
           </ul>
 
           {isOpen && (

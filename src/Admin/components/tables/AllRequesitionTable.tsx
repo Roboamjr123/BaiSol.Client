@@ -49,7 +49,7 @@ const AllRequesitionTable = () => {
     requests?.map((request: IAllRequest) => request.reqId) || [];
   const reviewedRequests =
     requests
-      ?.filter((request: IAllRequest) => request.status !== "OnReview") // Filter out requests with status "OnReview"
+      ?.filter((request: IAllRequest) => request.status !== "OnReview") 
       .map((request: IAllRequest) => request.reqId) || [];
   const requestsLength = requests ? requests.length : 0;
 

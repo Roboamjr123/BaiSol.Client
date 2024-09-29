@@ -1,12 +1,14 @@
 import { ChipProps } from "@nextui-org/react";
 
-export const requisition_columns = [
-  { name: "DESCRIPTION", uid: "description" },
-  { name: "Project", uid: "project" },
-  { name: "REQUESTED QUANTITY", uid: "quantity" },
-  { name: "QOH", uid: "qoh" },
-  { name: "TIMESTAMPS", uid: "timestamps" },
-  { name: "USER INVOLVED", uid: "user" },
+export const request_columns = [
+  { name: "REQUEST SUPPLY", uid: "requestSupply" },
+  { name: "SUPPLY CATEGORY", uid: "supplyCategory" },
+  { name: "REQUESTED QUANTITY", uid: "quantityRequested" },
+  { name: "PROJECT NAME", uid: "projectName" },
+  { name: "SUBMITTED BY", uid: "submittedBy" },
+  { name: "SUBMITTED AT", uid: "submittedAt" },
+  { name: "REVIEWED BY", uid: "reviewedBy" },
+  { name: "REVIEWED AT", uid: "reviewedAt" },
   { name: "STATUS", uid: "status" },
   { name: "ACTIONS", uid: "actions" },
 ];

@@ -1,8 +1,9 @@
-// const userEmail = useSelector(selectUser);
-
 import { Mutation, useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "../AuthAPI";
 import { toast } from "react-toastify";
+
+// const userEmail = useSelector(selectUser);
+const userEmail = "richardqweweuirante98@gmail.com";
 
 export interface IAllRequest {
   reqId: number;
@@ -10,7 +11,6 @@ export interface IAllRequest {
   reviewedAt: string;
   status: string;
   quantityRequested: number;
-  qoh: number;
   requestSupply: string;
   supplyCategory: string;
   projectName: string;
@@ -20,12 +20,11 @@ export interface IAllRequest {
 
 export const getRequestsByProj = () => {
   return useQuery<IAllRequest[], Error>({
-    queryKey: ["request-by-project", "Facilitator"],
+    queryKey: ["request-by-project", userEmail],
     queryFn: async () => {
       const response = await api.get("api/Requisition/SentRequestByProj", {
         params: {
-          // userEmail: userEmail
-          userEmail: "facilitator@email.com",
+          userEmail: userEmail,
         },
       });
       return response.data;
@@ -38,14 +37,13 @@ interface IRequestSupplies {
   supplyName: string;
 }
 
-export const getRequestMaterialSupplies = (supplyCtgry?: "Material") => {
+export const getRequestMaterialSupplies = (supplyCtgry: string) => {
   return useQuery<IRequestSupplies[], Error>({
-    queryKey: ["request-material-supplies", "Facilitator"],
+    queryKey: ["request-material-supplies", userEmail],
     queryFn: async () => {
       const response = await api.get("api/Requisition/RequestSupplies", {
         params: {
-          // userEmail: userEmail
-          userEmail: "facilitator@email.com",
+          userEmail: userEmail,
           supplyCtgry,
         },
       });
@@ -65,8 +63,7 @@ export const useAcknowledgeRequest = () => {
         "api/Facilitator/AcknowledgeRequest",
         {
           ...data,
-          userEmail: "richardquirante98@gmail.com",
-          // userEmail: userEmail,
+          userEmail: userEmail,
         },
         {
           headers: {
@@ -100,15 +97,13 @@ interface IAssignedMaterials {
 
 export const getAssignedMaterialsByFacilitator = () => {
   return useQuery<IAssignedMaterials[], Error>({
-    queryKey: ["assigned-materials", "Facilitator"],
-    // queryKey: ["assigned-materials", userEmail],
+    queryKey: ["assigned-materials", userEmail],
     queryFn: async () => {
       const response = await api.get(
         "api/Facilitator/AssignedMaterialsSupply",
         {
           params: {
-            userEmail: "richardquirante98@gmail.com",
-            // userEmail: userEmail,
+            userEmail: userEmail,
           },
         }
       );
@@ -134,15 +129,13 @@ interface IAssignedEquipment {
 
 export const getAssignedEquipmentByFacilitator = () => {
   return useQuery<IAssignedEquipment[], Error>({
-    queryKey: ["assigned-equipment", "Facilitator"],
-    // queryKey: ["assigned-equipment", userEmail],
+    queryKey: ["assigned-equipment", userEmail],
     queryFn: async () => {
       const response = await api.get(
         "api/Facilitator/AssignedEquipmentSupply",
         {
           params: {
-            userEmail: "richardquirante98@gmail.com",
-            // userEmail: userEmail,
+            userEmail: userEmail,
           },
         }
       );
