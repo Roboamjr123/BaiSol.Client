@@ -12,8 +12,8 @@ export interface IAllRequest {
   status: string;
   quantityRequested: number;
   requestSupply: string;
-  supplyCategory: string;
   projectName: string;
+  supplyCategory: string;
   submittedBy: string;
   reviewedBy: string;
 }
@@ -22,7 +22,7 @@ export const getRequestsByProj = () => {
   return useQuery<IAllRequest[], Error>({
     queryKey: ["request-by-project", userEmail],
     queryFn: async () => {
-      const response = await api.get("api/Requisition/SentRequestByProj", {
+      const response = await api.get("api/Facilitator/SentRequestByProj", {
         params: {
           userEmail: userEmail,
         },
@@ -41,7 +41,7 @@ export const getRequestMaterialSupplies = (supplyCtgry: string) => {
   return useQuery<IRequestSupplies[], Error>({
     queryKey: ["request-material-supplies", userEmail],
     queryFn: async () => {
-      const response = await api.get("api/Requisition/RequestSupplies", {
+      const response = await api.get("api/Facilitator/RequestSupplies", {
         params: {
           userEmail: userEmail,
           supplyCtgry,

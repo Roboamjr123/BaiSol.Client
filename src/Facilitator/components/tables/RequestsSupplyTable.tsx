@@ -26,6 +26,7 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
+  useDisclosure,
 } from "@nextui-org/react";
 import {
   useDeleteRequest,
@@ -35,10 +36,24 @@ import { toast } from "react-toastify";
 import { MdOutlineDeleteForever } from "react-icons/md";
 import { iconClasses } from "../../../lib/utils/usersTable";
 import { BiDotsVertical } from "react-icons/bi";
-import { CheckIcon, ChevronDownIcon } from "lucide-react";
+import { CheckIcon, ChevronDownIcon, EditIcon } from "lucide-react";
 import { RxCross2 } from "react-icons/rx";
-import { FaEdit } from "react-icons/fa";
+import { FaEdit, FaPlus } from "react-icons/fa";
 import { IoIosSave } from "react-icons/io";
+import EditRequestQuantityModal from "../modals/EditRequestQuantityModal";
+
+const defaultRequest: IAllRequest = {
+  reqId: 0,
+  submittedAt: new Date().toISOString(), // Default to current time
+  reviewedAt: "", // Empty string, if no review date yet
+  status: "Pending", // Default status
+  quantityRequested: 0,
+  requestSupply: "",
+  projectName: "",
+  supplyCategory: "",
+  submittedBy: "",
+  reviewedBy: "",
+};
 
 const RequestsSupplyTable = () => {
   const deleteRequest = useDeleteRequest();
@@ -59,7 +74,7 @@ const RequestsSupplyTable = () => {
 
   const { data: requestsData, isLoading, refetch } = getRequestsByProj();
   const requests = requestsData ?? [];
-  
+
   const approvedRequests =
     requests?.map((requests: IAllRequest) => requests.reqId) || [];
   const disableRequest =
@@ -73,6 +88,8 @@ const RequestsSupplyTable = () => {
 
   const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
   const [isSelectMany, setIsSelectMany] = useState(false);
+
+  const [requestData, setRequestData] = useState<IAllRequest>(defaultRequest);
 
   const handleDeleteRequest = (id: number) => {
     if (window.confirm("Click OK to delete request.")) {
@@ -88,6 +105,12 @@ const RequestsSupplyTable = () => {
     }
   };
 
+  const {
+    isOpen: editIsOpen,
+    onOpen: editOnOpen,
+    onClose: editOnClose,
+  } = useDisclosure();
+
   const handleAcknowledgeRequest = (id: number[]) => {
     if (window.confirm("Click  OK to acknowledge request.")) {
       acknowledgeRequest.mutateAsync(
@@ -100,6 +123,11 @@ const RequestsSupplyTable = () => {
         }
       );
     }
+  };
+
+  const handleOpenEdit = (request: IAllRequest) => {
+    setRequestData(request);
+    editOnOpen();
   };
 
   const topContent = useMemo(() => {
@@ -135,6 +163,16 @@ const RequestsSupplyTable = () => {
                 </DropdownItem>
               </DropdownMenu>
             </Dropdown>
+          ) : null}
+
+          {!isSelectMany ? (
+            <Button
+              className="bg-orange-500 text-background"
+              endContent={<FaPlus />}
+              size="sm"
+            >
+              Add Request
+            </Button>
           ) : null}
 
           <Switch
@@ -223,32 +261,57 @@ const RequestsSupplyTable = () => {
                   <BiDotsVertical className="text-default-400" />
                 </Button>
               </DropdownTrigger>
-              <DropdownMenu variant="shadow">
-                <DropdownItem
-                  color="success"
-                  startContent={
-                    <CheckIcon className={cn(iconClasses, "text-success")} />
-                  }
-                  onClick={() => {
-                    handleAcknowledgeRequest([request.reqId]);
-                  }}
-                >
-                  Acknowledge
-                </DropdownItem>
-                <DropdownItem
-                  onClick={() => {
-                    handleDeleteRequest(request.reqId);
-                  }}
-                  color="danger"
-                  className="text-danger"
-                  startContent={
-                    <MdOutlineDeleteForever
-                      className={cn(iconClasses, "text-danger")}
-                    />
-                  }
-                >
-                  Delete
-                </DropdownItem>
+              <DropdownMenu aria-label="Actions" variant="shadow">
+                {request.status === "OnReview" ? (
+                  <DropdownItem
+                    key="edit"
+                    color="primary"
+                    startContent={
+                      <EditIcon className={`${iconClasses} text-primary`} />
+                    }
+                    onClick={() => handleOpenEdit(request)}
+                  >
+                    Edit
+                  </DropdownItem>
+                ) : (
+                  <DropdownItem className="hidden"></DropdownItem>
+                )}
+                {request.status === "Approved" ? (
+                  <DropdownItem
+                    key="acknowledge"
+                    color="success"
+                    startContent={
+                      <CheckIcon className={`${iconClasses} text-success`} />
+                    }
+                    onClick={() => {
+                      handleAcknowledgeRequest([request.reqId]);
+                    }}
+                  >
+                    Acknowledge
+                  </DropdownItem>
+                ) : (
+                  <DropdownItem className="hidden"></DropdownItem>
+                )}
+
+                {request.status === "OnReview" ? (
+                  <DropdownItem
+                    key="delete"
+                    color="danger"
+                    className="text-danger"
+                    startContent={
+                      <MdOutlineDeleteForever
+                        className={`${iconClasses} text-danger`}
+                      />
+                    }
+                    onClick={() => {
+                      handleDeleteRequest(request.reqId);
+                    }}
+                  >
+                    Delete
+                  </DropdownItem>
+                ) : (
+                  <DropdownItem className="hidden"></DropdownItem>
+                )}
               </DropdownMenu>
             </Dropdown>
           );
@@ -332,6 +395,12 @@ const RequestsSupplyTable = () => {
                 )}
               </TableBody>
             </Table>
+            <EditRequestQuantityModal
+              request={requestData}
+              isOpen={editIsOpen}
+              onClose={editOnClose}
+              refetch={refetch}
+            />
           </div>
         </div>
       </div>

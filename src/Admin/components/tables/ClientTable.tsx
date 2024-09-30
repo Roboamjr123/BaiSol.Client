@@ -336,7 +336,7 @@ const ClientTable = () => {
           />
           <div className="flex gap-3">
             <Dropdown>
-              <DropdownTrigger className=" sm:flex">
+              <DropdownTrigger className="sm:flex">
                 <Button
                   endContent={<FaChevronDown className="text-small" />}
                   size="sm"
