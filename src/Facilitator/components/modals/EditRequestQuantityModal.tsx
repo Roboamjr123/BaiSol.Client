@@ -32,6 +32,8 @@ const EditRequestQuantityModal: React.FC<IEdit> = ({
   useEffect(() => {
     if (!isOpen) {
       setQuantity(0);
+    } else {
+      setQuantity(request.quantityRequested); // Set the quantity to the value from the request when the modal opens
     }
   }, [isOpen]);
 
@@ -45,6 +47,7 @@ const EditRequestQuantityModal: React.FC<IEdit> = ({
   const handleUpdateQuantity = () => {
     if (quantity === request.quantityRequested) {
       toast.success("Quantity saved!");
+      onClose();
       return;
     }
 

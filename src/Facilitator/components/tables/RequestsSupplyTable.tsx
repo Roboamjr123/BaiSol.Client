@@ -41,6 +41,7 @@ import { RxCross2 } from "react-icons/rx";
 import { FaEdit, FaPlus } from "react-icons/fa";
 import { IoIosSave } from "react-icons/io";
 import EditRequestQuantityModal from "../modals/EditRequestQuantityModal";
+import AddRequest from "../modals/AddRequest";
 
 const defaultRequest: IAllRequest = {
   reqId: 0,
@@ -58,7 +59,6 @@ const defaultRequest: IAllRequest = {
 const RequestsSupplyTable = () => {
   const deleteRequest = useDeleteRequest();
   const acknowledgeRequest = useAcknowledgeRequest();
-  const sendRequest = useRequestSupply();
 
   // const {
   //   data: requestEquipment,
@@ -109,6 +109,18 @@ const RequestsSupplyTable = () => {
     isOpen: editIsOpen,
     onOpen: editOnOpen,
     onClose: editOnClose,
+  } = useDisclosure();
+
+  const {
+    isOpen: materialIsOpen,
+    onOpen: materialOnOpen,
+    onClose: materialOnClose,
+  } = useDisclosure();
+
+  const {
+    isOpen: equipmentIsOpen,
+    onOpen: equipmentOnOpen,
+    onClose: equipmentOnClose,
   } = useDisclosure();
 
   const handleAcknowledgeRequest = (id: number[]) => {
@@ -166,13 +178,33 @@ const RequestsSupplyTable = () => {
           ) : null}
 
           {!isSelectMany ? (
-            <Button
-              className="bg-orange-500 text-background"
-              endContent={<FaPlus />}
-              size="sm"
-            >
-              Add Request
-            </Button>
+            <Dropdown className="bg-background border-1 border-default-200">
+              <DropdownTrigger>
+                <Button
+                  className="bg-orange-500 text-background"
+                  endContent={<FaPlus />}
+                  size="sm"
+                >
+                  Add Request
+                </Button>
+              </DropdownTrigger>
+              <DropdownMenu variant="shadow">
+                <DropdownItem
+                  onClick={() => {
+                    materialOnOpen();
+                  }}
+                >
+                  Material
+                </DropdownItem>
+                <DropdownItem
+                  onClick={() => {
+                    equipmentOnOpen();
+                  }}
+                >
+                  Equipment
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
           ) : null}
 
           <Switch
@@ -400,6 +432,18 @@ const RequestsSupplyTable = () => {
               isOpen={editIsOpen}
               onClose={editOnClose}
               refetch={refetch}
+            />
+            <AddRequest
+              isOpen={materialIsOpen}
+              onClose={materialOnClose}
+              refetch={refetch}
+              isMaterial={true}
+            />
+            <AddRequest
+              isOpen={equipmentIsOpen}
+              onClose={equipmentOnClose}
+              refetch={refetch}
+              isMaterial={false}
             />
           </div>
         </div>

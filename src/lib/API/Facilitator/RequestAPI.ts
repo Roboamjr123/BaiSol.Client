@@ -39,7 +39,7 @@ interface IRequestSupplies {
 
 export const getRequestMaterialSupplies = (supplyCtgry: string) => {
   return useQuery<IRequestSupplies[], Error>({
-    queryKey: ["request-material-supplies", userEmail],
+    queryKey: ["request-material-supplies", supplyCtgry],
     queryFn: async () => {
       const response = await api.get("api/Facilitator/RequestSupplies", {
         params: {
@@ -76,6 +76,38 @@ export const useAcknowledgeRequest = () => {
     onError: (error: any) => {
       toast.error(error.response.data);
       console.error("Error approve request:", error);
+    },
+  });
+};
+
+interface IRequestSupply {
+  requestDetails: IRequestDetail[];
+}
+interface IRequestDetail {
+  quantityRequested: number;
+  suppId: number;
+}
+
+export const useRequestSupply = () => {
+  return useMutation({
+    mutationFn: async (formData: IRequestSupply) => {
+      const response = await api.post(
+        "api/Requisition/RequestSupply",
+        {
+          ...formData,
+          submittedBy: userEmail,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      return response.data;
+    },
+    onError: (error: any) => {
+      toast.error(error.response.data);
+      console.error("Error request supply:", error);
     },
   });
 };
