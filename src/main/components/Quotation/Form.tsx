@@ -1,16 +1,28 @@
 import Header from "./Header";
 import Table from "./Table";
 import Footer from "./Footer";
-import "./App.css"; // Import the stylesheet
 import LocalPrintshopIcon from "@mui/icons-material/LocalPrintshop";
 import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
-
+import Design from "../main/components/Quotation/pdf.css";
+/*************  ✨ Codeium Command ⭐  *************/
+/**
+ * Component to generate a PDF of the quotation.
+ *
+ * @returns a component that contains a header, table and footer
+ *          and a button to print and download the PDF
+ */
+/******  134b4739-01a7-4742-921b-d9adf1b9231d  *******/
 const Form = () => {
-  const handlePrint = () => {
-    window.print();
-  };
+  /*************  ✨ Codeium Command ⭐  *************/
+  /**
+   * Prints the page.
+   */
+  /******  6813502f-206b-440a-a6d2-75d0185fd9f6  *******/ const handlePrint =
+    () => {
+      window.print();
+    };
 
   const handleDownload = () => {
     const input = document.getElementById("pdf-content"); // Use the ID you set on the container

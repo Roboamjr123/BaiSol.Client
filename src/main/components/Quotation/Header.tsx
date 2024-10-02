@@ -1,4 +1,4 @@
-import Sunvoltage from "../images/sunvoltage.jpg";
+import Sunvoltage from "../../../assets/logo/sunvoltage.jpg";
 
 // Define the customer data as an object
 const customerData = {

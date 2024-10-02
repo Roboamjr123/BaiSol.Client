@@ -29,14 +29,14 @@ import ClientLayout from "./layouts/ClientLayout";
 import FacilitatorDashboard from "./Facilitator/pages/FacilitatorDashboard";
 import AssignedSupplyTable from "./Facilitator/components/tables/AssignedSupplyTable";
 import AssignedSupplyPage from "./Facilitator/pages/AssignedSupplyPage";
-
+import Forms from "./main/components/Quotation/Form";
 const queryClient = new QueryClient({});
 
 function App() {
-  const user = useSelector(selectUser) || {}; // Ensure user is not null
+  // const user = useSelector(selectUser) || {}; // Ensure user is not null
 
   // Default to empty object if user is null to avoid errors
-  const userRole = user?.userRole || null; // Ensure user is not null
+  // const userRole = user?.userRole || null; // Ensure user is not null
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -52,7 +52,7 @@ function App() {
           <Route path="*" element={<PageNotFound />} />
         </Route> */}
 
-        {/* <Route element={<AdminLayout />}>
+        <Route element={<AdminLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="Confirm-Email" element={<ConfirmEmail />} />
           <Route path="project" element={<ProjectPage />} />
@@ -61,14 +61,15 @@ function App() {
           <Route path="clients" element={<ClientPage />} />
           <Route path="supply" element={<Supply />} />
           <Route path="*" element={<PageNotFound />} />
-        </Route> */}
+          <Route path="/f" element={<Forms />} />
+        </Route>
 
-        <Route element={<FacilitatorLayout />}>
+        {/* <Route element={<FacilitatorLayout />}>
           <Route path="/" element={<FacilitatorDashboard />} />
           <Route path="supply" element={<AssignedSupplyPage />} />
 
           <Route path="*" element={<PageNotFound />} />
-        </Route>
+        </Route> */}
 
         {/* {userRole === "Admin" ? (
           <Route element={<AdminLayout />}>
