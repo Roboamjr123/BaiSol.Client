@@ -63,14 +63,14 @@ function App() {
           <Route path="*" element={<PageNotFound />} />
         </Route> */}
 
-        <Route element={<FacilitatorLayout />}>
+        {/* <Route element={<FacilitatorLayout />}>
           <Route path="/" element={<FacilitatorDashboard />} />
           <Route path="supply" element={<AssignedSupplyPage />} />
 
           <Route path="*" element={<PageNotFound />} />
-        </Route>
+        </Route> */}
 
-        {/* {userRole === "Admin" ? (
+        {userRole === "Admin" ? (
           <Route element={<AdminLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="project" element={<ProjectPage />} />
@@ -99,7 +99,7 @@ function App() {
             <Route path="change-password" element={<ChangePass />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>
-        )} */}
+        )}
 
         <Route path="/verify-2FA" element={<Verify2FA />} />
         <Route path="/home" element={<Home />} />
