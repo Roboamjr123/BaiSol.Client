@@ -1,0 +1,43 @@
+/* General styles for the page layout */
+.a4-container {
+  width: 280mm;
+  height: 297mm;
+  margin: 0 auto;
+  padding: 20mm; /* Padding inside the A4 page */
+  box-sizing: border-box;
+}
+
+.content-section {
+  margin: 10mm 0; /* Space between sections */
+}
+
+/* Print styling */
+@media print {
+  @page {
+    size: A4;
+    margin: 0; /* Reset margins for A4 paper size */
+  }
+
+  body,
+  html {
+    margin: 0; /* Remove default margins */
+    padding: 0; /* Remove default padding */
+    width: auto; /* Ensure it fits */
+    height: auto; /* Ensure it fits */
+  }
+
+  .a4-container {
+    width: 100%; /* Use full width for printing */
+    height: auto; /* Let height adjust based on content */
+    padding: 5mm; /* Reduce padding for print */
+  }
+
+  .print-button {
+    display: none; /* Hide print button when printing */
+  }
+
+  /* Ensure all sections fit inside the page */
+  .content-section {
+    margin: 10mm 0; /* Maintain spacing between sections */
+  }
+}
