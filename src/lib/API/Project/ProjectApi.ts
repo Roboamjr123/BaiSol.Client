@@ -101,3 +101,68 @@ export const useAddNewProjectNewClient = () => {
     },
   });
 };
+
+interface IProjectInfo {
+  customerId: string;
+  customerName: string;
+  customerEmail: string;
+  customerAddress: string;
+  projectDescription: string;
+  projectDateCreation: string;
+  projectDateValidity: string;
+}
+
+// fetch all project Info
+export const getProjectInfo = (projId?: string, customerEmail?: string) =>
+  useQuery<IProjectInfo, Error>({
+    queryKey: ["project-Info", projId, customerEmail],
+    queryFn: () =>
+      api
+        .get("api/Project/ProjectQuotationInfo", {
+          params: { projId, customerEmail },
+        })
+        .then((res) => res.data),
+  });
+
+interface IProjectSupply {
+  description: string;
+  lineTotal: string;
+}
+
+// fetch all project Supply
+export const getProjectSupply = (projId?: string, customerEmail?: string) =>
+  useQuery<IProjectSupply[], Error>({
+    queryKey: ["project-Supply", projId, customerEmail],
+    queryFn: () =>
+      api
+        .get("api/Project/ProjectQuotationSupply", {
+          params: { projId, customerEmail },
+        })
+        .then((res) => res.data),
+  });
+
+interface ProjectQuotationTotalExpense {
+  quoteId: string;
+  subTotal: string;
+  discount: string;
+  discountRate: string;
+  subTotalAfterDiscount: string;
+  vat: string;
+  vatRate: string;
+  total: string;
+  totalMaterialCost: IProjectSupply;
+  totalLaborCost: IProjectSupply;
+}
+
+
+// fetch all project Expense
+export const getProjectExpense = (projId?: string, customerEmail?: string) =>
+  useQuery<ProjectQuotationTotalExpense, Error>({
+    queryKey: ["project-Expense", projId, customerEmail], // Include parameters for better cache control
+    queryFn: () =>
+      api
+        .get("api/Project/ProjectQuotationSupply", {
+          params: { projId, customerEmail },
+        })
+        .then((res) => res.data),
+  });

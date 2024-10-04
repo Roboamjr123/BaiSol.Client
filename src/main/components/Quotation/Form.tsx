@@ -63,31 +63,29 @@ const Form = () => {
   };
 
   return (
-    <div>
-      <div className="a4-container">
-        <div className="print-container text-right py-5 px-1">
-          <button onClick={handlePrint} className="print-button">
-            <LocalPrintshopIcon />
-            <br />
-            Print
-          </button>
-          <button onClick={handleDownload} className="print-button px-5">
-            <DownloadRoundedIcon />
-            <br />
-            Download
-          </button>
+    <div className="a4-container">
+      <div className="print-container text-right pb-5 px-1">
+        <button onClick={handlePrint} className="print-button">
+          <LocalPrintshopIcon />
+          <br />
+          Print
+        </button>
+        <button onClick={handleDownload} className="print-button px-5">
+          <DownloadRoundedIcon />
+          <br />
+          Download
+        </button>
+      </div>
+      <div
+        id="pdf-content"
+        className="relative bg-gray-100 pt-5 font-weight-light"
+      >
+        <Header />
+        <div className="content-section">
+          <Table />
         </div>
-        <div
-          id="pdf-content"
-          className="relative bg-gray-100 pt-5 font-weight-light"
-        >
-          <Header />
-          <div className="content-section">
-            <Table />
-          </div>
-          <div className="content-section">
-            <Footer />
-          </div>
+        <div className="content-section">
+          <Footer />
         </div>
       </div>
     </div>

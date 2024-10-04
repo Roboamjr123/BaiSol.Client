@@ -60,25 +60,26 @@ const Header = () => {
       </div>
 
       {/* Customer Information */}
-      <div className="flex justify-between items-start ml-3 mr-4 gap-4">
+      <div className="flex flex-row max-w-full justify-between ml-3 mr-4 gap-20">
         {/* Customer Information */}
-        <div className="w-64 shadow-md">
+        <div className="w-1/3 shadow-md">
           <div className="bg-blue-500 text-black p-2">
             <p className="font-bold">Customer:</p>
           </div>
           <div className="p-3">
-            <p className="font-bold text-black">{customerData.name}</p>
-            <p className="text-black">{customerData.email}</p>
+            <p className="font-bold text-black text-base">{customerData.name}</p>
+            <p className="font-bold text-black text-sm">Address</p>
+            <p className="font-bold text-black text-sm">email: {customerData.email}</p>
           </div>
         </div>
 
         {/* Quote/Project Description */}
-        <div className="w-full max-w-lg border bg-white shadow-md">
+        <div className="w-2/3 border bg-white shadow-md">
           <div className="bg-blue-500 text-black p-3">
             <p className="font-bold">Quote/Project Description</p>
           </div>
           <div className="p-4">
-            <p>{projectDescription}</p>
+            <p className="text-sm">{projectDescription}</p>
           </div>
         </div>
       </div>

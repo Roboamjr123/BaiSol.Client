@@ -1,17 +1,17 @@
 const Footer = () => {
   return (
     <div>
-      <div className="flex justify-between items-start gap-6 ml-3 mr-4 ">
+      <div className="flex justify-between items-start gap-6 ml-3 mr-4 w-full">
         {/* First Block */}
-        <div className=" max-w-lg border bg-white shadow-md">
+        <div className="w-2/3 border bg-white shadow-md">
           <div className="bg-blue-500 text-black p-2">
             <p className="font-bold text-sm">Special Notes and Instructions</p>
           </div>
-          <div className="p-3 text-sm">
-            <p className="text-black">
+          <div className="p-3 gap-2 text-sm">
+            <p className="text-black text-xs">
               Once signed, please Fax, mail or email it to the provided address.
             </p>
-            <p className="text-black">Payment Terms:</p>
+            <p className="text-black pt-2 text-xs">Payment Terms:</p>
             <p className="text-black font-bold">
               60% downpayment, 30% progress billing, and 10% after installation.
             </p>
@@ -22,7 +22,7 @@ const Footer = () => {
         </div>
 
         {/* Second Block */}
-        <div className=" bg-white-100 shadow-m ">
+        <div className="bg-white-100 shadow-m w-1/3 flex flex-col items-end pr-3">
           <table className="border-collapse text-sm">
             <tbody>
               <tr>
@@ -81,6 +81,7 @@ const Footer = () => {
           <div className="w-1/3">
             <input
               type="text"
+              disabled={true}
               className="w-full border border-gray-300 p-2 text-gray-500 text-xs"
               placeholder="Signature"
             />
@@ -90,6 +91,7 @@ const Footer = () => {
           <div className="w-1/3">
             <input
               type="text"
+              disabled={true}
               className="w-full border border-gray-300 p-2 text-gray-500 text-xs"
               placeholder="Printed Name"
             />
@@ -99,6 +101,7 @@ const Footer = () => {
           <div className="w-1/3">
             <input
               type="text"
+              disabled={true}
               className="w-full border border-gray-300 p-2 text-gray-500 text-xs"
               placeholder="Date"
             />

@@ -2,15 +2,15 @@ import { Button } from "@nextui-org/react";
 import { useState } from "react";
 import { RiArrowRightWideFill } from "react-icons/ri";
 import QuotationPage from "./QuotationPage";
-import FinalQuotePrice from "./FinalQuotePrice";
 import Scheduler from "./Scheduler";
 import ProjectPayment from "../components/quotation/ProjectPayment";
 import RequestSupply from "../components/modal/supply/RequestSupply";
+import Form from "../../main/components/Quotation/Form";
 
 const ClientQuotePage = () => {
   const components = [
     {
-      component: <FinalQuotePrice />,
+      component: <Form />,
       name: "Final Price Quote",
       index: 1,
     },
