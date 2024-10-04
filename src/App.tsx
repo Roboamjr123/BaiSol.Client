@@ -29,6 +29,7 @@ import ClientLayout from "./layouts/ClientLayout";
 import FacilitatorDashboard from "./Facilitator/pages/FacilitatorDashboard";
 import AssignedSupplyTable from "./Facilitator/components/tables/AssignedSupplyTable";
 import AssignedSupplyPage from "./Facilitator/pages/AssignedSupplyPage";
+import Form from "./main/components/Quotation/Form";
 
 const queryClient = new QueryClient({});
 
@@ -52,7 +53,7 @@ function App() {
           <Route path="*" element={<PageNotFound />} />
         </Route> */}
 
-        {/* <Route element={<AdminLayout />}>
+        <Route element={<AdminLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="Confirm-Email" element={<ConfirmEmail />} />
           <Route path="project" element={<ProjectPage />} />
@@ -60,8 +61,9 @@ function App() {
           <Route path="personnel" element={<Personnel />} />
           <Route path="clients" element={<ClientPage />} />
           <Route path="supply" element={<Supply />} />
+          <Route path="form" element={<Form />} />
           <Route path="*" element={<PageNotFound />} />
-        </Route> */}
+        </Route>
 
         {/* <Route element={<FacilitatorLayout />}>
           <Route path="/" element={<FacilitatorDashboard />} />
@@ -70,7 +72,7 @@ function App() {
           <Route path="*" element={<PageNotFound />} />
         </Route> */}
 
-        {userRole === "Admin" ? (
+        {/* {userRole === "Admin" ? (
           <Route element={<AdminLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="project" element={<ProjectPage />} />
@@ -99,7 +101,7 @@ function App() {
             <Route path="change-password" element={<ChangePass />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>
-        )}
+        )} */}
 
         <Route path="/verify-2FA" element={<Verify2FA />} />
         <Route path="/home" element={<Home />} />
