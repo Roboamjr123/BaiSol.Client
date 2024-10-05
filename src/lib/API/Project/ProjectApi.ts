@@ -1,5 +1,8 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "../AuthAPI";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../../state/authSlice";
+import { toast } from "react-toastify";
 
 interface Project {
   projId: string; // UUID format
@@ -107,13 +110,14 @@ interface IProjectInfo {
   customerName: string;
   customerEmail: string;
   customerAddress: string;
+  projectId: string;
   projectDescription: string;
   projectDateCreation: string;
   projectDateValidity: string;
 }
 
 // fetch all project Info
-export const getProjectInfo = (projId?: string, customerEmail?: string) =>
+export const getProjectInfo = (projId?: string) =>
   useQuery<IProjectInfo, Error>({
     queryKey: ["project-Info", projId, customerEmail],
     queryFn: () =>
@@ -124,19 +128,77 @@ export const getProjectInfo = (projId?: string, customerEmail?: string) =>
         .then((res) => res.data),
   });
 
+interface IClientProjectInfo {
+  projId: string;
+  projName: string;
+  projDescript: string;
+  discountRate: number;
+  vatRate: number;
+  clientId: string;
+  clientFName: string;
+  clientLName: string;
+  clientContactNum: string;
+  clientAddress: string;
+  clientMonthlyElectricBill: number;
+}
+
+// fetch client Info
+export const getClientProjectInfo = (projId?: string) =>
+  useQuery<IClientProjectInfo, Error>({
+    queryKey: ["client-Info", projId],
+    queryFn: () =>
+      api
+        .get("api/Project/Get-Client-Info", {
+          params: { projId },
+        })
+        .then((res) => res.data),
+  });
+
+//Update client Info
+// Add new project with existing client
+export const useUpdateClientProjectInfo = () => {
+  return useMutation({
+    mutationFn: async (formData: IClientProjectInfo) => {
+      try {
+        const { data } = await api.post(
+          "api/Project/Update-Client-Project",
+          formData,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        return data;
+      } catch (error) {
+        console.error("Error updating client project info:", error);
+        throw error; // Ensure the error is thrown for react-query to handle
+      }
+    },
+    onError: (error: any) => {
+      toast.error(error.response.data);
+      console.error("Error updating:", error);
+    },
+  });
+};
+
 interface IProjectSupply {
   description: string;
   lineTotal: string;
 }
 
+// const user = useSelector(selectUser);
+// const customerEmail = user.role === "Client" ? user.email : "";
+const customerEmail = "richardddquirante98@gmail.com";
+
 // fetch all project Supply
-export const getProjectSupply = (projId?: string, customerEmail?: string) =>
+export const getProjectSupply = (projId?: string) =>
   useQuery<IProjectSupply[], Error>({
     queryKey: ["project-Supply", projId, customerEmail],
     queryFn: () =>
       api
         .get("api/Project/ProjectQuotationSupply", {
-          params: { projId, customerEmail },
+          params: { projId, customerEmail: customerEmail },
         })
         .then((res) => res.data),
   });
@@ -154,14 +216,13 @@ interface ProjectQuotationTotalExpense {
   totalLaborCost: IProjectSupply;
 }
 
-
 // fetch all project Expense
-export const getProjectExpense = (projId?: string, customerEmail?: string) =>
+export const getProjectExpense = (projId?: string) =>
   useQuery<ProjectQuotationTotalExpense, Error>({
     queryKey: ["project-Expense", projId, customerEmail], // Include parameters for better cache control
     queryFn: () =>
       api
-        .get("api/Project/ProjectQuotationSupply", {
+        .get("api/Project/ProjectQuotationExpense", {
           params: { projId, customerEmail },
         })
         .then((res) => res.data),

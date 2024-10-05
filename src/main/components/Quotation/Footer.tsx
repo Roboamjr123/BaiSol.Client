@@ -1,4 +1,10 @@
+import { useParams } from "react-router-dom";
+import { getProjectExpense } from "../../../lib/API/Project/ProjectApi";
+
 const Footer = () => {
+  const { projId } = useParams<{ projId: string }>();
+  const { data: projExpense } = getProjectExpense(projId);
+
   return (
     <div>
       <div className="flex justify-between items-start gap-6 ml-3 mr-4 w-full">
@@ -29,29 +35,28 @@ const Footer = () => {
                 <td className=" px-4 py-1  font-semibold text-gray-700">
                   Subtotal
                 </td>
-                <td className=" px-4 py-1"> P 302,000.00</td>
+                <td className=" px-4 py-1">₱ {projExpense?.subTotal}</td>
               </tr>
               <tr>
                 <td className=" px-4 py-1 font-semibold text-gray-700">
-                  Discount
+                  Discount {`(${projExpense?.discountRate})`}
                 </td>
-                <td className="border px-4 py-1 text-right"> 50%</td>
-              </tr>
-              <tr>
-                <td className=" px-4 py-1  font-semibold text-gray-700">
-                  Vat Rate
+                <td className="border px-4 py-1 text-right">
+                ₱ {projExpense?.discount}
                 </td>
-                <td className="border px-4 py-1 text-right"> 2%</td>
               </tr>
+
               <tr>
-                <td className=" px-4 py-1 font-semibold  text-gray-700">VAT</td>
-                <td className=" px-4 py-1 text-right">60.%</td>
+                <td className=" px-4 py-1 font-semibold  text-gray-700">
+                  VAT {`(${projExpense?.vatRate})`}
+                </td>
+                <td className=" px-4 py-1 text-right">₱ {projExpense?.vat}</td>
               </tr>
               <tr>
                 <td className=" px-4 py-1 font-semibold  text-gray-700">
                   Total
                 </td>
-                <td className=" px-4 py-1 text-right">P 302,000.00</td>
+                <td className=" px-4 py-1 text-right">₱ {projExpense?.total}</td>
               </tr>
             </tbody>
           </table>

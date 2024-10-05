@@ -6,6 +6,8 @@ import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import Design from "../main/components/Quotation/pdf.css";
+import { Edit, Edit2Icon } from "lucide-react";
+import React, { FC } from "react";
 /*************  ✨ Codeium Command ⭐  *************/
 /**
  * Component to generate a PDF of the quotation.
@@ -14,7 +16,7 @@ import Design from "../main/components/Quotation/pdf.css";
  *          and a button to print and download the PDF
  */
 /******  134b4739-01a7-4742-921b-d9adf1b9231d  *******/
-const Form = () => {
+const Form: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
   /*************  ✨ Codeium Command ⭐  *************/
   /**
    * Prints the page.
@@ -64,22 +66,32 @@ const Form = () => {
 
   return (
     <div className="a4-container">
-      <div className="print-container text-right pb-5 px-1">
-        <button onClick={handlePrint} className="print-button">
+      <div className="print-container text-right flex justify-end gap-x-5 pb-5 px-1">
+        <button
+          onClick={handlePrint}
+          className="print-button hover:text-orange-500 !important"
+        >
           <LocalPrintshopIcon />
           <br />
           Print
         </button>
-        <button onClick={handleDownload} className="print-button px-5">
+        <button
+          onClick={handleDownload}
+          className="print-button hover:text-orange-500 !important"
+        >
           <DownloadRoundedIcon />
           <br />
           Download
-        </button>
+        </button>{" "}
+        {isAdmin && (
+          <button className="print-button hover:text-orange-500 !important">
+            <Edit />
+            Edit
+          </button>
+        )}
       </div>
-      <div
-        id="pdf-content"
-        className="relative bg-gray-100 pt-5 font-weight-light"
-      >
+
+      <div id="pdf-content" className="relative pt-5 font-weight-light">
         <Header />
         <div className="content-section">
           <Table />

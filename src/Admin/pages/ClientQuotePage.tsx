@@ -10,7 +10,7 @@ import Form from "../../main/components/Quotation/Form";
 const ClientQuotePage = () => {
   const components = [
     {
-      component: <Form />,
+      component: <Form isAdmin={true} />,
       name: "Final Price Quote",
       index: 1,
     },

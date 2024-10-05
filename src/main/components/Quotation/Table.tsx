@@ -1,3 +1,9 @@
+import { useParams } from "react-router-dom";
+import {
+  getProjectExpense,
+  getProjectSupply,
+} from "../../../lib/API/Project/ProjectApi";
+
 // Data for the table stored as an array of objects
 const tableData = [
   {
@@ -30,6 +36,11 @@ const tableData = [
 ];
 
 const AccessibleTable = () => {
+  const { projId } = useParams<{ projId: string }>();
+
+  const { data: materialSupplies } = getProjectSupply(projId);
+  const { data: projExpense } = getProjectExpense(projId);
+
   return (
     <div>
       <div className="flex justify-between py-2 items-start ml-3 mr-4">
@@ -46,7 +57,7 @@ const AccessibleTable = () => {
           </thead>
           <tbody>
             {/* Map over the tableData array to generate rows dynamically */}
-            {tableData.map((row, index) => (
+            {/* {tableData.map((row, index) => (
               <tr key={index} className={`odd:bg-white even:bg-gray-100`}>
                 <td className="border border-gray-300 px-4 py-2">
                   {row.description}
@@ -55,7 +66,38 @@ const AccessibleTable = () => {
                   {row.lineAmount ? `P ${row.lineAmount}` : ""}
                 </td>
               </tr>
+            ))} */}
+            {materialSupplies?.map((row, index) => (
+              <tr key={index} className={`odd:bg-white even:bg-gray-100`}>
+                <td className="border border-gray-300 px-4 py-2">
+                  {row.description}
+                </td>
+                <td className="border border-gray-300 text-right px-4 py-2">
+                  {row.lineTotal ? `₱ ${row.lineTotal}` : ""}
+                </td>
+              </tr>
             ))}
+            
+            <tr className={"bg-white"}>
+              <td className="border border-gray-300 px-4 py-2">&nbsp;</td>
+              <td className="border border-gray-300 text-right px-4 py-2"></td>
+            </tr>
+            <tr className={`odd:bg-white even:bg-gray-100`}>
+              <td className="border border-gray-300 px-4 py-2">
+                {projExpense?.totalMaterialCost.description}
+              </td>
+              <td className="border border-gray-300 text-right px-4 py-2">
+                {`₱ ${projExpense?.totalMaterialCost.lineTotal}`}
+              </td>
+            </tr>
+            <tr className={`odd:bg-white even:bg-gray-100`}>
+              <td className="border border-gray-300 px-4 py-2">
+                {projExpense?.totalLaborCost.description}
+              </td>
+              <td className="border border-gray-300 text-right px-4 py-2">
+                {`₱ ${projExpense?.totalLaborCost.lineTotal}`}
+              </td>
+            </tr>
 
             {/* Render two empty rows at the top */}
             {[...Array(2)].map((_, i) => (
