@@ -105,7 +105,7 @@ export const useAddNewProjectNewClient = () => {
   });
 };
 
-interface IProjectInfo {
+export interface IProjectInfo {
   customerId: string;
   customerName: string;
   customerEmail: string;
@@ -128,7 +128,7 @@ export const getProjectInfo = (projId?: string) =>
         .then((res) => res.data),
   });
 
-interface IClientProjectInfo {
+export interface IClientProjectInfo {
   projId: string;
   projName: string;
   projDescript: string;
@@ -182,7 +182,7 @@ export const useUpdateClientProjectInfo = () => {
   });
 };
 
-interface IProjectSupply {
+export interface IProjectSupply {
   description: string;
   lineTotal: string;
 }
@@ -203,7 +203,7 @@ export const getProjectSupply = (projId?: string) =>
         .then((res) => res.data),
   });
 
-interface ProjectQuotationTotalExpense {
+export interface ProjectQuotationTotalExpense {
   quoteId: string;
   subTotal: string;
   discount: string;

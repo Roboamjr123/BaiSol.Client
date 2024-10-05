@@ -1,10 +1,13 @@
 import { useParams } from "react-router-dom";
-import { getProjectExpense } from "../../../lib/API/Project/ProjectApi";
+import {
+  getProjectExpense,
+  ProjectQuotationTotalExpense,
+} from "../../../lib/API/Project/ProjectApi";
+import React from "react";
 
-const Footer = () => {
-  const { projId } = useParams<{ projId: string }>();
-  const { data: projExpense } = getProjectExpense(projId);
-
+const Footer: React.FC<{ projExpense?: ProjectQuotationTotalExpense }> = (
+  projExpense
+) => {
   return (
     <div>
       <div className="flex justify-between items-start gap-6 ml-3 mr-4 w-full">
@@ -35,28 +38,34 @@ const Footer = () => {
                 <td className=" px-4 py-1  font-semibold text-gray-700">
                   Subtotal
                 </td>
-                <td className=" px-4 py-1">₱ {projExpense?.subTotal}</td>
+                <td className=" px-4 py-1">
+                  ₱ {projExpense?.projExpense?.subTotal}
+                </td>
               </tr>
               <tr>
                 <td className=" px-4 py-1 font-semibold text-gray-700">
-                  Discount {`(${projExpense?.discountRate})`}
+                  Discount {`(${projExpense?.projExpense?.discountRate})`}
                 </td>
                 <td className="border px-4 py-1 text-right">
-                ₱ {projExpense?.discount}
+                  ₱ {projExpense?.projExpense?.discount}
                 </td>
               </tr>
 
               <tr>
                 <td className=" px-4 py-1 font-semibold  text-gray-700">
-                  VAT {`(${projExpense?.vatRate})`}
+                  VAT {`(${projExpense?.projExpense?.vatRate})`}
                 </td>
-                <td className=" px-4 py-1 text-right">₱ {projExpense?.vat}</td>
+                <td className=" px-4 py-1 text-right">
+                  ₱ {projExpense?.projExpense?.vat}
+                </td>
               </tr>
               <tr>
                 <td className=" px-4 py-1 font-semibold  text-gray-700">
                   Total
                 </td>
-                <td className=" px-4 py-1 text-right">₱ {projExpense?.total}</td>
+                <td className=" px-4 py-1 text-right">
+                  ₱ {projExpense?.projExpense?.total}
+                </td>
               </tr>
             </tbody>
           </table>

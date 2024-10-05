@@ -1,6 +1,10 @@
 import { useParams } from "react-router-dom";
 import Sunvoltage from "../../../assets/logo/sunvoltage.jpg";
-import { getProjectInfo } from "../../../lib/API/Project/ProjectApi";
+import {
+  getProjectInfo,
+  IProjectInfo,
+} from "../../../lib/API/Project/ProjectApi";
+import React from "react";
 
 // Define the customer data as an object
 const customerData = {
@@ -20,11 +24,7 @@ const quoteDetails = {
   customerId: "10111",
 };
 
-const Header = () => {
-  // Fetch `id` from URL params
-  const { projId } = useParams<{ projId: string }>();
-
-  const { data: projInfo } = getProjectInfo(projId);
+const Header: React.FC<{ projInfo?: IProjectInfo }> = (projInfo) => {
 
   return (
     <div>
@@ -43,7 +43,7 @@ const Header = () => {
                 <td className="px-4 py-2 font-semibold text-gray-700">Date</td>
                 {/* <td className="border px-4 py-2">{quoteDetails.date}</td> */}
                 <td className="border px-4 py-2">
-                  {projInfo?.projectDateCreation}
+                  {projInfo?.projInfo?.projectDateCreation}
                 </td>
               </tr>
               <tr>
@@ -52,7 +52,7 @@ const Header = () => {
                 </td>
                 {/* <td className="border px-4 py-2">{quoteDetails.validUntil}</td> */}
                 <td className="border px-4 py-2">
-                  {projInfo?.projectDateValidity}
+                  {projInfo?.projInfo?.projectDateValidity}
                 </td>
               </tr>
               <tr>
@@ -60,14 +60,14 @@ const Header = () => {
                   Quote #
                 </td>
                 {/* <td className="border px-4 py-2">{quoteDetails.quoteNumber}</td> */}
-                <td className="border px-4 py-2">{projInfo?.projectId}</td>
+                <td className="border px-4 py-2">{projInfo?.projInfo?.projectId}</td>
               </tr>
               <tr>
                 <td className="px-4 py-2 font-semibold text-gray-700">
                   Customer ID
                 </td>
                 {/* <td className="border px-4 py-2">{quoteDetails.customerId}</td> */}
-                <td className="border px-4 py-2">{projInfo?.customerId}</td>
+                <td className="border px-4 py-2">{projInfo?.projInfo?.customerId}</td>
               </tr>
             </tbody>
           </table>
@@ -83,17 +83,15 @@ const Header = () => {
           </div>
           <div className="p-3">
             <p className="font-bold text-black text-base">
-              {projInfo?.customerName}
+              {projInfo?.projInfo?.customerName}
             </p>
             {/* <p className="font-bold text-black text-base">
               {customerData.name}
             </p> */}
             {/* <p className="font-bold text-black text-sm">Address</p> */}
-            <p className="text-black text-sm">
-              {projInfo?.customerAddress}
-            </p>
+            <p className="text-black text-sm">{projInfo?.projInfo?.customerAddress}</p>
             <p className="font-semibold text-black text-sm">
-              email: {projInfo?.customerEmail}
+              email: {projInfo?.projInfo?.customerEmail}
             </p>
             {/* <p className="font-bold text-black text-sm">
               email: {customerData.email}
@@ -108,7 +106,7 @@ const Header = () => {
           </div>
           <div className="p-4">
             {/* <p className="text-sm">{projectDescription}</p> */}
-            <p className="text-sm">{projInfo?.projectDescription}</p>
+            <p className="text-sm">{projInfo?.projInfo?.projectDescription}</p>
           </div>
         </div>
       </div>

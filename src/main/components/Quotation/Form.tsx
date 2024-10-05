@@ -8,6 +8,15 @@ import html2canvas from "html2canvas";
 import Design from "../main/components/Quotation/pdf.css";
 import { Edit, Edit2Icon } from "lucide-react";
 import React, { FC } from "react";
+import { useParams } from "react-router-dom";
+import {
+  getClientProjectInfo,
+  getProjectExpense,
+  getProjectInfo,
+  getProjectSupply,
+} from "../../../lib/API/Project/ProjectApi";
+import { useDisclosure } from "@nextui-org/react";
+import EditClientInfo from "../../../Admin/components/modal/project/EditClientInfo";
 /*************  ✨ Codeium Command ⭐  *************/
 /**
  * Component to generate a PDF of the quotation.
@@ -17,6 +26,20 @@ import React, { FC } from "react";
  */
 /******  134b4739-01a7-4742-921b-d9adf1b9231d  *******/
 const Form: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
+  const { projId } = useParams<{ projId: string }>();
+
+  const { data: projInfo, refetch: refetchInfo } = getProjectInfo(projId);
+  const { data: projExpense, refetch: refetchExpense } =
+    getProjectExpense(projId);
+
+    const { data: infos } = getClientProjectInfo(projId);
+
+  const {
+    isOpen: editIsOpen,
+    onOpen: editOnOpen,
+    onClose: editOnClose,
+  } = useDisclosure();
+
   /*************  ✨ Codeium Command ⭐  *************/
   /**
    * Prints the page.
@@ -60,7 +83,7 @@ const Form: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
         heightLeft -= pageHeight;
       }
 
-      pdf.save("Invoice.pdf");
+      pdf.save(`${projInfo?.projectId}.pdf`);
     });
   };
 
@@ -84,7 +107,10 @@ const Form: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
           Download
         </button>{" "}
         {isAdmin && (
-          <button className="print-button hover:text-orange-500 !important">
+          <button
+            onClick={() => editOnOpen()}
+            className="print-button hover:text-orange-500 !important"
+          >
             <Edit />
             Edit
           </button>
@@ -92,14 +118,24 @@ const Form: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
       </div>
 
       <div id="pdf-content" className="relative pt-5 font-weight-light">
-        <Header />
+        <Header projInfo={projInfo} />
         <div className="content-section">
-          <Table />
+          <Table
+            projId={projId}
+            projExpense={projExpense}
+          />
         </div>
         <div className="content-section">
-          <Footer />
+          <Footer projExpense={projExpense} />
         </div>
       </div>
+      <EditClientInfo
+        isOpen={editIsOpen}
+        onClose={editOnClose}
+        infos={infos!}
+        refetchExpense={refetchExpense}
+        refetchInfo={refetchInfo}
+      />
     </div>
   );
 };

@@ -2,7 +2,10 @@ import { useParams } from "react-router-dom";
 import {
   getProjectExpense,
   getProjectSupply,
+  IProjectSupply,
+  ProjectQuotationTotalExpense,
 } from "../../../lib/API/Project/ProjectApi";
+import React from "react";
 
 // Data for the table stored as an array of objects
 const tableData = [
@@ -35,11 +38,12 @@ const tableData = [
   },
 ];
 
-const AccessibleTable = () => {
-  const { projId } = useParams<{ projId: string }>();
-
-  const { data: materialSupplies } = getProjectSupply(projId);
-  const { data: projExpense } = getProjectExpense(projId);
+const AccessibleTable: React.FC<{
+  projId?: string;
+  projExpense?: ProjectQuotationTotalExpense;
+}> = (projExpense, projId) => {
+  const { data: materialSupplies, refetch: refetchSupplies } =
+    getProjectSupply(projId);
 
   return (
     <div>
@@ -67,7 +71,8 @@ const AccessibleTable = () => {
                 </td>
               </tr>
             ))} */}
-            {materialSupplies?.map((row, index) => (
+
+            {materialSupplies?.map((row: IProjectSupply, index: any) => (
               <tr key={index} className={`odd:bg-white even:bg-gray-100`}>
                 <td className="border border-gray-300 px-4 py-2">
                   {row.description}
@@ -77,25 +82,25 @@ const AccessibleTable = () => {
                 </td>
               </tr>
             ))}
-            
+
             <tr className={"bg-white"}>
               <td className="border border-gray-300 px-4 py-2">&nbsp;</td>
               <td className="border border-gray-300 text-right px-4 py-2"></td>
             </tr>
             <tr className={`odd:bg-white even:bg-gray-100`}>
               <td className="border border-gray-300 px-4 py-2">
-                {projExpense?.totalMaterialCost.description}
+                {projExpense?.projExpense?.totalMaterialCost.description}
               </td>
               <td className="border border-gray-300 text-right px-4 py-2">
-                {`₱ ${projExpense?.totalMaterialCost.lineTotal}`}
+                {`₱ ${projExpense?.projExpense?.totalMaterialCost.lineTotal}`}
               </td>
             </tr>
             <tr className={`odd:bg-white even:bg-gray-100`}>
               <td className="border border-gray-300 px-4 py-2">
-                {projExpense?.totalLaborCost.description}
+                {projExpense?.projExpense?.totalLaborCost.description}
               </td>
               <td className="border border-gray-300 text-right px-4 py-2">
-                {`₱ ${projExpense?.totalLaborCost.lineTotal}`}
+                {`₱ ${projExpense?.projExpense?.totalLaborCost.lineTotal}`}
               </td>
             </tr>
 
