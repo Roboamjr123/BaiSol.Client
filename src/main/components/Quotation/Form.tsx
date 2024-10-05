@@ -1,22 +1,19 @@
 import Header from "./Header";
 import Table from "./Table";
 import Footer from "./Footer";
-import LocalPrintshopIcon from "@mui/icons-material/LocalPrintshop";
-import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
-import Design from "../main/components/Quotation/pdf.css";
-import { Edit, Edit2Icon } from "lucide-react";
-import React, { FC } from "react";
+import { Download, Edit } from "lucide-react";
+import React from "react";
 import { useParams } from "react-router-dom";
 import {
   getClientProjectInfo,
   getProjectExpense,
   getProjectInfo,
-  getProjectSupply,
 } from "../../../lib/API/Project/ProjectApi";
 import { useDisclosure } from "@nextui-org/react";
 import EditClientInfo from "../../../Admin/components/modal/project/EditClientInfo";
+import { FaDownload } from "react-icons/fa";
 /*************  ✨ Codeium Command ⭐  *************/
 /**
  * Component to generate a PDF of the quotation.
@@ -32,7 +29,6 @@ const Form: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
   const { data: projExpense, refetch: refetchExpense } =
     getProjectExpense(projId);
 
-    const { data: infos } = getClientProjectInfo(projId);
 
   const {
     isOpen: editIsOpen,
@@ -44,10 +40,7 @@ const Form: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
   /**
    * Prints the page.
    */
-  /******  6813502f-206b-440a-a6d2-75d0185fd9f6  *******/ const handlePrint =
-    () => {
-      window.print();
-    };
+  /******  6813502f-206b-440a-a6d2-75d0185fd9f6  *******/ 
 
   const handleDownload = () => {
     const input = document.getElementById("pdf-content"); // Use the ID you set on the container
@@ -90,26 +83,18 @@ const Form: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
   return (
     <div className="a4-container">
       <div className="print-container text-right flex justify-end gap-x-5 pb-5 px-1">
-        <button
-          onClick={handlePrint}
-          className="print-button hover:text-orange-500 !important"
-        >
-          <LocalPrintshopIcon />
-          <br />
-          Print
-        </button>
+       
         <button
           onClick={handleDownload}
-          className="print-button hover:text-orange-500 !important"
+          className="print-button flex flex-col items-center hover:text-orange-500 !important"
         >
-          <DownloadRoundedIcon />
-          <br />
+          <Download  />
           Download
         </button>{" "}
         {isAdmin && (
           <button
             onClick={() => editOnOpen()}
-            className="print-button hover:text-orange-500 !important"
+            className="print-button flex flex-col items-center hover:text-orange-500 !important"
           >
             <Edit />
             Edit
@@ -132,7 +117,7 @@ const Form: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
       <EditClientInfo
         isOpen={editIsOpen}
         onClose={editOnClose}
-        infos={infos!}
+        projId={projId!}
         refetchExpense={refetchExpense}
         refetchInfo={refetchInfo}
       />

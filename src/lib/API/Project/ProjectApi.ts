@@ -160,7 +160,7 @@ export const useUpdateClientProjectInfo = () => {
   return useMutation({
     mutationFn: async (formData: IClientProjectInfo) => {
       try {
-        const { data } = await api.post(
+        const { data } = await api.put(
           "api/Project/Update-Client-Project",
           formData,
           {
