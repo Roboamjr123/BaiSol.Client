@@ -1,6 +1,6 @@
 import React from "react";
 import { RiArrowRightWideFill } from "react-icons/ri";
-import ClientTable from "../Admin/components/tables/ClientTable";
+import ClientTable from "../../Admin/components/tables/ClientTable";
 
 const ClientPage = () => {
   return (

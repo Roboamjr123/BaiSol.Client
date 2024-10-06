@@ -1,18 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { validateToken } from "../lib/API/TokenValidation";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
-import { setUser } from "../state/authSlice";
+import { selectUser, setUser } from "../state/authSlice";
 import Sidebar from "./shared/Sidebar/Sidebar";
 import Header from "./shared/Header/Header";
 import { Outlet } from "react-router-dom";
-import { ClientSidebarLinks } from "../lib/constants/SidebarLinks";
+import { getClientSidebarLinks } from "../lib/constants/SidebarLinks";
+import { getClientProjId } from "../lib/API/Client/ClientProjectAPI";
 
 const ClientLayout = () => {
   const dispatch = useDispatch();
 
+// const user = useSelector(selectUser);
+// const customerEmail = user.role === "Client" ? user.email : "";
+const customerEmail = "richardddquirante98@gmail.com";
+  const { data: clientProjId, isLoading, error } = getClientProjId(customerEmail);
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const sidebarLinks = getClientSidebarLinks(clientProjId?.projId);
 
   useEffect(() => {
     const validateAndSetUser = async () => {
@@ -50,7 +58,7 @@ const ClientLayout = () => {
   return (
     <div className="flex h-screen overflow-hidden">
       <Sidebar
-        links={ClientSidebarLinks}
+        links={sidebarLinks}
         isOpen={isSidebarOpen}
         setOpen={setIsSidebarOpen}
       />

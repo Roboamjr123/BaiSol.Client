@@ -4,6 +4,7 @@ import { LuLayers } from "react-icons/lu";
 import { MdOutlinePayments } from "react-icons/md";
 import { RxDashboard } from "react-icons/rx";
 import { TbReport } from "react-icons/tb";
+import { getClientProjId } from "../API/Client/ClientProjectAPI";
 
 export const AdminSidebarLinks = [
   {
@@ -59,7 +60,15 @@ export const FacilitatorSidebarLinks = [
   },
 ];
 
-export const ClientSidebarLinks = [
+
+interface SidebarLink {
+  key: string;
+  label: string;
+  path: string;
+  icon: JSX.Element;
+}
+
+export const getClientSidebarLinks = (clientProjId?: string): SidebarLink[] => [
   {
     key: "dashboard",
     label: "Dashboard",
@@ -68,8 +77,8 @@ export const ClientSidebarLinks = [
   },
   {
     key: "project",
-    label: "Projects",
-    path: "/project",
+    label: "Project",
+    path: `/project/${clientProjId ?? ''}`,  // Use project ID if available
     icon: <LuLayers size={23} className="min-w-max" />,
   },
   {
@@ -85,3 +94,4 @@ export const ClientSidebarLinks = [
     icon: <MdOutlinePayments size={23} className="min-w-max" />,
   },
 ];
+

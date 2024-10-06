@@ -13,7 +13,7 @@ import ForgotPass from "./main/forms/auth/ForgotPass";
 import ChangePass from "./main/forms/auth/ChangePass";
 import AdminLayout from "./layouts/AdminLayout";
 import Personnel from "./Admin/pages/Personnel";
-import ClientPage from "./Client/ClientPage";
+import ClientPage from "./Client/pages/ClientPage";
 import ProjectPage from "./Admin/pages/ProjectPage";
 import ProjectCostQuotation from "./Admin/components/quotation/ProjectCostQuotation";
 import ProjectAndMaterialsCostQuotation from "./Admin/components/quotation/ProjectAndMaterialsCostQuotation";
@@ -30,6 +30,7 @@ import FacilitatorDashboard from "./Facilitator/pages/FacilitatorDashboard";
 import AssignedSupplyTable from "./Facilitator/components/tables/AssignedSupplyTable";
 import AssignedSupplyPage from "./Facilitator/pages/AssignedSupplyPage";
 import Form from "./main/components/Quotation/Form";
+import ClientProjectQuotationPage from "./Client/pages/ClientProjectQuotationPage";
 
 const queryClient = new QueryClient({});
 
@@ -53,7 +54,7 @@ function App() {
           <Route path="*" element={<PageNotFound />} />
         </Route> */}
 
-        <Route element={<AdminLayout />}>
+        {/* <Route element={<AdminLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="Confirm-Email" element={<ConfirmEmail />} />
           <Route path="project" element={<ProjectPage />} />
@@ -63,12 +64,23 @@ function App() {
           <Route path="supply" element={<Supply />} />
           <Route path="form" element={<Form />} />
           <Route path="*" element={<PageNotFound />} />
+        </Route> */}
+
+        <Route element={<ClientLayout />}>
+          <Route path="/" element={<ClientPage />} />
+          <Route
+            path="project/:projId"
+            element={<ClientProjectQuotationPage />}
+          />
+          <Route path="*" element={<PageNotFound />} />
         </Route>
 
         {/* <Route element={<FacilitatorLayout />}>
           <Route path="/" element={<FacilitatorDashboard />} />
           <Route path="supply" element={<AssignedSupplyPage />} />
 
+
+          
           <Route path="*" element={<PageNotFound />} />
         </Route> */}
 
@@ -90,6 +102,10 @@ function App() {
         ) : userRole === "Client" ? (
           <Route element={<ClientLayout />}>
             <Route path="/" element={<ClientPage />} />
+          <Route
+            path="project/:projId"
+            element={<ClientProjectQuotationPage />}
+          />
             <Route path="*" element={<PageNotFound />} />
           </Route>
         ) : (
