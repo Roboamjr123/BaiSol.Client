@@ -31,8 +31,11 @@ import AssignedSupplyTable from "./Facilitator/components/tables/AssignedSupplyT
 import AssignedSupplyPage from "./Facilitator/pages/AssignedSupplyPage";
 import Form from "./main/components/Quotation/Form";
 import ClientProjectQuotationPage from "./Client/pages/ClientProjectQuotationPage";
+import { registerLicense } from "@syncfusion/ej2/base";
 
 const queryClient = new QueryClient({});
+
+
 
 function App() {
   const user = useSelector(selectUser) || {}; // Ensure user is not null

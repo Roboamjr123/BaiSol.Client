@@ -50,8 +50,8 @@ export const useRegisterAdminMutation = () => {
 // UnComment the admin email for user creator
 // Create New Facilitator
 export const useRegisterPersonnelUserMutation = (role: string) => {
-  const adminEmail = useUserEmail();
-  // const adminEmail = "richardquirante98@gmail.com";
+  // const adminEmail = useUserEmail();
+  const adminEmail = "richardquirante98@gmail.com";
   return useMutation({
     mutationFn: async (formData: {
       firstName: string;

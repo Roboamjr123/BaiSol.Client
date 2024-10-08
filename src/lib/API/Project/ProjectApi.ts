@@ -117,11 +117,11 @@ export interface IProjectInfo {
   projectDateValidity: string;
 }
 
-// fetch all project Info
+// Fetch all project info
 export const getProjectInfo = (projId?: string) => {
   const customerEmail = useClientUserEmail();
-  useQuery<IProjectInfo, Error>({
-    queryKey: ["project-Info", projId, customerEmail],
+  return useQuery<IProjectInfo, Error>({
+    queryKey: ["project-info", projId, customerEmail],
     queryFn: () =>
       api
         .get("api/Project/ProjectQuotationInfo", {
@@ -197,7 +197,7 @@ export interface IProjectSupply {
 // fetch all project Supply
 export const getProjectSupply = (projId?: string) => {
   const customerEmail = useClientUserEmail();
-  useQuery<IProjectSupply[], Error>({
+  return useQuery<IProjectSupply[], Error>({
     queryKey: ["project-Supply", projId, customerEmail],
     queryFn: () =>
       api
@@ -224,7 +224,7 @@ export interface ProjectQuotationTotalExpense {
 // fetch all project Expense
 export const getProjectExpense = (projId?: string) => {
   const customerEmail = useClientUserEmail();
-  useQuery<ProjectQuotationTotalExpense, Error>({
+  return useQuery<ProjectQuotationTotalExpense, Error>({
     queryKey: ["project-Expense", projId, customerEmail], // Include parameters for better cache control
     queryFn: () =>
       api

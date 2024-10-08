@@ -1,8 +1,9 @@
 import React from 'react'
+import Gantt from '../components/gantt/Gantt'
 
 const Scheduler = () => {
   return (
-    <div>Scheduler</div>
+    <Gantt/>
   )
 }
 
