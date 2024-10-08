@@ -78,13 +78,13 @@ export const getClientSidebarLinks = (clientProjId?: string): SidebarLink[] => [
   {
     key: "project",
     label: "Project",
-    path: `/project/${clientProjId ?? ''}`,  // Use project ID if available
+    path: `/project`,  // Use project ID if available
     icon: <LuLayers size={23} className="min-w-max" />,
   },
   {
     key: "quotation",
     label: "Quotation",
-    path: "/quotation",
+    path: `/quotation/${clientProjId ?? ''}`,
     icon: <TbReport size={23} className="min-w-max" />,
   },
   {

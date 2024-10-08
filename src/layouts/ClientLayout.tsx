@@ -15,8 +15,9 @@ const ClientLayout = () => {
 
 // const user = useSelector(selectUser);
 // const customerEmail = user.role === "Client" ? user.email : "";
-const customerEmail = "richardddquirante98@gmail.com";
-  const { data: clientProjId, isLoading, error } = getClientProjId(customerEmail);
+// const customerEmail = "richardddquirante98@gmail.com";
+// const customerEmail = "richardddquirante98@gmail.com";
+  const { data: clientProjId, isLoading, error } = getClientProjId();
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 

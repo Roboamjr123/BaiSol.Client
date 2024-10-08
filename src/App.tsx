@@ -35,8 +35,6 @@ import { registerLicense } from "@syncfusion/ej2/base";
 
 const queryClient = new QueryClient({});
 
-
-
 function App() {
   const user = useSelector(selectUser) || {}; // Ensure user is not null
 
@@ -72,7 +70,7 @@ function App() {
         {/* <Route element={<ClientLayout />}>
           <Route path="/" element={<ClientPage />} />
           <Route
-            path="project/:projId"
+            path="quotation/:projId"
             element={<ClientProjectQuotationPage />}
           />
           <Route path="*" element={<PageNotFound />} />
@@ -106,10 +104,10 @@ function App() {
         ) : userRole === "Client" ? (
           <Route element={<ClientLayout />}>
             <Route path="/" element={<ClientPage />} />
-            <Route
-              path="project/:projId"
-              element={<ClientProjectQuotationPage />}
-            />
+          <Route
+            path="quotation/:projId"
+            element={<ClientProjectQuotationPage />}
+          />
             <Route path="*" element={<PageNotFound />} />
           </Route>
         ) : (
