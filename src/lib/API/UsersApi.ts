@@ -2,6 +2,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "./AuthAPI";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../state/authSlice";
+import { useUserEmail } from "../../state/Hooks/userHook";
 
 // Define the type of data returned by the API without unwanted fields
 interface PersonnelUser {
@@ -17,6 +18,9 @@ interface PersonnelUser {
 
 // Create New Admin
 export const useRegisterAdminMutation = () => {
+  const user = useSelector(selectUser);
+  const adminEmail = useUserEmail();
+  // const adminEmail = "richardquirante98@gmail.com";
   return useMutation({
     mutationFn: async (formData: {
       firstName: string;
@@ -26,7 +30,7 @@ export const useRegisterAdminMutation = () => {
     }) => {
       const data = {
         ...formData,
-        adminEmail: "richardquirante98@gmail.com",
+        adminEmail: adminEmail,
       };
       try {
         const response = await api.post("user/User/Register-Admin", data, {
@@ -46,7 +50,8 @@ export const useRegisterAdminMutation = () => {
 // UnComment the admin email for user creator
 // Create New Facilitator
 export const useRegisterPersonnelUserMutation = (role: string) => {
-  // const admin = useSelector(selectUser);
+  const adminEmail = useUserEmail();
+  // const adminEmail = "richardquirante98@gmail.com";
   return useMutation({
     mutationFn: async (formData: {
       firstName: string;
@@ -58,7 +63,7 @@ export const useRegisterPersonnelUserMutation = (role: string) => {
     }) => {
       const data = {
         ...formData,
-        adminEmail: "richardquirante98@gmail.com",
+        adminEmail: adminEmail,
         // adminEmail: admin.email, // Add adminEmail dynamically
       };
 
@@ -226,12 +231,14 @@ export const useStatusMutateInstaller = () => {
 
 // Add New Installer
 export const useAddNewInstaller = () => {
-  // const admin = useSelector(selectUser);
+  const adminEmail = useUserEmail();
+
+  // const adminEmail = "richardquirante98@gmail.com";
   return useMutation({
     mutationFn: async (formData: { name: string; position: string }) => {
       const data = {
         ...formData,
-        adminEmail: "richardquirante98@gmail.com",
+        adminEmail: adminEmail,
         // adminEmail: admin.email, // Add adminEmail dynamically
       };
 

@@ -3,8 +3,7 @@ import { api } from "./AuthAPI";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../state/authSlice";
-
-// const userEmail = useSelector(selectUser);
+import { useUserEmail } from "../../state/Hooks/userHook";
 
 export interface IAddEquipment {
   eqptDescript: string;
@@ -16,6 +15,7 @@ export interface IAddEquipment {
 
 // Add new Equipment
 export const useAddEquipment = () => {
+  const userEmail = useUserEmail();
   return useMutation({
     mutationFn: async (formData: IAddEquipment) => {
       try {
@@ -23,8 +23,8 @@ export const useAddEquipment = () => {
           "api/Equipment/Add-Equipment",
           {
             ...formData,
-            userEmail: "richardquirante98@gmail.com",
-            // userEmail: userEmail,
+
+            userEmail: userEmail,
           },
           {
             headers: {
@@ -108,14 +108,15 @@ interface IUpdatEquipmentPAndQ {
 
 // Update Equipment Price and Quantity
 export const useUpdateEquipmentPAndQ = () => {
+  const userEmail = useUserEmail();
   return useMutation({
     mutationFn: async (data: IUpdatEquipmentPAndQ) => {
       const response = await api.put(
         `api/Equipment/Update-EquipmentPAndQ`,
         {
           ...data,
-          userEmail: "richardquirante98@gmail.com",
-          // userEmail: userEmail,
+
+          userEmail: userEmail,
         },
         {
           headers: {
@@ -140,14 +141,15 @@ interface IUpdateEquipmentUAndD {
 
 // Update Equipment Unit and Description
 export const useUpdateEquipmentUAndD = () => {
+  const userEmail = useUserEmail();
   return useMutation({
     mutationFn: async (data: IUpdateEquipmentUAndD) => {
       const response = await api.put(
         `api/Equipment/Update-EquipmentUAndD`,
         {
           ...data,
-          userEmail: "richardquirante98@gmail.com",
-          // userEmail: userEmail,
+
+          userEmail: userEmail,
         },
         {
           headers: {
@@ -210,7 +212,7 @@ export const useReturnDamageEquipment = () => {
           "api/Equipment/Return-Damaged-Equipment",
           {
             ...formData,
-            userEmail: "richardquirante98@gmail.com",
+
             // ,userEmail: admin?.email
           },
           {
@@ -239,7 +241,7 @@ export const useReturnGoodquipment = () => {
           "api/Equipment/Return-Good-Equipment",
           {
             ...formData,
-            userEmail: "richardquirante98@gmail.com",
+
             // ,userEmail: admin?.email
           },
           {

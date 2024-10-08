@@ -146,8 +146,8 @@ const Sidebar: React.FC<SidebarProps> = ({ links, isOpen, setOpen }) => {
               </li>
             ))}
 
-            {/* {userRole === "Admin" && ( */}
-            {userRole === null && (
+            {userRole === "Admin" && (
+            // {userRole === null && (
               <>
                 {(isOpen || isTabletMid) && (
                   <div className="border-y py-5 border-orange-300">

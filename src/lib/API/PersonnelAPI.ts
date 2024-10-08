@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "./AuthAPI";
+import { useUserEmail } from "../../state/Hooks/userHook";
 
 export interface IAvailableInstallers {
   installerId: number;
@@ -65,13 +66,12 @@ interface IAssignInstallers {
 }
 
 export const useAssignInstallersToProject = () => {
-  // const admin = useSelector(selectUser);
+  const adminEmail = useUserEmail();
   return useMutation({
     mutationFn: async (formData: IAssignInstallers) => {
       const data = {
         ...formData,
-        adminEmail: "richardquirante98@gmail.com",
-        // adminEmail: admin?.email, // Add adminEmail dynamically
+        adminEmail: adminEmail, // Add adminEmail dynamically
       };
 
       try {
@@ -99,13 +99,12 @@ interface IAssignFacilitator {
 }
 
 export const useAssignFacilitatorToProject = () => {
-  // const admin = useSelector(selectUser);
+  const adminEmail = useUserEmail();
   return useMutation({
     mutationFn: async (formData: IAssignFacilitator) => {
       const data = {
         ...formData,
-        adminEmail: "richardquirante98@gmail.com",
-        // adminEmail: admin.email, // Add adminEmail dynamically
+        adminEmail: adminEmail, // Add adminEmail dynamically
       };
 
       try {

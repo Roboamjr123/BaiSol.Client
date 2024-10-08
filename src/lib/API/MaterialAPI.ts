@@ -3,8 +3,7 @@ import { api } from "./AuthAPI";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../state/authSlice";
-
-// const userEmail = useSelector(selectUser);
+import { useUserEmail } from "../../state/Hooks/userHook";
 
 // Get material qoh
 export const getMaterialQOH = (mtlId: number) => {
@@ -67,6 +66,7 @@ export interface IAddMaterial {
 
 // Add new Material
 export const useAddMaterial = () => {
+  const userEmail = useUserEmail();
   return useMutation({
     mutationFn: async (formData: IAddMaterial) => {
       try {
@@ -74,7 +74,7 @@ export const useAddMaterial = () => {
           "material/Material/Add-Material",
           {
             ...formData,
-            userEmail: "richardquirante98@gmail.com",
+            userEmail: userEmail,
             // userEmail: userEmail,
           },
           {
@@ -124,13 +124,14 @@ interface IUpdateMaterialPAndQ {
 
 // Update Material Price and Quantity
 export const useUpdateMaterialPAndQ = () => {
+  const userEmail = useUserEmail();
   return useMutation({
     mutationFn: async (data: IUpdateMaterialPAndQ) => {
       const response = await api.put(
         `material/Material/Update-MaterialPAndQ`,
         {
           ...data,
-          userEmail: "richardquirante98@gmail.com",
+          userEmail: userEmail,
           // userEmail: userEmail,
         },
         {
@@ -152,13 +153,14 @@ interface IUpdateMaterialUAndD {
 
 // Update Material Unit and Description
 export const useUpdateMaterialUAndD = () => {
+  const userEmail = useUserEmail();
   return useMutation({
     mutationFn: async (data: IUpdateMaterialUAndD) => {
       const response = await api.put(
         `material/Material/Update-MaterialUAndD`,
         {
           ...data,
-          userEmail: "richardquirante98@gmail.com",
+          userEmail: userEmail,
           // userEmail: userEmail,
         },
         {
@@ -174,9 +176,7 @@ export const useUpdateMaterialUAndD = () => {
 
 // Delete Material
 export const useDeleteMaterial = () => {
-  //   const admin = useSelector(selectUser);
-  //   const adminEmail = admin?.email;
-  const adminEmail = "richardquirante98@gmail.com";
+  const adminEmail = useUserEmail();
 
   return useMutation({
     mutationFn: async ({ mtlId }: { mtlId: number }) => {

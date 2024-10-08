@@ -66,14 +66,14 @@ function App() {
           <Route path="*" element={<PageNotFound />} />
         </Route> */}
 
-        <Route element={<ClientLayout />}>
+        {/* <Route element={<ClientLayout />}>
           <Route path="/" element={<ClientPage />} />
           <Route
             path="project/:projId"
             element={<ClientProjectQuotationPage />}
           />
           <Route path="*" element={<PageNotFound />} />
-        </Route>
+        </Route> */}
 
         {/* <Route element={<FacilitatorLayout />}>
           <Route path="/" element={<FacilitatorDashboard />} />
@@ -84,7 +84,7 @@ function App() {
           <Route path="*" element={<PageNotFound />} />
         </Route> */}
 
-        {/* {userRole === "Admin" ? (
+        {userRole === "Admin" ? (
           <Route element={<AdminLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="project" element={<ProjectPage />} />
@@ -97,15 +97,16 @@ function App() {
         ) : userRole === "Facilitator" ? (
           <Route element={<FacilitatorLayout />}>
             <Route path="/" element={<FacilitatorDashboard />} />
+            <Route path="project" element={<AssignedSupplyPage />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>
         ) : userRole === "Client" ? (
           <Route element={<ClientLayout />}>
             <Route path="/" element={<ClientPage />} />
-          <Route
-            path="project/:projId"
-            element={<ClientProjectQuotationPage />}
-          />
+            <Route
+              path="project/:projId"
+              element={<ClientProjectQuotationPage />}
+            />
             <Route path="*" element={<PageNotFound />} />
           </Route>
         ) : (
@@ -117,7 +118,7 @@ function App() {
             <Route path="change-password" element={<ChangePass />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>
-        )} */}
+        )}
 
         <Route path="/verify-2FA" element={<Verify2FA />} />
         <Route path="/home" element={<Home />} />

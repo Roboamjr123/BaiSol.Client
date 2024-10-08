@@ -3,6 +3,7 @@ import { api } from "../AuthAPI";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../state/authSlice";
 import { toast } from "react-toastify";
+import { useClientUserEmail } from "../../../state/Hooks/userHook";
 
 interface Project {
   projId: string; // UUID format
@@ -117,7 +118,8 @@ export interface IProjectInfo {
 }
 
 // fetch all project Info
-export const getProjectInfo = (projId?: string) =>
+export const getProjectInfo = (projId?: string) => {
+  const customerEmail = useClientUserEmail();
   useQuery<IProjectInfo, Error>({
     queryKey: ["project-Info", projId, customerEmail],
     queryFn: () =>
@@ -127,6 +129,7 @@ export const getProjectInfo = (projId?: string) =>
         })
         .then((res) => res.data),
   });
+};
 
 export interface IClientProjectInfo {
   projId: string;
@@ -189,10 +192,11 @@ export interface IProjectSupply {
 
 // const user = useSelector(selectUser);
 // const customerEmail = user.role === "Client" ? user.email : "";
-const customerEmail = "richardddquirante98@gmail.com";
+// const customerEmail = "richardddquirante98@gmail.com";
 
 // fetch all project Supply
-export const getProjectSupply = (projId?: string) =>
+export const getProjectSupply = (projId?: string) => {
+  const customerEmail = useClientUserEmail();
   useQuery<IProjectSupply[], Error>({
     queryKey: ["project-Supply", projId, customerEmail],
     queryFn: () =>
@@ -202,6 +206,7 @@ export const getProjectSupply = (projId?: string) =>
         })
         .then((res) => res.data),
   });
+};
 
 export interface ProjectQuotationTotalExpense {
   quoteId: string;
@@ -217,7 +222,8 @@ export interface ProjectQuotationTotalExpense {
 }
 
 // fetch all project Expense
-export const getProjectExpense = (projId?: string) =>
+export const getProjectExpense = (projId?: string) => {
+  const customerEmail = useClientUserEmail();
   useQuery<ProjectQuotationTotalExpense, Error>({
     queryKey: ["project-Expense", projId, customerEmail], // Include parameters for better cache control
     queryFn: () =>
@@ -227,3 +233,4 @@ export const getProjectExpense = (projId?: string) =>
         })
         .then((res) => res.data),
   });
+};

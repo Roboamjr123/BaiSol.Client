@@ -3,9 +3,7 @@ import { api } from "./AuthAPI";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../state/authSlice";
-
-const userEmail = "richardquirante98@gmail.com";
-// const userEmail = useSelector(selectUser);
+import { useUserEmail } from "../../state/Hooks/userHook";
 
 export interface IAllRequest {
   reqId: number;
@@ -87,14 +85,15 @@ interface IRequestDetail {
 }
 
 export const useRequestSupply = () => {
+  const userEmail = useUserEmail();
   return useMutation({
     mutationFn: async (formData: IRequestSupply) => {
       const response = await api.post(
         "api/Requisition/RequestSupply",
         {
           ...formData,
-          submittedBy: "richardquirante98@gmail.com",
-          // submittedBy: userEmail,
+
+          submittedBy: userEmail,
         },
         {
           headers: {
@@ -116,6 +115,7 @@ interface IActionRequest {
 }
 
 export const useApproveRequest = () => {
+  const userEmail = useUserEmail();
   return useMutation({
     mutationFn: async (data: IActionRequest) => {
       const response = await api.put(
@@ -141,6 +141,7 @@ export const useApproveRequest = () => {
 };
 
 export const useDeclineRequest = () => {
+  const userEmail = useUserEmail();
   return useMutation({
     mutationFn: async (data: IActionRequest) => {
       const response = await api.put(
@@ -171,6 +172,7 @@ interface IUpdateRequestQuantity {
 }
 
 export const useUpdateRequestQuantity = () => {
+  const userEmail = useUserEmail();
   return useMutation({
     mutationFn: async (data: IUpdateRequestQuantity) => {
       const response = await api.put(
@@ -178,8 +180,7 @@ export const useUpdateRequestQuantity = () => {
         {
           ...data,
 
-          userEmail: "richardqweweuirante98@gmail.com",
-          // userEmail: userEmail,
+          userEmail: userEmail,
         },
         {
           headers: {
@@ -201,6 +202,7 @@ interface IDeleteRequest {
 }
 
 export const useDeleteRequest = () => {
+  const userEmail = useUserEmail();
   return useMutation({
     mutationFn: async (data: IDeleteRequest) => {
       const response = await api.delete("api/Requisition/DeleteRequest", {
