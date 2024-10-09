@@ -14,6 +14,7 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const loginMutation = useLoginMutation();
   const [validUser, setValidUser] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
 
   const validateEmail = (value: string) =>
@@ -33,29 +34,25 @@ const LoginPage = () => {
       password: password,
     };
 
-    try {
-      loginMutation.mutate(formData, {
-        onSuccess: (data) => {
-          if (data.flag) {
-            toast.success(data.message);
-            setValidUser(true);
-          } else {
-            toast.error(data.message);
-          }
-        },
-        onError: (error) => {
-          toast.error(error.message);
-        },
-      });
-    } catch (error) {
-      console.error("Error submitting form:", error);
-    }
+    loginMutation.mutateAsync(formData, {
+      onSuccess: (res) => {
+        if (res.flag && res.isDefaultAdmin) {
+          setIsAdmin(true);
+        } else {
+          setValidUser(true);
+        }
+      },
+    });
   };
 
   if (validUser) {
     navigate("/verify-2FA", {
       state: { email: email },
     });
+  }
+
+  if (isAdmin) {
+    navigate("/");
   }
 
   return (

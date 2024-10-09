@@ -127,14 +127,14 @@ const EquipmentTable = () => {
           return (
             <div className="flex flex-col">
               <span className="font-semibold text-sm tracking-widest">
-                {equipment.eqptCode}
-              </span>
-              <span className="text-xs text-gray-400 tracking-tight">
                 {equipment.eqptDescript}
               </span>
-              <span className="text-xs text-gray-400 tracking-tight">
+              <span className="text-xs text-gray-500 tracking-tight">
                 {equipment.eqptCtgry}
               </span>
+              {/* <span className="text-xs text-gray-400 tracking-tight">
+                {equipment.eqptCode}
+              </span> */}
             </div>
           );
         case "price":

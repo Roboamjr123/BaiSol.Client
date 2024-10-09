@@ -1,4 +1,4 @@
-import "../gantt/css/tailwind.css"
+import "../gantt/css/tailwind.css";
 
 import {
   GanttComponent,
@@ -16,6 +16,8 @@ import {
   Sort,
   HolidaysDirective,
   HolidayDirective,
+  SortSettings,
+  SortSettingsModel,
 } from "@syncfusion/ej2-react-gantt";
 import { DataManager, WebApiAdaptor } from "@syncfusion/ej2/data";
 
@@ -66,6 +68,10 @@ const Gantt = () => {
     crossDomain: true,
   });
 
+  const sortingOptions: SortSettingsModel = {
+    columns: [{ field: "TaskId", direction: "Descending" }],
+  };
+
   return (
     <div className="p-5">
       <GanttComponent
@@ -89,6 +95,8 @@ const Gantt = () => {
         allowRowDragAndDrop={true}
         allowReordering={true}
         allowParentDependency={true}
+        sortSettings={sortingOptions}
+        allowSorting={true}
       >
         <Inject
           services={[

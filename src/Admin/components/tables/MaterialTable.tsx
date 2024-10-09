@@ -109,14 +109,15 @@ const MaterialTable = () => {
           return (
             <div className="flex flex-col">
               <span className="font-semibold text-sm tracking-widest">
-                {material.mtlCode}
-              </span>
-              <span className="text-xs text-gray-400 tracking-tight">
+                {" "}
                 {material.mtlDescript}
-              </span>
-              <span className="text-xs text-gray-400 tracking-tight">
+              </span>{" "}
+              <span className="text-xs text-gray-500 tracking-tight">
                 {material.mtlCtgry}
               </span>
+              {/* <span className="text-xs text-gray-400 tracking-tight">
+                {material.mtlCode}
+              </span> */}
             </div>
           );
         case "price":

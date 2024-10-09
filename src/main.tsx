@@ -10,7 +10,8 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { registerLicense } from "@syncfusion/ej2/base";
 
 registerLicense(
-  `Ngo9BigBOggjHTQxAR8/V1NDaF5cWWtCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdnWH9eeHRURWJcVEdyX0I=`
+  // import.meta.env.VITE_APP_SYNCFUSION_LICENSE
+  `Ngo9BigBOggjHTQxAR8/V1NDaF5cWGFCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdnWH9eeHRSQmNdVURzVkY=`
 );
 
 disableReactDevTools();

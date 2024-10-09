@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import { setUser } from "../../state/authSlice";
 import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 
 const baseURL = import.meta.env.VITE_APP_SERVER_API_URL;
 
@@ -18,17 +19,71 @@ api.interceptors.request.use((config) => {
   }
   return config;
 });
-
+// Define the expected structure of the API response
+interface ILoginResponse {
+  message: string;
+  flag: boolean;
+  isDefaultAdmin: boolean;
+  accessToken: string | null;
+  refreshToken: string | null;
+}
 // Login
 export const useLoginMutation = () => {
+  const dispatch = useDispatch();
   return useMutation({
     mutationFn: async (formData: { email: string; password: string }) => {
-      const response = await api.post("auth/Auth/Login", formData, {
-        headers: {
-          "Content-Type": "application/json", // Ensure it matches the server requirements
-        },
-      });
+      const response = await api.post<ILoginResponse>(
+        "auth/Auth/Login",
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json", // Ensure it matches the server requirements
+          },
+        }
+      );
+
       return response.data;
+    },
+    onSuccess: (res) => {
+      if (res.isDefaultAdmin && res.flag) {
+        // Extract and store tokens
+        const { accessToken, refreshToken } = res;
+        if (accessToken && refreshToken) {
+          Cookies.set("accessToken", accessToken);
+          localStorage.setItem("refreshToken", refreshToken);
+
+          // Decode the access token to extract user information
+          const decodedToken: any = jwtDecode(accessToken);
+          const user = {
+            userId:
+              decodedToken[
+                "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+              ],
+            email:
+              decodedToken[
+                "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
+              ],
+            userName:
+              decodedToken[
+                "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"
+              ],
+            userRole:
+              decodedToken[
+                "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+              ],
+          };
+
+          // Dispatch the user information to the Redux store
+          dispatch(setUser(user));
+        }
+
+      }
+
+      // Show success message
+      toast.success(res.message);
+    },
+    onError: (err: any) => {
+      toast.error(err.response.data);
     },
   });
 };

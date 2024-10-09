@@ -265,7 +265,7 @@ const EditClientInfo: React.FC<IEdit> = ({
                   isRequired
                   value={vatRate}
                   type="text"
-                  label="VAT Rate"
+                  label="VAT Rate %"
                   variant="flat"
                   isInvalid={isInvalidVAT}
                   errorMessage={"Please fill the blank!"}
@@ -276,7 +276,7 @@ const EditClientInfo: React.FC<IEdit> = ({
                   isRequired
                   value={discountRate}
                   type="text"
-                  label="Discount Rate"
+                  label="Discount Rate %"
                   variant="flat"
                   isInvalid={isInvalidDiscount}
                   errorMessage={"Please fill the blank!"}
@@ -328,10 +328,7 @@ const EditClientInfo: React.FC<IEdit> = ({
               isInvalidBill ||
               firstName === "" ||
               lastName === "" ||
-              discountRate === "" ||
               address === "" ||
-              discountRate === "" ||
-              vatRate === "" ||
               isInvalidDiscount ||
               isInvalidVAT
             }
