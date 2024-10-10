@@ -32,6 +32,7 @@ import AssignedSupplyPage from "./Facilitator/pages/AssignedSupplyPage";
 import Form from "./main/components/Quotation/Form";
 import ClientProjectQuotationPage from "./Client/pages/ClientProjectQuotationPage";
 import { registerLicense } from "@syncfusion/ej2/base";
+import ActivityLogPage from "./Admin/pages/ActivityLogPage";
 
 const queryClient = new QueryClient({});
 
@@ -62,6 +63,7 @@ function App() {
           <Route path="project/:projId" element={<ClientQuotePage />} />
           <Route path="personnel" element={<Personnel />} />
           <Route path="clients" element={<ClientPage />} />
+          <Route path="activity" element={<ActivityLogPage />} />
           <Route path="supply" element={<Supply />} />
           <Route path="form" element={<Form />} />
           <Route path="*" element={<PageNotFound />} />

@@ -12,6 +12,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import { BiSolidReport } from "react-icons/bi";
 import { selectUser } from "../../../state/authSlice";
 import { useSelector } from "react-redux";
+import { RxActivityLog } from "react-icons/rx";
 
 // Define the type for a sidebar link
 interface SidebarLink {
@@ -146,14 +147,14 @@ const Sidebar: React.FC<SidebarProps> = ({ links, isOpen, setOpen }) => {
               </li>
             ))}
 
-            {userRole === "Admin" && (
-            // {userRole === null && (
+            {/* {userRole === "Admin" && ( */}
+            {userRole === null && (
               <>
                 {(isOpen || isTabletMid) && (
                   <div className="border-y py-5 border-orange-300">
-                    <small className="pl-3 text-slate-500 inline-block mb-2">
+                    {/* <small className="pl-3 text-slate-500 inline-block mb-2">
                       Product categories
-                    </small>
+                    </small> */}
                     {subMenusList?.map((menu) => (
                       <div key={menu.name} className="flex flex-col gap-1">
                         <SubMenu data={menu} />
@@ -170,6 +171,17 @@ const Sidebar: React.FC<SidebarProps> = ({ links, isOpen, setOpen }) => {
                   >
                     <MdPeopleAlt size={23} className="min-w-max" />
                     Clients
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to={"/activity"}
+                    className={({ isActive }) =>
+                      `link ${isActive ? "sidebar-active" : ""}`
+                    }
+                  >
+                    <RxActivityLog size={23} className="min-w-max" />
+                    Activity
                   </NavLink>
                 </li>
               </>

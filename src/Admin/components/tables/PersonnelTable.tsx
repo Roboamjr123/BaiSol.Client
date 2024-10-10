@@ -217,8 +217,8 @@ const PersonnelTable: React.FC<UserProps> = ({ role }) => {
         case "status":
           return (
             <Chip
-              className="capitalize border-none gap-1 text-default-600"
               color={statusColorMap[user.status]}
+              className="capitalize border-none gap-1 text-default-600"
               size="sm"
               variant="dot"
             >
@@ -269,7 +269,8 @@ const PersonnelTable: React.FC<UserProps> = ({ role }) => {
                   ) : (
                     <DropdownItem className="hidden"></DropdownItem>
                   )}
-                  {(user.status !== "OnWork" && user.status !== "InActive") &&
+                  {user.status !== "OnWork" &&
+                  user.status !== "InActive" &&
                   (role !== "Admin" ||
                     (role === "Admin" &&
                       (adminUsersNotInActive?.length || 0) > 1)) ? (
