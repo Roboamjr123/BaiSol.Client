@@ -6,6 +6,7 @@ import {
 } from "../../../../lib/API/Project/ProjectApi";
 import {
   Button,
+  Checkbox,
   Input,
   Modal,
   ModalBody,
@@ -43,11 +44,17 @@ const EditClientInfo: React.FC<IEdit> = ({
   const [projectName, setProjectName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [vatRate, setVATRate] = useState<string>("");
+  const [isVAT, setIsVAT] = useState<boolean>(false);
   const [discountRate, setDiscountRate] = useState<string>("");
 
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const { data: infos, isSuccess, isLoading } = getClientProjectInfo(projId);
+  const {
+    data: infos,
+    isSuccess,
+    refetch,
+    isLoading,
+  } = getClientProjectInfo(projId);
   const updateClientInfo = useUpdateClientProjectInfo();
 
   useEffect(() => {
@@ -62,6 +69,11 @@ const EditClientInfo: React.FC<IEdit> = ({
       setProjectName(infos?.projName!);
       setDescription(infos?.projDescript!);
       setIsModalVisible(true);
+
+      const initialVATRate = Number(infos?.vatRate); // Convert VAT rate to number
+      // Set isVAT to true if VAT rate is greater than 0, false otherwise
+      setIsVAT(initialVATRate > 0);
+      setVATRate(initialVATRate.toString() || ""); // Set VAT rate or reset itq
     }
 
     if (!isOpen) {
@@ -76,7 +88,13 @@ const EditClientInfo: React.FC<IEdit> = ({
       setDescription("");
       setIsModalVisible(false);
     }
-  }, [isOpen]);
+  }, [isOpen, infos, isLoading]);
+
+  // This function handles the checkbox toggle
+  const handleVATChange = (value: boolean) => {
+    setIsVAT(value); // Update the VAT state based on the checkbox
+    setVATRate(value ? "12" : "0"); // Set VAT rate to 12% when checked, else reset
+  };
 
   const validateContactNumber = (value: string) => /^\d{9}$/.test(value);
   const isInvalidCNum = useMemo(() => {
@@ -121,11 +139,11 @@ const EditClientInfo: React.FC<IEdit> = ({
     [clientMonthlyElectricBill]
   );
   const isInvalidVAT = useMemo(
-    () => isInvalidNumber(vatRate, false, 100),
+    () => isInvalidNumber(vatRate, true, 100),
     [vatRate]
   ); // Max VAT = 100%
   const isInvalidDiscount = useMemo(
-    () => isInvalidNumber(discountRate, false, 100),
+    () => isInvalidNumber(discountRate, true, 100),
     [discountRate]
   ); // Max discount = 100%
 
@@ -177,6 +195,7 @@ const EditClientInfo: React.FC<IEdit> = ({
 
         refetchExpense();
         refetchInfo();
+        refetch();
         onClose();
       },
     });
@@ -260,26 +279,29 @@ const EditClientInfo: React.FC<IEdit> = ({
               </div>
             </div>
             <div className="flex flex-col">
-              <div className="flex flex-row gap-2">
-                <Input
-                  isRequired
+              <div className="flex flex-row gap-2 pb-2">
+                {/* <Input
                   value={vatRate}
                   type="text"
                   label="VAT Rate %"
                   variant="flat"
                   isInvalid={isInvalidVAT}
-                  errorMessage={"Please fill the blank!"}
                   onChange={(e) => setVATRate(e.target.value)}
                   size="sm"
-                />
+                /> */}
+                <Checkbox
+                  isSelected={isVAT}
+                  color="warning"
+                  onValueChange={handleVATChange}
+                >
+                  VAT
+                </Checkbox>
                 <Input
-                  isRequired
                   value={discountRate}
                   type="text"
                   label="Discount Rate %"
                   variant="flat"
                   isInvalid={isInvalidDiscount}
-                  errorMessage={"Please fill the blank!"}
                   onChange={(e) => setDiscountRate(e.target.value)}
                   size="sm"
                 />
@@ -329,8 +351,7 @@ const EditClientInfo: React.FC<IEdit> = ({
               firstName === "" ||
               lastName === "" ||
               address === "" ||
-              isInvalidDiscount ||
-              isInvalidVAT
+              isInvalidDiscount
             }
             isLoading={updateClientInfo.isPending}
             onClick={() => handleUpdateClientInfo()}

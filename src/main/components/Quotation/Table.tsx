@@ -39,12 +39,9 @@ const tableData = [
 ];
 
 const AccessibleTable: React.FC<{
-  projId?: string;
   projExpense?: ProjectQuotationTotalExpense;
-}> = (projExpense, projId) => {
-  const { data: materialSupplies, refetch: refetchSupplies } =
-    getProjectSupply(projId);
-
+  materialSupplies?: IProjectSupply[];
+}> = (projExpense, materialSupplies = []) => {
   return (
     <div>
       <div className="flex justify-between py-2 items-start ml-3 mr-4">
@@ -72,18 +69,20 @@ const AccessibleTable: React.FC<{
               </tr>
             ))} */}
 
-            {materialSupplies?.map((row: IProjectSupply, index: any) => (
-              <tr key={index} className={`odd:bg-white even:bg-gray-100`}>
-                <td className="border border-gray-300 px-4 py-2">
-                  {row.description}
-                </td>
-                <td className="border border-gray-300 text-right px-4 py-2">
-                  {row.lineTotal ? `₱ ${row.lineTotal}` : ""}
-                </td>
-              </tr>
-            ))}
+            {projExpense?.materialSupplies?.map(
+              (row: IProjectSupply, index: number) => (
+                <tr key={index} className={`odd:bg-white even:bg-gray-100`}>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {row.description}
+                  </td>
+                  <td className="border border-gray-300 text-right px-4 py-2">
+                    {row.lineTotal ? `₱ ${row.lineTotal}` : ""}
+                  </td>
+                </tr>
+              )
+            )}
 
-            <tr className={"bg-white"}>
+            <tr className={"odd:bg-white even:bg-gray-100"}>
               <td className="border border-gray-300 px-4 py-2">&nbsp;</td>
               <td className="border border-gray-300 text-right px-4 py-2"></td>
             </tr>

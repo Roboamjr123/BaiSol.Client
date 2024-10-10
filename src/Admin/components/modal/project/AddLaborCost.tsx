@@ -2,6 +2,8 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useAddLaborCost } from "../../../../lib/API/Quote/LaborQuotationAPI";
 import { toast } from "react-toastify";
 import {
+  Autocomplete,
+  AutocompleteItem,
   Button,
   Input,
   Modal,
@@ -12,6 +14,7 @@ import {
   Textarea,
 } from "@nextui-org/react";
 import { capitalizeFirstLetter } from "../../../../lib/utils/functions";
+import { materialUnitsOfMeasurement } from "../../../../lib/constants/UnitsOfMeasurement";
 
 interface IAdd {
   projId: string;
@@ -31,7 +34,7 @@ const AddLaborCost: React.FC<IAdd> = ({
   const [description, setDescription] = useState<string>("");
   const [quantity, setQuantity] = useState<number>(0);
   const [unitNum, setUnitNum] = useState<number>(0);
-  const [unit, setUnit] = useState<string>("");
+  const [unit, setUnit] = useState<any>(null);
   const [unitCost, setUnitCost] = useState<string>("");
 
   const addCost = useAddLaborCost();
@@ -124,7 +127,7 @@ const AddLaborCost: React.FC<IAdd> = ({
             onChange={(e) => setDescription(e.target.value)}
           />
           <div className="grid grid-cols-2 gap-2">
-            <Input
+            {/* <Input
               isRequired
               type="text"
               label="Unit"
@@ -132,7 +135,22 @@ const AddLaborCost: React.FC<IAdd> = ({
               value={unit}
               size="sm"
               onChange={(e) => setUnit(e.target.value)}
-            />
+            />  */}
+            
+            <Autocomplete
+                isRequired
+                selectedKey={unit}
+                label="Unit"
+                variant="flat"
+                defaultItems={materialUnitsOfMeasurement}
+                onSelectionChange={setUnit}
+              >
+                {(item) => (
+                  <AutocompleteItem key={item.value}>
+                    {item.label}
+                  </AutocompleteItem>
+                )}
+              </Autocomplete>
             <Input
               isRequired
               value={String(quantity)}

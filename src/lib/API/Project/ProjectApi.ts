@@ -190,21 +190,16 @@ export interface IProjectSupply {
   lineTotal: string;
 }
 
-// const user = useSelector(selectUser);
-// const customerEmail = user.role === "Client" ? user.email : "";
-// const customerEmail = "richardddquirante98@gmail.com";
-
 // fetch all project Supply
 export const getProjectSupply = (projId?: string) => {
-  const customerEmail = useClientUserEmail();
   return useQuery<IProjectSupply[], Error>({
-    queryKey: ["project-Supply", projId, customerEmail],
-    queryFn: () =>
-      api
-        .get("api/Project/ProjectQuotationSupply", {
-          params: { projId, customerEmail: customerEmail },
-        })
-        .then((res) => res.data),
+    queryKey: ["project-supply-quotation", projId],
+    queryFn: async () => {
+      const response = await api.get("api/Project/ProjectQuotationSupply", {
+        params: { projId },
+      });
+      return response.data;
+    },
   });
 };
 

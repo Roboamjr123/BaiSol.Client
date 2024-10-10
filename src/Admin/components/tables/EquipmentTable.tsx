@@ -24,14 +24,20 @@ import {
 } from "@nextui-org/react";
 import { BiDotsVertical } from "react-icons/bi";
 import { CiSearch } from "react-icons/ci";
-import { FaPlus } from "react-icons/fa";
+import { FaEdit, FaPlus } from "react-icons/fa";
 import { supply_columns } from "../../../lib/utils/supplyTable";
 import { formatNumber } from "../../../lib/utils/utils";
 import { iconClasses } from "../../../lib/utils/usersTable";
-import { MdOutlineDeleteForever } from "react-icons/md";
+import {
+  MdOutlineDeleteForever,
+  MdOutlineHistory,
+  MdOutlineProductionQuantityLimits,
+} from "react-icons/md";
 import { toast } from "react-toastify";
 import AddSupply from "../modal/supply/AddSupply";
 import EditSupply from "../modal/supply/EditSupply";
+import AddQuantitySupply from "../modal/supply/AddQuantitySupply";
+import ItemLogs from "../logs/ItemLogs";
 
 const defaultEquipment: IAllEquipment = {
   eqptId: 0,
@@ -54,6 +60,7 @@ const EquipmentTable = () => {
   const [equipmentData, setEquipmentData] =
     useState<IAllEquipment>(defaultEquipment);
 
+  const [logEquipmentId, setLogEquipmentId] = useState<string>("");
   const [filterValue, setFilterValue] = useState("");
   const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
   const hasSearchFilter = Boolean(filterValue);
@@ -86,10 +93,23 @@ const EquipmentTable = () => {
     onOpen: addOnOpen,
     onClose: addOnClose,
   } = useDisclosure();
+
   const {
     isOpen: addExistIsOpen,
     onOpen: addExistOnOpen,
     onClose: addExistOnClose,
+  } = useDisclosure();
+
+  const {
+    isOpen: logIsOpen,
+    onOpen: logOnOpen,
+    onClose: logOnClose,
+  } = useDisclosure();
+
+  const {
+    isOpen: addQOHIsOpen,
+    onOpen: addQOHOnOpen,
+    onClose: addQOHOnClose,
   } = useDisclosure();
 
   const {
@@ -116,6 +136,18 @@ const EquipmentTable = () => {
     setEquipmentData(equipment);
 
     editOnOpen();
+  };
+
+  const handleAddQOHEquipment = (equipment: IAllEquipment) => {
+    setEquipmentData(equipment);
+
+    addQOHOnOpen();
+  };
+
+  const handleLogOpen = (id: string) => {
+    setLogEquipmentId(id);
+
+    logOnOpen();
   };
 
   const renderCell = useCallback(
@@ -177,8 +209,25 @@ const EquipmentTable = () => {
                   onClick={() => {
                     handleEditMaterial(equipment);
                   }}
+                  color="primary"
+                  startContent={
+                    <FaEdit className={cn(iconClasses, "text-primary")} />
+                  }
                 >
                   Edit
+                </DropdownItem>
+                <DropdownItem
+                  color="success"
+                  onClick={() => {
+                    handleAddQOHEquipment(equipment);
+                  }}
+                  startContent={
+                    <MdOutlineProductionQuantityLimits
+                      className={cn(iconClasses, "text-success")}
+                    />
+                  }
+                >
+                  Add Quantity
                 </DropdownItem>
                 <DropdownItem
                   onClick={() => handleDeleteMaterial(equipment.eqptId)}
@@ -191,6 +240,18 @@ const EquipmentTable = () => {
                   }
                 >
                   Delete
+                </DropdownItem>
+                <DropdownItem
+                  startContent={
+                    <MdOutlineHistory
+                      className={cn(iconClasses, "text-default")}
+                    />
+                  }
+                  onClick={() => {
+                    handleLogOpen(String(equipment.eqptId));
+                  }}
+                >
+                  History
                 </DropdownItem>
               </DropdownMenu>
             </Dropdown>
@@ -221,7 +282,16 @@ const EquipmentTable = () => {
             onChange={(e) => setFilterValue(e.target.value)}
           />
 
-          <Dropdown className="bg-background border-1 border-default-200">
+          <Button
+            className="bg-orange-500 text-background"
+            endContent={<FaPlus />}
+            size="sm"
+            onClick={() => addOnOpen()}
+          >
+            Add Equipment
+          </Button>
+
+          {/* <Dropdown className="bg-background border-1 border-default-200">
             <DropdownTrigger>
               <Button
                 className="bg-orange-500 text-background"
@@ -237,7 +307,7 @@ const EquipmentTable = () => {
                 Exist
               </DropdownItem>
             </DropdownMenu>
-          </Dropdown>
+          </Dropdown> */}
         </div>
         <div className="flex justify-between items-start">
           <span className="text-default-400 text-small">
@@ -333,6 +403,19 @@ const EquipmentTable = () => {
             isOpen={addExistIsOpen}
             onClose={addExistOnClose}
             refetch={refetch}
+          />
+          <AddQuantitySupply
+            prevSupply={equipmentData!}
+            isMaterial={false}
+            isOpen={addQOHIsOpen}
+            onClose={addQOHOnClose}
+            refetch={refetch}
+          />
+
+          <ItemLogs
+            id={logEquipmentId}
+            isOpen={logIsOpen}
+            onClose={logOnClose}
           />
         </div>
       </div>

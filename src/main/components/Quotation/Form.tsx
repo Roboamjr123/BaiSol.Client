@@ -10,6 +10,7 @@ import {
   getClientProjectInfo,
   getProjectExpense,
   getProjectInfo,
+  getProjectSupply,
 } from "../../../lib/API/Project/ProjectApi";
 import { useDisclosure } from "@nextui-org/react";
 import EditClientInfo from "../../../Admin/components/modal/project/EditClientInfo";
@@ -29,6 +30,7 @@ const Form: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
   const { data: projExpense, refetch: refetchExpense } =
     getProjectExpense(projId);
 
+  const { data: materialSupplies } = getProjectSupply(projId);
 
   const {
     isOpen: editIsOpen,
@@ -40,7 +42,7 @@ const Form: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
   /**
    * Prints the page.
    */
-  /******  6813502f-206b-440a-a6d2-75d0185fd9f6  *******/ 
+  /******  6813502f-206b-440a-a6d2-75d0185fd9f6  *******/
 
   const handleDownload = () => {
     const input = document.getElementById("pdf-content"); // Use the ID you set on the container
@@ -83,12 +85,11 @@ const Form: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
   return (
     <div className="a4-container">
       <div className="print-container text-right flex justify-end gap-x-5 pb-5 px-1">
-       
         <button
           onClick={handleDownload}
           className="print-button flex flex-col items-center hover:text-orange-500 !important"
         >
-          <Download  />
+          <Download />
           Download
         </button>{" "}
         {isAdmin && (
@@ -106,7 +107,7 @@ const Form: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
         <Header projInfo={projInfo} />
         <div className="content-section">
           <Table
-            projId={projId}
+            materialSupplies={materialSupplies}
             projExpense={projExpense}
           />
         </div>

@@ -116,6 +116,34 @@ export const getAllMaterials = () => {
   });
 };
 
+interface IUpdateMaterialQOH {
+  mtlId: number;
+  mtlPrice: number;
+} 
+
+// Update Material Price and Quantity
+export const useUpdateMaterialQOH = () => {
+  const userEmail = useUserEmail();
+  return useMutation({
+    mutationFn: async (data: IUpdateMaterialQOH) => {
+      const response = await api.put(
+        `material/Material/Update-QOH-Material`,
+        {
+          ...data,
+          userEmail: userEmail,
+          // userEmail: userEmail,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json", // Ensure it matches the server requirements
+          },
+        }
+      );
+      return response.data;
+    },
+  });
+};
+
 interface IUpdateMaterialPAndQ {
   mtlId: number;
   mtlPrice: number;

@@ -7,6 +7,8 @@ import {
   ModalHeader,
   Textarea,
   Button,
+  Autocomplete,
+  AutocompleteItem,
 } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
 import {
@@ -21,6 +23,7 @@ import {
   useUpdateEquipmentPAndQ,
   useUpdateEquipmentUAndD,
 } from "../../../../lib/API/EquipmentAPI";
+import { materialUnitsOfMeasurement } from "../../../../lib/constants/UnitsOfMeasurement";
 
 interface IEdit {
   prevSupply: IAllMaterials | IAllEquipment;
@@ -45,7 +48,7 @@ const EditSupply: React.FC<IEdit> = ({
     : useUpdateEquipmentUAndD();
 
   const [description, setDescription] = useState<string>("");
-  const [unit, setUnit] = useState<string>("");
+  const [unit, setUnit] = useState<any>(null);
   const [quantity, setQuantity] = useState<number>(0);
   const [price, setPrice] = useState<number>(0);
 
@@ -121,13 +124,13 @@ const EditSupply: React.FC<IEdit> = ({
         });
       }
 
-      if (material.mtlPrice !== price || material.mtlqoh !== quantity) {
-        await handleUpdate(updatePandQ.mutateAsync, {
-          mtlId: material.mtlId,
-          mtlPrice: price,
-          mtlqoh: quantity,
-        });
-      }
+      // if (material.mtlPrice !== price || material.mtlqoh !== quantity) {
+      //   await handleUpdate(updatePandQ.mutateAsync, {
+      //     mtlId: material.mtlId,
+      //     mtlPrice: price,
+      //     mtlqoh: quantity,
+      //   });
+      // }
     } else {
       const equipment = prevSupply as IAllEquipment;
 
@@ -142,13 +145,13 @@ const EditSupply: React.FC<IEdit> = ({
         });
       }
 
-      if (equipment.eqptPrice !== price || equipment.eqptqoh !== quantity) {
-        await handleUpdate(updatePandQ.mutateAsync, {
-          eqptId: equipment.eqptId,
-          eqptPrice: price,
-          eqptqoh: quantity,
-        });
-      }
+      // if (equipment.eqptPrice !== price || equipment.eqptqoh !== quantity) {
+      //   await handleUpdate(updatePandQ.mutateAsync, {
+      //     eqptId: equipment.eqptId,
+      //     eqptPrice: price,
+      //     eqptqoh: quantity,
+      //   });
+      // }
     }
   };
 
@@ -158,10 +161,11 @@ const EditSupply: React.FC<IEdit> = ({
         <ModalHeader>
           <div className="text-2xl font-bold mb-2 text-[#1e0e4b] text-center">
             Edit{" "}
-            {isMaterial
-              ? (prevSupply as IAllMaterials).mtlCode
-              : (prevSupply as IAllEquipment).eqptCode}{" "}
-            <span className="text-orange-500">Material</span>
+            <span className="text-orange-500">
+              {isMaterial
+                ? (prevSupply as IAllMaterials).mtlDescript
+                : (prevSupply as IAllEquipment).eqptDescript}
+            </span>
           </div>
         </ModalHeader>
         <ModalBody className="flex flex-col gap-3">
@@ -175,7 +179,7 @@ const EditSupply: React.FC<IEdit> = ({
             onChange={(e) => setDescription(e.target.value)}
           />
           <div className="flex flex-row gap-2">
-            <Input
+            {/* <Input
               isRequired
               value={unit}
               type="text"
@@ -183,9 +187,25 @@ const EditSupply: React.FC<IEdit> = ({
               variant="flat"
               errorMessage={"Please fill the blank!"}
               onChange={(e) => setUnit(e.target.value)}
-            />
+            /> */}
+            
+            <Autocomplete
+                isRequired
+                
+                selectedKey={unit}
+                label="Unit"
+                variant="flat"
+                defaultItems={materialUnitsOfMeasurement}
+                onSelectionChange={setUnit}
+              >
+                {(item) => (
+                  <AutocompleteItem key={item.value}>
+                    {item.label}
+                  </AutocompleteItem>
+                )}
+              </Autocomplete>
           </div>
-          <div className="flex flex-row gap-2">
+          {/* <div className="flex flex-row gap-2">
             <Input
               isRequired
               value={String(price)}
@@ -205,7 +225,7 @@ const EditSupply: React.FC<IEdit> = ({
               errorMessage={"Please fill the blank!"}
               onChange={handleQuantityChange}
             />
-          </div>
+          </div> */}
         </ModalBody>
         <ModalFooter>
           <Button

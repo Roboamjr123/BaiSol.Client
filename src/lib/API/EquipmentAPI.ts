@@ -100,6 +100,38 @@ export const getEquipmentCategory = () => {
   });
 };
 
+interface IUpdatEquipmentQOH {
+  eqptId: number;
+  eqptqoh: number;
+}
+
+// Update Equipment Quantity
+export const useUpdateEquipmentQOH = () => {
+  const userEmail = useUserEmail();
+  return useMutation({
+    mutationFn: async (data: IUpdatEquipmentQOH) => {
+      const response = await api.put(
+        `api/Equipment/Update-QOH-Equipment`,
+        {
+          ...data,
+
+          userEmail: userEmail,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json", // Ensure it matches the server requirements
+          },
+        }
+      );
+      return response.data;
+    },
+    onError: (error: any) => {
+      toast.error(error.response.data.message);
+      console.error("Error update:", error);
+    },
+  });
+};
+
 interface IUpdatEquipmentPAndQ {
   eqptId: number;
   eqptPrice: number;

@@ -24,14 +24,17 @@ import {
 } from "@nextui-org/react";
 import { BiDotsVertical } from "react-icons/bi";
 import { CiSearch } from "react-icons/ci";
-import { FaPlus } from "react-icons/fa";
+import { FaEdit, FaPlus } from "react-icons/fa";
 import { supply_columns } from "../../../lib/utils/supplyTable";
-import { MdOutlineDeleteForever } from "react-icons/md";
+import { MdOutlineDeleteForever, MdOutlineHistory, MdOutlineProductionQuantityLimits } from "react-icons/md";
 import { iconClasses } from "../../../lib/utils/usersTable";
 import { toast } from "react-toastify";
 import { formatNumber } from "../../../lib/utils/utils";
 import AddSupply from "../modal/supply/AddSupply";
 import EditSupply from "../modal/supply/EditSupply";
+import AddQuantitySupply from "../modal/supply/AddQuantitySupply";
+import { HistoryIcon } from "lucide-react";
+import ItemLogs from "../logs/ItemLogs";
 
 export const defaultMaterial: IAllMaterials = {
   mtlId: 0,
@@ -51,6 +54,7 @@ const MaterialTable = () => {
   const { data: materials, isLoading, refetch } = getAllMaterials();
   const materiaLength = materials ? materials.length : 0;
 
+  const [logMaterialId, setLogMaterialId] = useState<string>("");
   const [materialData, setMaterialData] =
     useState<IAllMaterials>(defaultMaterial);
   const [filterValue, setFilterValue] = useState("");
@@ -98,6 +102,18 @@ const MaterialTable = () => {
     setMaterialData(material);
 
     editOnOpen();
+  };
+
+  const handleAddQOHMaterial = (material: IAllMaterials) => {
+    setMaterialData(material);
+
+    addQOHOnOpen();
+  };
+
+  const handleOpenHistoryLog = (id: string) => {
+    setLogMaterialId(id);
+
+    logOnOpen();
   };
 
   const renderCell = useCallback(
@@ -157,11 +173,30 @@ const MaterialTable = () => {
               </DropdownTrigger>
               <DropdownMenu variant="shadow">
                 <DropdownItem
+                  color="primary"
+                  startContent={
+                    <FaEdit 
+                      className={cn(iconClasses, "text-primary")}
+                    />
+                  }
                   onClick={() => {
                     handleEditMaterial(material);
                   }}
                 >
                   Edit
+                </DropdownItem>
+                <DropdownItem
+                  color="success"
+                  startContent={
+                    <MdOutlineProductionQuantityLimits 
+                      className={cn(iconClasses, "text-success")}
+                    />
+                  }
+                  onClick={() => {
+                    handleAddQOHMaterial(material);
+                  }}
+                >
+                  Add Quantity
                 </DropdownItem>
                 <DropdownItem
                   onClick={() => handleDeleteMaterial(material.mtlId)}
@@ -174,6 +209,18 @@ const MaterialTable = () => {
                   }
                 >
                   Delete
+                </DropdownItem>
+                <DropdownItem
+                  startContent={
+                    <MdOutlineHistory
+                      className={cn(iconClasses, "text-default")}
+                    />
+                  }
+                  onClick={() => {
+                    handleOpenHistoryLog(String(material.mtlId));
+                  }}
+                >
+                  History
                 </DropdownItem>
               </DropdownMenu>
             </Dropdown>
@@ -204,7 +251,16 @@ const MaterialTable = () => {
             onChange={(e) => setFilterValue(e.target.value)}
           />
 
-          <Dropdown className="bg-background border-1 border-default-200">
+          <Button
+            className="bg-orange-500 text-background"
+            endContent={<FaPlus />}
+            size="sm"
+            onClick={() => addOnOpen()}
+          >
+            Add Material
+          </Button>
+
+          {/* <Dropdown className="bg-background border-1 border-default-200">
             <DropdownTrigger>
               <Button
                 className="bg-orange-500 text-background"
@@ -220,11 +276,11 @@ const MaterialTable = () => {
                 Exist
               </DropdownItem>
             </DropdownMenu>
-          </Dropdown>
+          </Dropdown> */}
         </div>
         <div className="flex justify-between items-start">
           <span className="text-default-400 text-small">
-            Total {materiaLength} material/s
+            Total {materiaLength} {materiaLength > 1 ? "materials" : "material"}
           </span>
         </div>
       </div>
@@ -257,10 +313,23 @@ const MaterialTable = () => {
     onOpen: addOnOpen,
     onClose: addOnClose,
   } = useDisclosure();
+
   const {
     isOpen: addExistIsOpen,
     onOpen: addExistOnOpen,
     onClose: addExistOnClose,
+  } = useDisclosure();
+
+  const {
+    isOpen: logIsOpen,
+    onOpen: logOnOpen,
+    onClose: logOnClose,
+  } = useDisclosure();
+
+  const {
+    isOpen: addQOHIsOpen,
+    onOpen: addQOHOnOpen,
+    onClose: addQOHOnClose,
   } = useDisclosure();
 
   const {
@@ -320,6 +389,13 @@ const MaterialTable = () => {
             onClose={editOnClose}
             refetch={refetch}
           />
+          <AddQuantitySupply
+            prevSupply={materialData!}
+            isMaterial={true}
+            isOpen={addQOHIsOpen}
+            onClose={addQOHOnClose}
+            refetch={refetch}
+          />
           <AddSupply
             isMaterial={true}
             isOpen={addIsOpen}
@@ -332,6 +408,12 @@ const MaterialTable = () => {
             isOpen={addExistIsOpen}
             onClose={addExistOnClose}
             refetch={refetch}
+          />
+          <ItemLogs
+            id={logMaterialId}
+            isMaterial={true}
+            isOpen={logIsOpen}
+            onClose={logOnClose}
           />
         </div>
       </div>

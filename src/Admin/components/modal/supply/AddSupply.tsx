@@ -5,6 +5,8 @@ import {
   useAddMaterial,
 } from "../../../../lib/API/MaterialAPI";
 import {
+  Autocomplete,
+  AutocompleteItem,
   Button,
   Input,
   Modal,
@@ -21,6 +23,7 @@ import {
   IAddEquipment,
   useAddEquipment,
 } from "../../../../lib/API/EquipmentAPI";
+import { materialUnitsOfMeasurement } from "../../../../lib/constants/UnitsOfMeasurement";
 
 const AddSupply: React.FC<{
   isExistCategory?: boolean;
@@ -33,7 +36,7 @@ const AddSupply: React.FC<{
   const [price, setPrice] = useState<string>("");
   const [quantity, setQuantity] = useState<number>(0);
   const [category, setCategory] = useState<string>("");
-  const [unit, setUnit] = useState<string>("");
+  const [unit, setUnit] = useState<any>(null);
 
   const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -170,7 +173,21 @@ const AddSupply: React.FC<{
                   onChange={(e) => setCategory(e.target.value)}
                 />
               )}
-              <Input
+              <Autocomplete
+                isRequired
+                selectedKey={unit}
+                label="Unit"
+                variant="flat"
+                defaultItems={materialUnitsOfMeasurement}
+                onSelectionChange={setUnit}
+              >
+                {(item) => (
+                  <AutocompleteItem key={item.value}>
+                    {item.label}
+                  </AutocompleteItem>
+                )}
+              </Autocomplete>
+              {/* <Input
                 isRequired
                 value={unit}
                 type="text"
@@ -178,7 +195,7 @@ const AddSupply: React.FC<{
                 variant="flat"
                 errorMessage={"Please fill the blank!"}
                 onChange={(e) => setUnit(e.target.value)}
-              />
+              /> */}
             </div>
             <div className="flex flex-row gap-2">
               <Input
@@ -191,7 +208,7 @@ const AddSupply: React.FC<{
                 errorMessage={"Please fill the blank!"}
                 onChange={handlePriceChange}
               />
-              <Input
+              {/* <Input
                 isRequired
                 value={String(quantity)}
                 type="text"
@@ -199,7 +216,7 @@ const AddSupply: React.FC<{
                 variant="flat"
                 errorMessage={"Please fill the blank!"}
                 onChange={handleQuantityChange}
-              />
+              /> */}
             </div>
 
             <Button
@@ -207,7 +224,7 @@ const AddSupply: React.FC<{
                 description === "" ||
                 unit === "" ||
                 category === "" ||
-                quantity <= 0 ||
+                // quantity <= 0 ||
                 Number(price) <= 0
               }
               isLoading={addNewSupply.isPending}

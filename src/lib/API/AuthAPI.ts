@@ -76,7 +76,6 @@ export const useLoginMutation = () => {
           // Dispatch the user information to the Redux store
           dispatch(setUser(user));
         }
-
       }
 
       // Show success message
@@ -93,7 +92,8 @@ export const use2FAMutation = () => {
 
   return useMutation({
     mutationFn: async (data: { email: string; code: string }) => {
-      return await api.post("auth/Auth/Login-2FA", data);
+      const response = await api.post("auth/Auth/Login-2FA", data);
+      return response.data;
     },
     onSuccess: (res) => {
       const accessToken = res.data.accessToken;
@@ -119,6 +119,9 @@ export const use2FAMutation = () => {
       };
 
       dispatch(setUser(user));
+    },
+    onError: (err: any) => {
+      toast.error(err.response.data.message);
     },
   });
 };
