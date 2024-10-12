@@ -51,7 +51,10 @@ const LaborCostQuotation: React.FC<ILaborCost> = ({
 
   const totalLaborCostRow = [
     { label: "TOTAL", value: laborCost?.totalLaborCost.totalCost },
-    { label: "Profit %", value: "30%" },
+    {
+      label: "Profit %",
+      value: String(laborCost?.totalLaborCost.profitPercentage) + "%",
+    },
     { label: "PROFIT", value: laborCost?.totalLaborCost.profit },
     {
       label: "OVERALL PROJECT MGT COST",

@@ -25,7 +25,8 @@ const Footer: React.FC<{ projExpense?: ProjectQuotationTotalExpense }> = (
               60% downpayment, 30% progress billing, and 10% after installation.
             </p>
             <p className="text-black font-bold">
-              Note: Installation period is around 7 days.
+              Note: Installation period is around{" "}
+              {projExpense.projExpense?.estimationDate} days.
             </p>
           </div>
         </div>
@@ -44,7 +45,7 @@ const Footer: React.FC<{ projExpense?: ProjectQuotationTotalExpense }> = (
               </tr>
               <tr>
                 <td className=" px-4 py-1 font-semibold text-gray-700">
-                  Discount {`(${projExpense?.projExpense?.discountRate})`}
+                  Discount
                 </td>
                 <td className="border px-4 py-1 text-right">
                   ₱ {projExpense?.projExpense?.discount}

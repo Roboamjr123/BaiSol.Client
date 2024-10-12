@@ -3,7 +3,10 @@ import { api } from "../AuthAPI";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../state/authSlice";
 import { toast } from "react-toastify";
-import { useClientUserEmail } from "../../../state/Hooks/userHook";
+import {
+  useClientUserEmail,
+  useUserEmail,
+} from "../../../state/Hooks/userHook";
 
 interface Project {
   projId: string; // UUID format
@@ -215,6 +218,7 @@ export interface ProjectQuotationTotalExpense {
   vat: string;
   vatRate: string;
   total: string;
+  estimationDate: number;
   totalMaterialCost: IProjectSupply;
   totalLaborCost: IProjectSupply;
 }
@@ -230,5 +234,32 @@ export const getProjectExpense = (projId?: string) => {
           params: { projId, customerEmail },
         })
         .then((res) => res.data),
+  });
+};
+
+export interface IEditProfit {
+  projId: string;
+  profitRate: number;
+}
+
+export const useUpdateProfitRate = () => {
+  const user = useUserEmail();
+  return useMutation({
+    mutationFn: async (formData: IEditProfit) => {
+      const { data } = await api.put(
+        "api/Project/Update-Profit-Rate",
+        { ...formData, userEmail: user },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      return data;
+    },
+    onError: (error: any) => {
+      toast.error(error.response.data);
+      console.error("Error updating:", error);
+    },
   });
 };

@@ -74,6 +74,7 @@ const QuotationPage = () => {
         projectCost={projectCost}
         isLoading={isLoadingPAM}
         refetch={refetchPAM}
+        refetchLabor={refetchLabor}
         isEditMode={isEditMode}
       />
       <LaborCostQuotation

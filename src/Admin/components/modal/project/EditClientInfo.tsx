@@ -15,6 +15,8 @@ import {
   ModalContent,
   ModalFooter,
   ModalHeader,
+  Radio,
+  RadioGroup,
   Spinner,
   Textarea,
 } from "@nextui-org/react";
@@ -162,6 +164,7 @@ const EditClientInfo: React.FC<IEdit> = ({
       lastName !== infos?.clientLName ||
       cNum !== infos?.clientContactNum ||
       address !== infos?.clientAddress ||
+      isMale !== infos?.isMale ||
       kWCapacity !== infos?.kWCapacity;
 
     if (!hasChanges) {
@@ -226,6 +229,11 @@ const EditClientInfo: React.FC<IEdit> = ({
     setkWCapacity(key ? Number(key) : 0); // Convert key to number
   };
 
+  const handleSexChange = (value: string) => {
+    setIsMale(value === "Male");
+    setSex(value);
+  };
+
   return (
     <Modal
       placement="center"
@@ -267,7 +275,20 @@ const EditClientInfo: React.FC<IEdit> = ({
                   onChange={(e) => setLastName(e.target.value)}
                   size="sm"
                 />
-              </div>{" "}
+              </div>
+              <div className="flex flex-row gap-2 pb-2">
+                <RadioGroup
+                  label="Sex"
+                  value={sex}
+                  size="sm"
+                  orientation="horizontal"
+                  color="warning"
+                  onValueChange={handleSexChange}
+                >
+                  <Radio value="Female">Female</Radio>
+                  <Radio value="Male">Male</Radio>
+                </RadioGroup>
+              </div>
               <div className="flex flex-row ">
                 <Input
                   isRequired

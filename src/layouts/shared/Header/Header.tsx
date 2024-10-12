@@ -74,7 +74,7 @@ function Header({ isSidebarOpen, setIsSidebarOpen }: HeaderProps) {
           <DropdownMenu aria-label="Profile Actions" variant="flat">
             <DropdownItem key="profile" className="h-14 gap-2">
               <p className="font-semibold">Signed in as</p>
-              <p className="font-semibold">{user.email}</p>
+              <p className="font-semibold">{useUserEmail()}</p>
             </DropdownItem>
             <DropdownItem key="settings">My Settings</DropdownItem>
             <DropdownItem key="team_settings">Team Settings</DropdownItem>
@@ -88,7 +88,7 @@ function Header({ isSidebarOpen, setIsSidebarOpen }: HeaderProps) {
           </DropdownMenu>
         </Dropdown>
         <span className="hidden sm:block md:block lg:block">
-          {user.userRole}
+          {useUserRole()}
         </span>
         <Dropdown placement="bottom-end">
           <DropdownTrigger>
@@ -105,7 +105,7 @@ function Header({ isSidebarOpen, setIsSidebarOpen }: HeaderProps) {
           <DropdownMenu aria-label="Profile Actions" variant="flat">
             <DropdownItem key="profile" className="h-14 gap-2">
               <p className="font-semibold">Signed in as</p>
-              <p className="font-semibold">{user.email}</p>
+              <p className="font-semibold">{useUserEmail()}</p>
             </DropdownItem>
             <DropdownItem key="settings">My Settings</DropdownItem>
             <DropdownItem key="team_settings">Team Settings</DropdownItem>

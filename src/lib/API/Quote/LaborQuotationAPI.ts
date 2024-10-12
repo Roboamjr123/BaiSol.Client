@@ -15,6 +15,7 @@ export interface LaborCost {
 export interface TotalLaborCost {
   totalCost: number;
   profit: number;
+  profitPercentage: number;
   overallLaborProjectTotal: number;
 }
 

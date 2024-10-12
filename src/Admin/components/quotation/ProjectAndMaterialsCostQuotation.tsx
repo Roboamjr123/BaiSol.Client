@@ -12,11 +12,14 @@ import AddMaterialSupply from "../modal/project/AddMaterialSupply";
 import { Button, Spinner, useDisclosure } from "@nextui-org/react";
 import { FaEdit, FaPlus, FaTrashAlt } from "react-icons/fa";
 import { formatNumber } from "../../../lib/utils/utils";
+import { Edit } from "lucide-react";
+import EditProfitRate from "../modal/project/EditProfitRate";
 
 interface IProjectAndMAterial {
   projId: string;
   projectCost: any;
   refetch: () => void;
+  refetchLabor: () => void;
   isLoading: boolean;
   isEditMode: boolean;
 }
@@ -25,6 +28,7 @@ const ProjectAndMaterialsCostQuotation: React.FC<IProjectAndMAterial> = ({
   projId,
   projectCost,
   refetch,
+  refetchLabor,
   isLoading,
   isEditMode,
 }) => {
@@ -49,7 +53,10 @@ const ProjectAndMaterialsCostQuotation: React.FC<IProjectAndMAterial> = ({
       label: "TOTAL",
       value: projectCost?.totalProjectCostList?.totalCost ?? 0,
     },
-    { label: "Profit %", value: "30%" },
+    {
+      label: "Profit %",
+      value: String(projectCost?.totalProjectCostList?.profitPercentage) + "%",
+    },
     { label: "PROFIT", value: projectCost?.totalProjectCostList?.profit ?? 0 },
     {
       label: "OVERALL MATERIAL TOTAL",
@@ -105,6 +112,16 @@ const ProjectAndMaterialsCostQuotation: React.FC<IProjectAndMAterial> = ({
     onClose: addOnClose,
   } = useDisclosure();
 
+  const {
+    isOpen: editIsOpen,
+    onOpen: editOnOpen,
+    onClose: editOnClose,
+  } = useDisclosure();
+
+  const handleOpenEdit = () => {
+    editOnOpen();
+  };
+
   return (
     <div className="bg-gray-100 flex items-center justify-center">
       <div className="container mx-auto p-4 bg-white h-full">
@@ -116,22 +133,35 @@ const ProjectAndMaterialsCostQuotation: React.FC<IProjectAndMAterial> = ({
                   Material Cost
                 </span>
                 {isEditMode && (
-                  <Button
-                    isLoading={isLoading}
-                    className="bg-orange-500 text-background"
-                    endContent={<FaPlus />}
-                    size="sm"
-                    onClick={() => addOnOpen()}
-                  >
-                    Add Material Supply
-                  </Button>
+                  <div className="flex gap-4">
+                    <Button
+                      isLoading={isLoading}
+                      className="bg-orange-500 text-background"
+                      endContent={<Edit />}
+                      size="sm"
+                      onClick={() => editOnOpen()}
+                    >
+                      Edit Profit Rate
+                    </Button>
+                    <Button
+                      isLoading={isLoading}
+                      className="bg-orange-500 text-background"
+                      endContent={<FaPlus />}
+                      size="sm"
+                      onClick={() => addOnOpen()}
+                    >
+                      Add Material Supply
+                    </Button>
+                  </div>
                 )}
               </div>
               <table className="w-full rounded-lg text-left text-gray-700">
                 <thead className="text-sm text-gray-700 bg-gray-50">
                   <tr className="border-b border-gray-400">
                     {project_quotation_and_materials_columns
-                      .filter((item) => !(!isEditMode && item.name === "Action")) // Remove "Action" in edit mode
+                      .filter(
+                        (item) => !(!isEditMode && item.name === "Action")
+                      ) // Remove "Action" in edit mode
                       .map((item) => (
                         <th scope="col" className="text-center px-4 py-3">
                           {item.name}
@@ -239,7 +269,6 @@ const ProjectAndMaterialsCostQuotation: React.FC<IProjectAndMAterial> = ({
                                         </div>
                                       </td>
                                     )}
-                                    
                                   </tr>
                                 );
                               }
@@ -296,6 +325,16 @@ const ProjectAndMaterialsCostQuotation: React.FC<IProjectAndMAterial> = ({
                 onClose={addOnClose}
                 projId={projId!}
                 refetch={refetch}
+              />
+              <EditProfitRate
+                isOpen={editIsOpen}
+                onClose={editOnClose}
+                projId={projId!}
+                refetch={refetch}
+                refetchLabor={refetchLabor}
+                prevProfitRate={
+                  projectCost?.totalProjectCostList?.profitPercentage
+                }
               />
             </div>
           </div>

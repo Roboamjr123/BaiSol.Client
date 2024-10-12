@@ -24,6 +24,7 @@ import {
   useAddEquipment,
 } from "../../../../lib/API/EquipmentAPI";
 import { materialUnitsOfMeasurement } from "../../../../lib/constants/UnitsOfMeasurement";
+import { MaterialCategories } from "../../../../lib/constants/SupplyCategories";
 
 const AddSupply: React.FC<{
   isExistCategory?: boolean;
@@ -35,7 +36,7 @@ const AddSupply: React.FC<{
   const [description, setDescription] = useState<string>("");
   const [price, setPrice] = useState<string>("");
   const [quantity, setQuantity] = useState<number>(0);
-  const [category, setCategory] = useState<string>("");
+  const [category, setCategory] = useState<any>();
   const [unit, setUnit] = useState<any>(null);
 
   const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,6 +55,8 @@ const AddSupply: React.FC<{
   const { data: allMaterialCategories } = isMaterial
     ? getMaterialCategory()
     : getEquipmentCategory();
+
+  const allSupplyCategories = isMaterial ? MaterialCategories : [];
 
   useEffect(() => {
     if (!isOpen) {
@@ -140,38 +143,69 @@ const AddSupply: React.FC<{
             />
             <div className="flex flex-row gap-2">
               {isExistCategory ? (
-                <Select
+                <div>
+                  {/* <Select
+                    label="Select category"
+                    size="sm"
+                    value={[category]}
+                    onChange={(e) => setCategory(e.target.value)}
+                  >
+                    {allMaterialCategories &&
+                    allMaterialCategories.length > 0 ? (
+                      allMaterialCategories.map((item) => (
+                        <SelectItem
+                          key={item.category}
+                          // onClick={() => setCategory(item.category)}
+                        >
+                          {item.category}
+                        </SelectItem>
+                      ))
+                    ) : (
+                      <SelectItem key={""} isDisabled>
+                        No Categories Available
+                      </SelectItem>
+                    )}
+                  </Select> */}
+
+                  <Autocomplete
+                    label="Select category"
+                    size="sm"
+                    defaultItems={allSupplyCategories}
+                    selectedKey={category}
+                    onSelectionChange={setCategory}
+                  >
+                    {(item) => (
+                      <AutocompleteItem key={item.Value}>
+                        {item.Value}
+                      </AutocompleteItem>
+                    )}
+                  </Autocomplete>
+                </div>
+              ) : (
+                // <Input
+                //   isRequired
+                //   value={category}
+                //   type="text"
+                //   isDisabled={isExistCategory}
+                //   label="Category"
+                //   variant="flat"
+                //   errorMessage={"Please fill the blank!"}
+                //   onChange={(e) => setCategory(e.target.value)}
+                // />
+
+                <Autocomplete
                   label="Select category"
                   size="sm"
-                  value={[category]}
-                  onChange={(e) => setCategory(e.target.value)}
+                  defaultItems={allSupplyCategories}
+                  selectedKey={category}
+                  onSelectionChange={setCategory}
                 >
-                  {allMaterialCategories && allMaterialCategories.length > 0 ? (
-                    allMaterialCategories.map((item) => (
-                      <SelectItem
-                        key={item.category}
-                        // onClick={() => setCategory(item.category)}
-                      >
-                        {item.category}
-                      </SelectItem>
-                    ))
-                  ) : (
-                    <SelectItem key={""} isDisabled>
-                      No Categories Available
-                    </SelectItem>
+                  {(item) => (
+                    <AutocompleteItem key={item.Value}>
+                      {item.Value}
+                    </AutocompleteItem>
                   )}
-                </Select>
-              ) : (
-                <Input
-                  isRequired
-                  value={category}
-                  type="text"
-                  isDisabled={isExistCategory}
-                  label="Category"
-                  variant="flat"
-                  errorMessage={"Please fill the blank!"}
-                  onChange={(e) => setCategory(e.target.value)}
-                />
+                </Autocomplete>
               )}
               <Autocomplete
                 isRequired

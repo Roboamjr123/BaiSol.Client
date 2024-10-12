@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 
 interface ProjectCost {
   totalCost: number;
+  profitPercentage: number;
   profit: number;
   overallMaterialTotal: number;
   overallProjMgtCost: number;
