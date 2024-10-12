@@ -5,6 +5,8 @@ import {
   useUpdateClientProjectInfo,
 } from "../../../../lib/API/Project/ProjectApi";
 import {
+  Autocomplete,
+  AutocompleteItem,
   Button,
   Checkbox,
   Input,
@@ -19,6 +21,7 @@ import {
 import Loader from "../../../../main/components/Loader";
 import { toast } from "react-toastify";
 import { IoIosSave } from "react-icons/io";
+import { ProjectDescriptionSystemType } from "../../../../lib/constants/ProjectPackage";
 
 interface IEdit {
   projId: string;
@@ -36,8 +39,7 @@ const EditClientInfo: React.FC<IEdit> = ({
   refetchInfo,
 }) => {
   const [cNum, setCNum] = useState<string>("");
-  const [clientMonthlyElectricBill, setClientMonthlyElectricBill] =
-    useState<string>("");
+  const [kWCapacity, setkWCapacity] = useState<number>(0);
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [address, setAddress] = useState<string>("");
@@ -45,7 +47,10 @@ const EditClientInfo: React.FC<IEdit> = ({
   const [description, setDescription] = useState<string>("");
   const [vatRate, setVATRate] = useState<string>("");
   const [isVAT, setIsVAT] = useState<boolean>(false);
-  const [discountRate, setDiscountRate] = useState<string>("");
+  const [discount, setDiscount] = useState<string>("");
+  const [sex, setSex] = useState<string>("");
+  const [systemType, setSystemType] = useState<string>("");
+  const [isMale, setIsMale] = useState<boolean>(false);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -59,15 +64,18 @@ const EditClientInfo: React.FC<IEdit> = ({
 
   useEffect(() => {
     if (isOpen && !isLoading) {
-      setDiscountRate(String(infos?.discountRate));
+      setDiscount(String(infos?.discount));
       setVATRate(String(infos?.vatRate));
       setCNum(infos?.clientContactNum!);
-      setClientMonthlyElectricBill(String(infos?.clientMonthlyElectricBill));
+      setkWCapacity(infos?.kWCapacity!);
       setFirstName(infos?.clientFName!);
       setAddress(infos?.clientAddress!);
       setLastName(infos?.clientLName!);
       setProjectName(infos?.projName!);
       setDescription(infos?.projDescript!);
+      setSex(infos?.sex!);
+      setSystemType(infos?.systemType!);
+      setIsMale(infos?.isMale!);
       setIsModalVisible(true);
 
       const initialVATRate = Number(infos?.vatRate); // Convert VAT rate to number
@@ -77,10 +85,10 @@ const EditClientInfo: React.FC<IEdit> = ({
     }
 
     if (!isOpen) {
-      setDiscountRate("");
+      setDiscount("");
       setVATRate("");
       setCNum("");
-      setClientMonthlyElectricBill("");
+      setkWCapacity(0);
       setFirstName("");
       setAddress("");
       setLastName("");
@@ -126,39 +134,35 @@ const EditClientInfo: React.FC<IEdit> = ({
     }
   };
 
-  const handleMBillChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    if (/^\d*\.?\d{0,2}$/.test(value)) {
-      setClientMonthlyElectricBill(value);
-    }
-  };
+  const isInvalidDiscount = useMemo(() => {
+    const trimmed = discount.trim();
 
-  // Validation for each field
-  const isInvalidBill = useMemo(
-    () => isInvalidNumber(clientMonthlyElectricBill),
-    [clientMonthlyElectricBill]
-  );
-  const isInvalidVAT = useMemo(
-    () => isInvalidNumber(vatRate, true, 100),
-    [vatRate]
-  ); // Max VAT = 100%
-  const isInvalidDiscount = useMemo(
-    () => isInvalidNumber(discountRate, true, 100),
-    [discountRate]
-  ); // Max discount = 100%
+    // Regular expression to match numbers formatted as 11,333,333.33
+    const validFormat = /^(\d{1,3}(,\d{3})*)(\.\d{1,2})?$/.test(trimmed);
+
+    // Remove commas to convert the string into a number correctly
+    const sanitizedValue = trimmed.replace(/,/g, "");
+    const number = parseFloat(sanitizedValue);
+
+    return (
+      !validFormat || // Ensure the format matches the specified pattern
+      isNaN(number) || // Ensure the value is a valid number
+      number < 0 || // Disallow negative numbers
+      number > 1000000000 // Example: setting a high max value for realistic limits
+    );
+  }, [discount]);
 
   const handleUpdateClientInfo = () => {
     const hasChanges =
       projectName !== infos?.projName ||
       description !== infos?.projDescript ||
-      parseFloat(discountRate) !== infos?.discountRate ||
+      parseFloat(discount) !== infos?.discount ||
       parseFloat(vatRate) !== infos?.vatRate ||
       firstName !== infos?.clientFName ||
       lastName !== infos?.clientLName ||
       cNum !== infos?.clientContactNum ||
       address !== infos?.clientAddress ||
-      parseFloat(clientMonthlyElectricBill) !==
-        infos?.clientMonthlyElectricBill;
+      kWCapacity !== infos?.kWCapacity;
 
     if (!hasChanges) {
       toast.success("Client Info successfully updated!");
@@ -169,24 +173,27 @@ const EditClientInfo: React.FC<IEdit> = ({
       projId: infos!.projId, // Assuming projId comes from infos
       projName: projectName,
       projDescript: description,
-      discountRate: parseFloat(discountRate), // Convert string to number
+      discount: parseFloat(discount), // Convert string to number
       vatRate: parseFloat(vatRate), // Convert string to number
       clientId: infos!.clientId, // Assuming clientId comes from infos
       clientFName: firstName,
       clientLName: lastName,
       clientContactNum: cNum,
       clientAddress: address,
-      clientMonthlyElectricBill: parseFloat(clientMonthlyElectricBill), // Convert string to number
+      kWCapacity: kWCapacity, // Convert string to number,
+      isMale: isMale,
+      sex: sex,
+      systemType: systemType,
     };
 
     updateClientInfo.mutateAsync(formData, {
       onSuccess: (data) => {
         toast.success(data);
 
-        setDiscountRate("");
+        setDiscount("");
         setVATRate("");
         setCNum("");
-        setClientMonthlyElectricBill("");
+        setkWCapacity(0);
         setFirstName("");
         setAddress("");
         setLastName("");
@@ -199,6 +206,24 @@ const EditClientInfo: React.FC<IEdit> = ({
         onClose();
       },
     });
+  };
+
+  // Handler for the first autocomplete
+  const handleTypeChange = (key: string | null) => {
+    if (key) {
+      if (key !== systemType) {
+        // Only reset the kW capacity when the system type actually changes
+        setkWCapacity(0);
+      }
+      setSystemType(key);
+    } else {
+      setSystemType(""); // Reset system type if key is null
+    }
+  };
+
+  // Handler for the second autocomplete
+  const handleKWCapacityChange = (key: number | null) => {
+    setkWCapacity(key ? Number(key) : 0); // Convert key to number
   };
 
   return (
@@ -262,33 +287,55 @@ const EditClientInfo: React.FC<IEdit> = ({
                   maxLength={9}
                 />
               </div>
-              <div className="flex flex-row ">
-                <Input
-                  isRequired
-                  value={clientMonthlyElectricBill}
-                  type="text"
-                  label="Monthly Electric Bill"
-                  variant="flat"
-                  errorMessage={
-                    isInvalidBill ? "Must be a non-zero amount!" : ""
-                  }
-                  onChange={handleMBillChange}
+              <div className="flex flex-row pb-2">
+                <Autocomplete
+                  defaultItems={ProjectDescriptionSystemType.map((item) => ({
+                    label: item.type,
+                    value: item.type,
+                  }))}
+                  label="Select Solar Type"
                   size="sm"
-                  isInvalid={isInvalidBill}
-                />
+                  placeholder="Choose a solar type"
+                  className="max-w-xs"
+                  selectedKey={systemType}
+                  onSelectionChange={handleTypeChange}
+                >
+                  {(item) => (
+                    <AutocompleteItem key={item.value}>
+                      {item.label}
+                    </AutocompleteItem>
+                  )}
+                </Autocomplete>
+              </div>
+              <div className="flex flex-row">
+                {systemType && (
+                  <Autocomplete
+                    defaultItems={
+                      ProjectDescriptionSystemType.find(
+                        (item) => item.type === systemType
+                      )?.options.map((option) => ({
+                        label: option.kWCapacity,
+                        value: option.value.toString(),
+                      })) || []
+                    }
+                    size="sm"
+                    label="Select kW Capacity"
+                    placeholder="Choose a kW capacity"
+                    className="max-w-xs"
+                    selectedKey={kWCapacity.toString()}
+                    onSelectionChange={handleKWCapacityChange}
+                  >
+                    {(item) => (
+                      <AutocompleteItem key={item.value}>
+                        {item.label}
+                      </AutocompleteItem>
+                    )}
+                  </Autocomplete>
+                )}
               </div>
             </div>
             <div className="flex flex-col">
               <div className="flex flex-row gap-2 pb-2">
-                {/* <Input
-                  value={vatRate}
-                  type="text"
-                  label="VAT Rate %"
-                  variant="flat"
-                  isInvalid={isInvalidVAT}
-                  onChange={(e) => setVATRate(e.target.value)}
-                  size="sm"
-                /> */}
                 <Checkbox
                   isSelected={isVAT}
                   color="warning"
@@ -297,12 +344,12 @@ const EditClientInfo: React.FC<IEdit> = ({
                   VAT
                 </Checkbox>
                 <Input
-                  value={discountRate}
+                  value={discount}
                   type="text"
-                  label="Discount Rate %"
+                  label="Discount"
                   variant="flat"
                   isInvalid={isInvalidDiscount}
-                  onChange={(e) => setDiscountRate(e.target.value)}
+                  onChange={(e) => setDiscount(e.target.value)}
                   size="sm"
                 />
               </div>
@@ -347,7 +394,6 @@ const EditClientInfo: React.FC<IEdit> = ({
               description === "" ||
               projectName === "" ||
               isInvalidCNum ||
-              isInvalidBill ||
               firstName === "" ||
               lastName === "" ||
               address === "" ||

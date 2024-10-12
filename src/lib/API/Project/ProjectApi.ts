@@ -135,14 +135,17 @@ export interface IClientProjectInfo {
   projId: string;
   projName: string;
   projDescript: string;
-  discountRate: number;
+  discount: number;
   vatRate: number;
   clientId: string;
   clientFName: string;
   clientLName: string;
   clientContactNum: string;
   clientAddress: string;
-  clientMonthlyElectricBill: number;
+  systemType: string;
+  kWCapacity: number;
+  sex: string;
+  isMale: boolean;
 }
 
 // fetch client Info

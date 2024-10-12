@@ -14,6 +14,8 @@ import Cookies from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../../../state/authSlice";
 import { useNavigate } from "react-router-dom";
+import { useLogOut } from "../../../lib/API/AuthAPI";
+import { useUserEmail, useUserRole } from "../../../state/Hooks/userHook";
 
 interface HeaderProps {
   isSidebarOpen: boolean;
@@ -22,6 +24,24 @@ interface HeaderProps {
 
 function Header({ isSidebarOpen, setIsSidebarOpen }: HeaderProps) {
   const navigate = useNavigate();
+  const logOut = useLogOut();
+
+  const email = useUserEmail();
+  const user = useSelector(selectUser);
+
+  const handleLogout = async () => {
+    try {
+      await logOut.mutateAsync(email); // Await the logout mutation
+      // Only execute the following lines if the mutation is successful
+      localStorage.removeItem("refreshToken");
+      Cookies.remove("accessToken");
+      window.location.reload();
+      navigate("/");
+    } catch (err) {
+      console.error("Logout error:", err); // Log error for debugging
+      // Optionally show an error toast here if needed
+    }
+  };
 
   return (
     <Navbar isBordered className="border-orange-200">
@@ -54,7 +74,7 @@ function Header({ isSidebarOpen, setIsSidebarOpen }: HeaderProps) {
           <DropdownMenu aria-label="Profile Actions" variant="flat">
             <DropdownItem key="profile" className="h-14 gap-2">
               <p className="font-semibold">Signed in as</p>
-              <p className="font-semibold">zoey@example.com</p>
+              <p className="font-semibold">{user.email}</p>
             </DropdownItem>
             <DropdownItem key="settings">My Settings</DropdownItem>
             <DropdownItem key="team_settings">Team Settings</DropdownItem>
@@ -62,20 +82,14 @@ function Header({ isSidebarOpen, setIsSidebarOpen }: HeaderProps) {
             <DropdownItem key="system">System</DropdownItem>
             <DropdownItem key="configurations">Configurations</DropdownItem>
             <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
-            <DropdownItem
-              key="logout"
-              onClick={() => {
-                localStorage.removeItem("refreshToken");
-                Cookies.remove("accessToken");
-                window.location.reload();
-              }}
-              color="danger"
-            >
+            <DropdownItem key="logout" onClick={handleLogout} color="danger">
               Log Out
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>
-        <span className="hidden sm:block md:block lg:block">Admin</span>
+        <span className="hidden sm:block md:block lg:block">
+          {user.userRole}
+        </span>
         <Dropdown placement="bottom-end">
           <DropdownTrigger>
             <Avatar
@@ -91,7 +105,7 @@ function Header({ isSidebarOpen, setIsSidebarOpen }: HeaderProps) {
           <DropdownMenu aria-label="Profile Actions" variant="flat">
             <DropdownItem key="profile" className="h-14 gap-2">
               <p className="font-semibold">Signed in as</p>
-              <p className="font-semibold">zoey@example.com</p>
+              <p className="font-semibold">{user.email}</p>
             </DropdownItem>
             <DropdownItem key="settings">My Settings</DropdownItem>
             <DropdownItem key="team_settings">Team Settings</DropdownItem>
@@ -99,16 +113,7 @@ function Header({ isSidebarOpen, setIsSidebarOpen }: HeaderProps) {
             <DropdownItem key="system">System</DropdownItem>
             <DropdownItem key="configurations">Configurations</DropdownItem>
             <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
-            <DropdownItem
-              onClick={() => {
-                localStorage.removeItem("refreshToken");
-                Cookies.remove("accessToken");
-                navigate("/");
-                window.location.reload();
-              }}
-              key="logout"
-              color="danger"
-            >
+            <DropdownItem onClick={handleLogout} key="logout" color="danger">
               Log Out
             </DropdownItem>
           </DropdownMenu>

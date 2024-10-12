@@ -5,6 +5,7 @@ import { jwtDecode } from "jwt-decode";
 import { setUser } from "../../state/authSlice";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
+import { useUserEmail } from "../../state/Hooks/userHook";
 
 const baseURL = import.meta.env.VITE_APP_SERVER_API_URL;
 
@@ -122,6 +123,25 @@ export const use2FAMutation = () => {
     },
     onError: (err: any) => {
       toast.error(err.response.data.message);
+    },
+  });
+};
+
+export const useLogOut = () => {
+  return useMutation({
+    mutationFn: async (email: string) => {
+      const response = await api.post(`auth/Auth/LogOut?email=${email}`, {
+        headers: {
+          "Content-Type": "application/json", // Ensure it matches the server requirements
+        },
+      });
+      return response.data;
+    },
+    onSuccess: (data) => {
+      toast.success(data);
+    },
+    onError: (err: any) => {
+      toast.error(err);
     },
   });
 };

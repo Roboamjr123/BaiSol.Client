@@ -1,5 +1,13 @@
 import React, { useMemo, useState } from "react";
-import { Button, Input, Textarea } from "@nextui-org/react";
+import {
+  Autocomplete,
+  AutocompleteItem,
+  Button,
+  Input,
+  Radio,
+  RadioGroup,
+  Textarea,
+} from "@nextui-org/react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { toast } from "react-toastify";
@@ -8,6 +16,7 @@ import {
   useRegisterPersonnelUserMutation,
 } from "../../../lib/API/UsersApi";
 import { Navigate, useNavigate } from "react-router-dom";
+import { ProjectDescriptionSystemType } from "../../../lib/constants/ProjectPackage";
 
 const ClientRegistrationForm = () => {
   const navigate = useNavigate();
@@ -16,11 +25,12 @@ const ClientRegistrationForm = () => {
   const [password, setPassword] = useState<string>("");
   const [conPassword, setConPassword] = useState<string>("");
   const [cNum, setCNum] = useState<string>("");
-  const [clientMonthlyElectricBill, setClientMonthlyElectricBill] =
-    useState<string>("");
+  const [ClientkWCapacity, setClientKWCapacity] = useState<number>();
   const [firstName, setFirstName] = useState<string>("");
   const [address, setAddress] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
+  const [systemType, setSystemType] = useState<string>("");
+  const [isMale, setIsMale] = useState<string>("");
   const [showPassword, setShowPassword] = useState(false);
 
   const registerClient = useRegisterPersonnelUserMutation("Client"); // State to store the response
@@ -55,22 +65,22 @@ const ClientRegistrationForm = () => {
     return cNum !== "" && !validateContactNumber(cNum);
   }, [cNum]);
 
-  const isInvalidBill = useMemo(() => {
-    const trimmedValue = clientMonthlyElectricBill.trim();
+  // const isInvalidBill = useMemo(() => {
+  //   const trimmedValue = ClientkWCapacity.trim();
 
-    // Return false if the input is empty
-    if (trimmedValue === "") return false;
+  //   // Return false if the input is empty
+  //   if (trimmedValue === "") return false;
 
-    // Check if the value is a valid number
-    const numberValue = parseFloat(trimmedValue);
+  //   // Check if the value is a valid number
+  //   const numberValue = parseFloat(trimmedValue);
 
-    // Check if the input is all zeros or improperly formatted
-    return (
-      /^0+(\.0+)?$/.test(trimmedValue) || // All zeros or zeros with decimal
-      isNaN(numberValue) || // Not a number
-      numberValue <= 0 // Zero or negative number
-    );
-  }, [clientMonthlyElectricBill]);
+  //   // Check if the input is all zeros or improperly formatted
+  //   return (
+  //     /^0+(\.0+)?$/.test(trimmedValue) || // All zeros or zeros with decimal
+  //     isNaN(numberValue) || // Not a number
+  //     numberValue <= 0 // Zero or negative number
+  //   );
+  // }, [ClientkWCapacity]);
 
   const handleCNumChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -79,18 +89,33 @@ const ClientRegistrationForm = () => {
     }
   };
 
-  const handleMBillChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    if (/^\d*\.?\d{0,2}$/.test(value)) {
-      setClientMonthlyElectricBill(value);
-    }
-  };
+  // const handleMBillChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const value = e.target.value;
+  //   if (/^\d*\.?\d{0,2}$/.test(value)) {
+  //     setClientKWCapacity(value);
+  //   }
+  // };
 
   // Utility function to capitalize first letter and convert rest to lowercase
   const capitalizeFirstLetter = (str: string) => {
     return (
       str.trim().charAt(0).toUpperCase() + str.trim().slice(1).toLowerCase()
     );
+  };
+
+  // Handler for the first autocomplete
+  const handleTypeChange = (key: string | null) => {
+    if (key) {
+      setSystemType(key);
+      setClientKWCapacity(0); // Reset kW capacity when system type changes
+    } else {
+      setSystemType(""); // Reset system type if key is null
+    }
+  };
+
+  // Handler for the second autocomplete
+  const handleKWCapacityChange = (key: number | null) => {
+    setClientKWCapacity(key || 0); // Handle null values
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -103,8 +128,9 @@ const ClientRegistrationForm = () => {
       password: password.trim(),
       clientContactNum: cNum.trim(),
       clientAddress: capitalizeFirstLetter(address.trim()),
-      clientMonthlyElectricBill:
-        parseFloat(clientMonthlyElectricBill.trim()) || 0, // Convert to number and default to 0 if empty
+      kWCapacity: Number(ClientkWCapacity),
+      systemType: systemType,
+      isMale: Boolean(isMale),
     };
 
     try {
@@ -115,7 +141,7 @@ const ClientRegistrationForm = () => {
           setPassword("");
           setConPassword("");
           setCNum("");
-          setClientMonthlyElectricBill("");
+          setClientKWCapacity(0);
           setFirstName("");
           setAddress("");
           setLastName("");
@@ -170,6 +196,19 @@ const ClientRegistrationForm = () => {
                   />
                 </div>
                 <div>
+                  <RadioGroup
+                    size="sm"
+                    label="Sex"
+                    orientation="horizontal"
+                    value={isMale}
+                    onValueChange={setIsMale}
+                    color="warning"
+                  >
+                    <Radio value="false">Female</Radio>
+                    <Radio value="true">Male</Radio>
+                  </RadioGroup>
+                </div>
+                <div>
                   <Input
                     endContent={
                       <div className="flex items-center h-full">
@@ -209,20 +248,51 @@ const ClientRegistrationForm = () => {
                     maxLength={9}
                   />
                 </div>
-                <div>
-                  <Input
-                    isRequired
-                    value={clientMonthlyElectricBill}
-                    type="text"
-                    label="Monthly Electric Bill"
-                    variant="flat"
-                    errorMessage={
-                      isInvalidBill ? "Must be a non-zero amount!" : ""
-                    }
-                    onChange={handleMBillChange}
+                <div className="flex flex-row gap-2">
+                  {/* First Autocomplete for System Type */}
+                  <Autocomplete
+                    defaultItems={ProjectDescriptionSystemType.map((item) => ({
+                      label: item.type,
+                      value: item.type,
+                    }))}
+                    label="Select Solar Type"
                     size="sm"
-                    isInvalid={isInvalidBill}
-                  />
+                    placeholder="Choose a solar type"
+                    className="max-w-xs"
+                    selectedKey={systemType}
+                    onSelectionChange={handleTypeChange}
+                  >
+                    {(item) => (
+                      <AutocompleteItem key={item.value}>
+                        {item.label}
+                      </AutocompleteItem>
+                    )}
+                  </Autocomplete>
+
+                  {/* Second Autocomplete for Options */}
+                  {systemType && (
+                    <Autocomplete
+                      defaultItems={
+                        ProjectDescriptionSystemType.find(
+                          (item) => item.type === systemType
+                        )?.options.map((option) => ({
+                          label: option.kWCapacity,
+                          value: option.value,
+                        })) || []
+                      }
+                      size="sm"
+                      label="Select kW Capacity"
+                      placeholder="Choose a kW capacity"
+                      className="max-w-xs"
+                      onSelectionChange={handleKWCapacityChange}
+                    >
+                      {(item) => (
+                        <AutocompleteItem key={item.value}>
+                          {item.label}
+                        </AutocompleteItem>
+                      )}
+                    </Autocomplete>
+                  )}
                 </div>
                 <Textarea
                   isRequired
@@ -299,10 +369,8 @@ const ClientRegistrationForm = () => {
                 lastName === "" ||
                 email === "" ||
                 password === "" ||
-                isInvalidBill ||
                 isInvalidCNum ||
-                cNum === "" ||
-                clientMonthlyElectricBill === ""
+                cNum === ""
               }
               isLoading={registerClient.isPending}
               type="submit"
