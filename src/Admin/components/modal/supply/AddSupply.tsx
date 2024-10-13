@@ -24,7 +24,10 @@ import {
   useAddEquipment,
 } from "../../../../lib/API/EquipmentAPI";
 import { materialUnitsOfMeasurement } from "../../../../lib/constants/UnitsOfMeasurement";
-import { MaterialCategories } from "../../../../lib/constants/SupplyCategories";
+import {
+  EquipmentCategories,
+  MaterialCategories,
+} from "../../../../lib/constants/SupplyCategories";
 
 const AddSupply: React.FC<{
   isExistCategory?: boolean;
@@ -56,7 +59,9 @@ const AddSupply: React.FC<{
     ? getMaterialCategory()
     : getEquipmentCategory();
 
-  const allSupplyCategories = isMaterial ? MaterialCategories : [];
+  const allSupplyCategories = isMaterial
+    ? MaterialCategories
+    : EquipmentCategories;
 
   useEffect(() => {
     if (!isOpen) {

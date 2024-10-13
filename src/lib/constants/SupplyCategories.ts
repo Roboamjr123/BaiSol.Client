@@ -1,8 +1,8 @@
-interface MaterialCategory {
+interface SupplyCategories {
   Value: string;
 }
 
-export const MaterialCategories: MaterialCategory[] = [
+export const MaterialCategories: SupplyCategories[] = [
   { Value: "Solar PV Panels" },
   { Value: "PV Mountings" },
   { Value: "PV Cables" },
@@ -14,4 +14,16 @@ export const MaterialCategories: MaterialCategory[] = [
   { Value: "Inverter" },
   { Value: "Electrical Accessories" },
   { Value: "Protective Accessories" },
+];
+
+export const EquipmentCategories: SupplyCategories[] = [
+  { Value: "Hand Tools" },
+  { Value: "Electrical Tools" },
+  { Value: "Power Tools" },
+  { Value: "Safety Gear" },
+  { Value: "Tools/Accessories" },
+  { Value: "Communication Gear" },
+  { Value: "Electrical Supplies" },
+  { Value: "Electrical Equipment" },
+  { Value: "Welding Equipment" },
 ];

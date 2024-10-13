@@ -58,6 +58,9 @@ export const useAddLaborCost = () => {
       );
       return response.data;
     },
+    onError: (err: any) => {
+      toast.error(err.response.data);
+    },
   });
 };
 
@@ -74,15 +77,11 @@ interface IUpdateLaborCost {
 export const useUpdateLaborCost = () => {
   return useMutation({
     mutationFn: async (data: IUpdateLaborCost) => {
-      const response = await api.put(
-        `api/Quotation/Update-Labor-Quote`,
-        data,
-        {
-          headers: {
-            "Content-Type": "application/json", // Ensure it matches the server requirements
-          },
-        }
-      );
+      const response = await api.put(`api/Quotation/Update-Labor-Quote`, data, {
+        headers: {
+          "Content-Type": "application/json", // Ensure it matches the server requirements
+        },
+      });
       return response.data;
     },
   });
