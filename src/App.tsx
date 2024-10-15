@@ -55,7 +55,7 @@ function App() {
           <Route path="change-password" element={<ChangePass />} />
           <Route path="*" element={<PageNotFound />} />
         </Route> */}
-
+{/* s */}
         <Route element={<AdminLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="Confirm-Email" element={<ConfirmEmail />} />
