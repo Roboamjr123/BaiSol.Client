@@ -37,7 +37,7 @@ import { toast } from "react-toastify";
 import AddSupply from "../modal/supply/AddSupply";
 import EditSupply from "../modal/supply/EditSupply";
 import AddQuantitySupply from "../modal/supply/AddQuantitySupply";
-import ItemLogs from "../logs/ItemLogs";
+// import ItemLogs from "../logs/ItemLogs";
 
 const defaultEquipment: IAllEquipment = {
   eqptId: 0,
@@ -412,11 +412,11 @@ const EquipmentTable = () => {
             refetch={refetch}
           />
 
-          <ItemLogs
+          {/* <ItemLogs
             id={logEquipmentId}
             isOpen={logIsOpen}
             onClose={logOnClose}
-          />
+          /> */}
         </div>
       </div>
     </div>

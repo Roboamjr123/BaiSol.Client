@@ -55,7 +55,7 @@ function App() {
           <Route path="change-password" element={<ChangePass />} />
           <Route path="*" element={<PageNotFound />} />
         </Route> */}
-{/* s */}
+
         <Route element={<AdminLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="Confirm-Email" element={<ConfirmEmail />} />
@@ -87,7 +87,7 @@ function App() {
           <Route path="*" element={<PageNotFound />} />
         </Route> */}
 
-        {/* { userRole === "Admin" ? (
+        {/* {userRole === "Admin" ? (
           <Route element={<AdminLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="project" element={<ProjectPage />} />
@@ -107,10 +107,10 @@ function App() {
         ) : userRole === "Client" ? (
           <Route element={<ClientLayout />}>
             <Route path="/" element={<ClientPage />} />
-          <Route
-            path="quotation/:projId"
-            element={<ClientProjectQuotationPage />}
-          />
+            <Route
+              path="quotation/:projId"
+              element={<ClientProjectQuotationPage />}
+            />
             <Route path="*" element={<PageNotFound />} />
           </Route>
         ) : (

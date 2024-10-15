@@ -3,7 +3,7 @@ import { useState } from "react";
 import { RiArrowRightWideFill } from "react-icons/ri";
 import QuotationPage from "./QuotationPage";
 import Scheduler from "./Scheduler";
-import ProjectPayment from "../components/quotation/ProjectPayment";
+import ProjectPayment from "../../main/components/Payment/ProjectPayment";
 import RequestSupply from "../components/modal/supply/RequestSupply";
 import Form from "../../main/components/Quotation/Form";
 
@@ -25,7 +25,7 @@ const ClientQuotePage = () => {
       index: 3,
     },
     {
-      component: <ProjectPayment />,
+      component: <ProjectPayment isAdmin={true} />,
       name: "Payment",
       index: 4,
     },
