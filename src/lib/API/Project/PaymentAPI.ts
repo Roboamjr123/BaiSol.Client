@@ -66,6 +66,7 @@ export const useCreatePayment = () => {
   });
 };
 
+// Acknowledge Payment
 export const useAcknowledgePayment = () => {
   const userEmail = useUserEmail();
   return useMutation({
