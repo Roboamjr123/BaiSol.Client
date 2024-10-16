@@ -13,10 +13,10 @@ import { getClientProjId } from "../lib/API/Client/ClientProjectAPI";
 const ClientLayout = () => {
   const dispatch = useDispatch();
 
-// const user = useSelector(selectUser);
-// const customerEmail = user.role === "Client" ? user.email : "";
-// const customerEmail = "richardddquirante98@gmail.com";
-// const customerEmail = "richardddquirante98@gmail.com";
+  // const user = useSelector(selectUser);
+  // const customerEmail = user.role === "Client" ? user.email : "";
+  // const customerEmail = "richardddquirante98@gmail.com";
+  // const customerEmail = "richardddquirante98@gmail.com";
   const { data: clientProjId, isLoading, error } = getClientProjId();
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);

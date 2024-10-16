@@ -60,7 +60,6 @@ export const FacilitatorSidebarLinks = [
   },
 ];
 
-
 interface SidebarLink {
   key: string;
   label: string;
@@ -78,20 +77,19 @@ export const getClientSidebarLinks = (clientProjId?: string): SidebarLink[] => [
   {
     key: "project",
     label: "Project",
-    path: `/project`,  // Use project ID if available
+    path: `/project`, // Use project ID if available
     icon: <LuLayers size={23} className="min-w-max" />,
   },
   {
     key: "quotation",
     label: "Quotation",
-    path: `/quotation/${clientProjId ?? ''}`,
+    path: `/quotation/${clientProjId ?? ""}`,
     icon: <TbReport size={23} className="min-w-max" />,
   },
   {
     key: "payment",
     label: "Payment",
-    path: "/payment",
+    path: `/payment/${clientProjId ?? "373b08cb-8b71-4b0b-a07f-153b5e3966fa"}`,
     icon: <MdOutlinePayments size={23} className="min-w-max" />,
   },
 ];
-

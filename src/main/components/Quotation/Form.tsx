@@ -8,6 +8,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import {
   getClientProjectInfo,
+  getIsOnGoingProject,
   getProjectExpense,
   getProjectInfo,
   getProjectSupply,
@@ -31,6 +32,7 @@ const Form: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
     getProjectExpense(projId);
 
   const { data: materialSupplies } = getProjectSupply(projId);
+  const { data: isProjectOnGoing } = getIsOnGoingProject(projId!);
 
   const {
     isOpen: editIsOpen,
@@ -92,7 +94,7 @@ const Form: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
           <Download />
           Download
         </button>{" "}
-        {isAdmin && (
+        {isAdmin && isProjectOnGoing && (
           <button
             onClick={() => editOnOpen()}
             className="print-button flex flex-col items-center hover:text-orange-500 !important"

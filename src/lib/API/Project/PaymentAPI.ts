@@ -93,3 +93,18 @@ export const useAcknowledgePayment = () => {
     },
   });
 };
+
+// Check downpayment if payed
+export const getIsProjectPayedDownpayment = (projId: string) => {
+  return useQuery<boolean, Error>({
+    queryKey: ["IsProjectPayedDownpayment", projId],
+    queryFn: async () => {
+      const response = await api.get("api/Payment/IsProjectPayedDownpayment", {
+        params: {
+          projId: projId,
+        },
+      });
+      return response.data;
+    },
+  });
+};

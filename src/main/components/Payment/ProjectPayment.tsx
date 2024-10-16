@@ -1,11 +1,17 @@
 import { Button, Card } from "@nextui-org/react";
 import { paymentsData } from "../../constants/PaymentsData";
+import { getClientPayments } from "../../../lib/API/Project/PaymentAPI";
+import { useParams } from "react-router-dom";
 
 const ProjectPayment: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
+  const { projId } = useParams<{ projId: string }>();
+
+  const { data: payment } = getClientPayments(projId!);
+
   return (
     <div className="container mx-auto p-6">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {paymentsData.map((payment) => (
+        {payment?.map((payment) => (
           <Card
             key={payment.referenceNumber}
             style={{
@@ -25,7 +31,17 @@ const ProjectPayment: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
               <h2 className="text-xl font-bold text-gray-900 mb-4">
                 {payment.description}
               </h2>
-              <p className="mb-4 text-gray-700">{payment.status}</p>
+              <p
+                className={`mb-4 font-semibold ${
+                  payment.status === "paid"
+                    ? "text-primary"
+                    : payment.status === "unpaid"
+                    ? "text-danger"
+                    : "text-gray-700"
+                }`}
+              >
+                {payment.status}
+              </p>{" "}
               <p className="text-lg font-semibold mb-2 text-gray-800">
                 Amount:{" "}
                 <span className="text-2xl text-orange-400">
@@ -57,15 +73,16 @@ const ProjectPayment: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
               {isAdmin ? (
                 payment.status === "paid" && !payment.isAcknowledged ? (
                   <Button
-                    style={{
-                      backgroundColor: "#38a169",
-                      fontSize: "16px",
-                      fontWeight: "bold",
-                      padding: "10px 20px",
-                      borderRadius: "8px",
-                      width: "100%",
-                      color: "#fff",
-                    }}
+                    // style={{
+                    //   backgroundColor: "#38a169",
+                    //   fontSize: "16px",
+                    //   fontWeight: "bold",
+                    //   padding: "10px 20px",
+                    //   borderRadius: "8px",
+                    //   width: "100%",
+                    //   color: "#fff",
+                    // }}
+                    className="bg-orange-400 w-full ml-auto text-white rounded-lg py-2 px-3 hover:bg-gray-200 hover:text-orange-500 transition-all duration-300 ease-in"
                     onClick={() => handleAcknowledge(payment.referenceNumber)}
                   >
                     Acknowledge Payment
@@ -74,16 +91,19 @@ const ProjectPayment: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
               ) : (
                 payment.status === "unpaid" && (
                   <Button
-                    style={{
-                      backgroundColor: "#38a169",
-                      fontSize: "16px",
-                      fontWeight: "bold",
-                      padding: "10px 20px",
-                      borderRadius: "8px",
-                      width: "100%",
-                      color: "#fff",
-                    }}
-                    onClick={() => handleRedirectToCheckout(payment.checkoutUrl)}
+                    className="bg-orange-400 w-full ml-auto text-white rounded-lg py-2 px-3 hover:bg-gray-200 hover:text-orange-500 transition-all duration-300 ease-in"
+                    // style={{
+                    //   backgroundColor: "#38a169",
+                    //   fontSize: "16px",
+                    //   fontWeight: "bold",
+                    //   padding: "10px 20px",
+                    //   borderRadius: "8px",
+                    //   width: "100%",
+                    //   color: "#fff",
+                    // }}
+                    onClick={() =>
+                      handleRedirectToCheckout(payment.checkoutUrl)
+                    }
                   >
                     Pay Now
                   </Button>
@@ -104,7 +124,7 @@ const handleAcknowledge = (referenceNumber: string) => {
 const handleRedirectToCheckout = (checkoutUrl: string) => {
   // Use window.location to redirect to the checkout URL
   if (checkoutUrl) {
-    window.location.href = checkoutUrl;
+    window.open(checkoutUrl, "_blank");
   } else {
     console.error("Checkout URL is not available.");
   }
