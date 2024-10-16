@@ -40,7 +40,7 @@ function App() {
   const user = useSelector(selectUser) || {}; // Ensure user is not null
 
   // Default to empty object if user is null to avoid errors
-  const userRole = user?.userRole || null; // Ensure user is not null
+//   const userRole = user?.userRole || null; // Ensure user is not null
 
   return (
     <QueryClientProvider client={queryClient}>
