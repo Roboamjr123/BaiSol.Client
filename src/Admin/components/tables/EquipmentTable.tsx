@@ -370,7 +370,7 @@ const EquipmentTable = () => {
                 isLoading={isLoading}
                 items={filteredItems}
                 loadingContent={
-                  <Spinner color="warning">Loading Material...</Spinner>
+                  <Spinner color="warning">Loading...</Spinner>
                 }
               >
                 {(item) => (

@@ -6,8 +6,49 @@ import Scheduler from "./Scheduler";
 import ProjectPayment from "../../main/components/Payment/ProjectPayment";
 import RequestSupply from "../components/modal/supply/RequestSupply";
 import Form from "../../main/components/Quotation/Form";
+import { useParams } from "react-router-dom";
+import {
+  getIsOnGoingProject,
+  useUpdateProjectToOnWork,
+} from "../../lib/API/Project/ProjectApi";
+import { toast } from "react-toastify";
+import {
+  getIsProjectPayedDownpayment,
+  useCreatePayment,
+} from "../../lib/API/Project/PaymentAPI";
 
 const ClientQuotePage = () => {
+  const { projId } = useParams<{ projId: string }>();
+  const sealQuotation = useUpdateProjectToOnWork();
+  const createPayment = useCreatePayment();
+  const { data: isProjectOnGoing } = getIsOnGoingProject(projId!);
+  const { data: isPayedDown } = getIsProjectPayedDownpayment(projId!);
+
+  const handleSealQuotation = () => {
+    if (
+      window.confirm(
+        "Are you sure you want to seal this quotation? This action cannot be undone."
+      )
+    ) {
+      createPayment.mutateAsync(
+        { projId: projId! },
+        {
+          onSuccess: (pay) => {
+            sealQuotation.mutateAsync(
+              { projId: projId! },
+              {
+                onSuccess: (data) => {
+                  toast.success(pay);
+                  toast.success(data);
+                },
+              }
+            );
+          },
+        }
+      );
+    }
+  };
+
   const components = [
     {
       component: <Form isAdmin={true} />,
@@ -20,7 +61,12 @@ const ClientQuotePage = () => {
       index: 2,
     },
     {
-      component: <Scheduler />,
+      component: (
+        <Scheduler
+          isOnGoing={isProjectOnGoing ?? false}
+          isPayedDown={isPayedDown ?? false}
+        />
+      ),
       name: "Schedule",
       index: 3,
     },
@@ -54,13 +100,32 @@ const ClientQuotePage = () => {
 
   return (
     <div>
-      <h1 className="flex items-center mb-4">
-        Project
-        <span className="mx-2 text-gray-400">
-          <RiArrowRightWideFill />
-        </span>
-        {activeName}
-      </h1>
+      <div className="flex flex-row justify-between">
+        <h1 className="flex items-center mb-4">
+          Project
+          <span className="mx-2 text-gray-400">
+            <RiArrowRightWideFill />
+          </span>
+          {activeName}
+        </h1>
+        <div>
+          {isProjectOnGoing ? (
+            <Button
+              onClick={handleSealQuotation}
+              className="bg-orange-400 w-full ml-auto text-white rounded-lg py-2 px-3 hover:bg-gray-200 hover:text-orange-500 transition-all duration-300 ease-in"
+            >
+              Seal Quotation
+            </Button>
+          ) : (
+            <Button
+              isDisabled
+              className="bg-orange-400 w-full ml-auto text-white rounded-lg py-2 px-3 hover:bg-gray-200 hover:text-orange-500 transition-all duration-300 ease-in"
+            >
+              Sealed Quotation
+            </Button>
+          )}
+        </div>
+      </div>
       <div className="grid grid-cols-3 sm:grid-cols-5 gap-4 sm:gap-2 my-8">
         {components.map((item) => (
           <Button

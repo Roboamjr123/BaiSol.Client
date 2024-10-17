@@ -30,6 +30,21 @@ export const getAllClientsProjects = () => {
   });
 };
 
+// Check project status
+export const getIsOnGoingProject = (projId: string) => {
+  return useQuery<boolean, Error>({
+    queryKey: ["IsProjectOnGoing", projId],
+    queryFn: async () => {
+      const response = await api.get("api/Project/IsProjectOnGoing", {
+        params: {
+          projId: projId,
+        },
+      });
+      return response.data;
+    },
+  });
+};
+
 interface AvailableClients {
   clientId: string;
   clientEmail: string;
@@ -249,6 +264,28 @@ export const useUpdateProfitRate = () => {
       const { data } = await api.put(
         "api/Project/Update-Profit-Rate",
         { ...formData, userEmail: user },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      return data;
+    },
+    onError: (error: any) => {
+      toast.error(error.response.data);
+      console.error("Error updating:", error);
+    },
+  });
+};
+
+export const useUpdateProjectToOnWork = () => {
+  const user = useUserEmail();
+  return useMutation({
+    mutationFn: async (id: { projId: string }) => {
+      const { data } = await api.put(
+        "api/Project/UpdateProjectToOnWork",
+        { ...id, userEmail: user },
         {
           headers: {
             "Content-Type": "application/json",

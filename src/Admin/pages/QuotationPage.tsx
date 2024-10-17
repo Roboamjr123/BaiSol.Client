@@ -11,12 +11,14 @@ import { IoIosSave } from "react-icons/io";
 import { FaEdit } from "react-icons/fa";
 import { getAssignedEquipment } from "../../lib/API/Quote/EquipmentAssignationAPI";
 import ProvideEquipmentSupply from "../components/quotation/ProvideEquipmentSupply";
+import { getIsOnGoingProject } from "../../lib/API/Project/ProjectApi";
 
 const QuotationPage = () => {
   // Fetch `id` from URL params
   const { projId } = useParams<{ projId: string }>();
   const navigate = useNavigate();
   const [isEditMode, setIsEditMode] = useState(false);
+  const { data: isProjectOnGoing } = getIsOnGoingProject(projId!);
 
   const {
     data: projectCost,
@@ -50,22 +52,24 @@ const QuotationPage = () => {
     <div className="flex flex-col gap-5">
       <div className="flex justify-between">
         <div className="ml-auto">
-          <Switch
-            className="items-center"
-            color="warning"
-            size="lg"
-            isSelected={isEditMode}
-            onValueChange={setIsEditMode}
-            thumbIcon={({ isSelected, className }) =>
-              isSelected ? (
-                <FaEdit className={className} />
-              ) : (
-                <IoIosSave className={className} />
-              )
-            }
-          >
-            {isEditMode ? "Edit" : "Saved"}
-          </Switch>
+          {isProjectOnGoing && (
+            <Switch
+              className="items-center"
+              color="warning"
+              size="lg"
+              isSelected={isEditMode}
+              onValueChange={setIsEditMode}
+              thumbIcon={({ isSelected, className }) =>
+                isSelected ? (
+                  <FaEdit className={className} />
+                ) : (
+                  <IoIosSave className={className} />
+                )
+              }
+            >
+              {isEditMode ? "Edit" : "Saved"}
+            </Switch>
+          )}
         </div>
       </div>
 

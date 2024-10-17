@@ -33,6 +33,8 @@ import Form from "./main/components/Quotation/Form";
 import ClientProjectQuotationPage from "./Client/pages/ClientProjectQuotationPage";
 import { registerLicense } from "@syncfusion/ej2/base";
 import ActivityLogPage from "./Admin/pages/ActivityLogPage";
+import ProjectPayment from "./main/components/Payment/ProjectPayment";
+import PaymentPage from "./Admin/pages/PaymentPage";
 
 const queryClient = new QueryClient({});
 
@@ -40,7 +42,7 @@ function App() {
   const user = useSelector(selectUser) || {}; // Ensure user is not null
 
   // Default to empty object if user is null to avoid errors
-//   const userRole = user?.userRole || null; // Ensure user is not null
+  const userRole = user?.userRole || null; // Ensure user is not null
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -65,16 +67,18 @@ function App() {
           <Route path="clients" element={<ClientPage />} />
           <Route path="activity" element={<ActivityLogPage />} />
           <Route path="supply" element={<Supply />} />
+          <Route path="billing" element={<PaymentPage />} />
           <Route path="form" element={<Form />} />
           <Route path="*" element={<PageNotFound />} />
         </Route>
-
-        {/* <Route element={<ClientLayout />}>
+        {/* 
+        <Route element={<ClientLayout />}>
           <Route path="/" element={<ClientPage />} />
           <Route
             path="quotation/:projId"
             element={<ClientProjectQuotationPage />}
           />
+          <Route path="payment/:projId" element={<ProjectPayment />} />
           <Route path="*" element={<PageNotFound />} />
         </Route> */}
 
@@ -96,6 +100,7 @@ function App() {
             <Route path="clients" element={<ClientPage />} />
             <Route path="activity" element={<ActivityLogPage />} />
             <Route path="supply" element={<Supply />} />
+          <Route path="billing" element={<PaymentPage />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>
         ) : userRole === "Facilitator" ? (
@@ -111,6 +116,7 @@ function App() {
               path="quotation/:projId"
               element={<ClientProjectQuotationPage />}
             />
+            <Route path="payment/:projId" element={<ProjectPayment />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>
         ) : (

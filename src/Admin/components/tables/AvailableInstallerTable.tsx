@@ -110,7 +110,7 @@ const AvailableInstrallerTable = () => {
               <TableBody
                 isLoading={allInstallers.isLoading}
                 loadingContent={
-                  <Spinner color="warning">Loading installers...</Spinner>
+                  <Spinner color="warning">Loading...</Spinner>
                 }
                 items={filteredItems}
               >

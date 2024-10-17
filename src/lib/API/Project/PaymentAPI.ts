@@ -41,6 +41,37 @@ export const getAllPayments = () => {
   });
 };
 
+export interface IAllPayment {
+  referenceNumber: string;
+  checkoutUrl: string;
+  amount: string;
+  netAmount: string;
+  description: string;
+  status: string;
+  sourceType: string;
+  createdAt: string;
+  paidAt: string;
+  paymentFee: string;
+  isAcknowledged: boolean;
+  acknowledgedBy: string;
+  acknowledgedAt: string;
+  projId: string;
+  projName: string;
+  billingEmail: string;
+  billingName: string;
+  billingPhone: string;
+}
+
+export const getAllPayment = () => {
+  return useQuery<IAllPayment[], Error>({
+    queryKey: ["all-payment"],
+    queryFn: async () => {
+      const response = await api.get("api/Payment/GetAllPayment");
+      return response.data;
+    },
+  });
+};
+
 export const useCreatePayment = () => {
   const userEmail = useUserEmail();
   return useMutation({
@@ -91,6 +122,21 @@ export const useAcknowledgePayment = () => {
     onError: (error: any) => {
       toast.error(error.response.data);
       console.error("Error request supply:", error);
+    },
+  });
+};
+
+// Check downpayment if payed
+export const getIsProjectPayedDownpayment = (projId: string) => {
+  return useQuery<boolean, Error>({
+    queryKey: ["IsProjectPayedDownpayment", projId],
+    queryFn: async () => {
+      const response = await api.get("api/Payment/IsProjectPayedDownpayment", {
+        params: {
+          projId: projId,
+        },
+      });
+      return response.data;
     },
   });
 };

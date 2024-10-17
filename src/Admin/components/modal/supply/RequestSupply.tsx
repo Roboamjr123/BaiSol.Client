@@ -42,9 +42,11 @@ import {
 import { iconClasses } from "../../../../lib/utils/usersTable";
 import { FaEdit } from "react-icons/fa";
 import { IoIosSave } from "react-icons/io";
+import { getIsProjectPayedDownpayment } from "../../../../lib/API/Project/PaymentAPI";
 
 const RequestSupply = () => {
   const { projId } = useParams<{ projId: string }>();
+  const { data: isPayedDown } = getIsProjectPayedDownpayment(projId!);
 
   const deleteRequest = useDeleteRequest();
   const approveRequest = useApproveRequest();
@@ -420,51 +422,55 @@ const RequestSupply = () => {
       <div className="container mx-auto p-4 bg-white h-full">
         <div className="overflow-x-auto overflow-y-hidden scrollbar-thin scrollbar-track-white scrollbar-thumb-orange-100">
           <div className="min-w-full gap-2">
-            <Table
-              aria-label="Requests Table"
-              isHeaderSticky
-              removeWrapper
-              disabledKeys={reviewedRequests?.toString()}
-              classNames={classNamesDesign}
-              selectedKeys={selectedKeys}
-              selectionMode={isSelectMany ? "multiple" : "single"}
-              topContent={topContent}
-              topContentPlacement="outside"
-              onSelectionChange={setSelectedKeys}
-              checkboxesProps={{
-                classNames: {
-                  wrapper:
-                    "after:bg-orange-400 after:text-background text-background",
-                },
-              }}
-            >
-              <TableHeader columns={requisition_columns}>
-                {(column) => (
-                  <TableColumn
-                    key={column.uid}
-                    align={column.uid === "actions" ? "center" : "start"}
-                  >
-                    {column.name}
-                  </TableColumn>
-                )}
-              </TableHeader>
-              <TableBody
-                emptyContent={"No request found"}
-                isLoading={isLoading}
-                items={filteredItems}
-                loadingContent={
-                  <Spinner color="warning">Loading Request...</Spinner>
-                }
+            {isPayedDown ? (
+              <Table
+                aria-label="Requests Table"
+                isHeaderSticky
+                removeWrapper
+                disabledKeys={reviewedRequests?.toString()}
+                classNames={classNamesDesign}
+                selectedKeys={selectedKeys}
+                selectionMode={isSelectMany ? "multiple" : "single"}
+                topContent={topContent}
+                topContentPlacement="outside"
+                onSelectionChange={setSelectedKeys}
+                checkboxesProps={{
+                  classNames: {
+                    wrapper:
+                      "after:bg-orange-400 after:text-background text-background",
+                  },
+                }}
               >
-                {(item) => (
-                  <TableRow key={item.reqId}>
-                    {(columnKey) => (
-                      <TableCell>{renderCell(item, columnKey)}</TableCell>
-                    )}
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
+                <TableHeader columns={requisition_columns}>
+                  {(column) => (
+                    <TableColumn
+                      key={column.uid}
+                      align={column.uid === "actions" ? "center" : "start"}
+                    >
+                      {column.name}
+                    </TableColumn>
+                  )}
+                </TableHeader>
+                <TableBody
+                  emptyContent={"No request found"}
+                  isLoading={isLoading}
+                  items={filteredItems}
+                  loadingContent={
+                    <Spinner color="warning">Loading Request...</Spinner>
+                  }
+                >
+                  {(item) => (
+                    <TableRow key={item.reqId}>
+                      {(columnKey) => (
+                        <TableCell>{renderCell(item, columnKey)}</TableCell>
+                      )}
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            ) : (
+              "Oncoming..."
+            )}
           </div>
         </div>
       </div>
