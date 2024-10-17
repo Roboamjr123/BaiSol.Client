@@ -16,6 +16,7 @@ import {
   Pagination,
   Selection,
   SortDescriptor,
+  Spinner,
 } from "@nextui-org/react";
 import { BiDotsVertical } from "react-icons/bi";
 import { CiSearch } from "react-icons/ci";
@@ -151,7 +152,6 @@ const ClientTable = () => {
         "Are you sure you want to activate the client account? Press OK to confirm."
       )
     ) {
-
       activateClient.mutateAsync(clientId, {
         onSuccess: (mess) => {
           toast.success(mess);
@@ -477,7 +477,7 @@ const ClientTable = () => {
   //   .map((row) => row.installerId)
   //   .toString();
 
-  if(activateClient.isPending) return <Loader label="Activating"/>
+  if (activateClient.isPending) return <Loader label="Activating" />;
 
   return (
     <div className="bg-gray-100 flex items-center justify-center">
@@ -520,7 +520,7 @@ const ClientTable = () => {
               <TableBody
                 emptyContent={"No personnel found"}
                 items={items}
-                loadingContent={"Loading clients..."}
+                loadingContent={<Spinner color="warning">Loading...</Spinner>}
                 isLoading={isLoading}
               >
                 {(item) => (

@@ -1,7 +1,7 @@
 import { FaTools } from "react-icons/fa";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { LuLayers } from "react-icons/lu";
-import { MdOutlinePayments } from "react-icons/md";
+import { MdOutlinePayment, MdOutlinePayments } from "react-icons/md";
 import { RxDashboard } from "react-icons/rx";
 import { TbReport } from "react-icons/tb";
 import { getClientProjId } from "../API/Client/ClientProjectAPI";
@@ -30,6 +30,12 @@ export const AdminSidebarLinks = [
     label: "Supply",
     path: "/supply",
     icon: <FaTools size={23} className="min-w-max" />,
+  },
+  {
+    key: "billing",
+    label: "Billing",
+    path: "/billing",
+    icon: <MdOutlinePayment size={23} className="min-w-max" />,
   },
 ];
 

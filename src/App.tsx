@@ -34,6 +34,7 @@ import ClientProjectQuotationPage from "./Client/pages/ClientProjectQuotationPag
 import { registerLicense } from "@syncfusion/ej2/base";
 import ActivityLogPage from "./Admin/pages/ActivityLogPage";
 import ProjectPayment from "./main/components/Payment/ProjectPayment";
+import PaymentPage from "./Admin/pages/PaymentPage";
 
 const queryClient = new QueryClient({});
 
@@ -66,6 +67,7 @@ function App() {
           <Route path="clients" element={<ClientPage />} />
           <Route path="activity" element={<ActivityLogPage />} />
           <Route path="supply" element={<Supply />} />
+          <Route path="billing" element={<PaymentPage />} />
           <Route path="form" element={<Form />} />
           <Route path="*" element={<PageNotFound />} />
         </Route>
@@ -98,6 +100,7 @@ function App() {
             <Route path="clients" element={<ClientPage />} />
             <Route path="activity" element={<ActivityLogPage />} />
             <Route path="supply" element={<Supply />} />
+          <Route path="billing" element={<PaymentPage />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>
         ) : userRole === "Facilitator" ? (

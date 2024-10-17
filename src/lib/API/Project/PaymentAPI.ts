@@ -41,6 +41,37 @@ export const getAllPayments = () => {
   });
 };
 
+export interface IAllPayment {
+  referenceNumber: string;
+  checkoutUrl: string;
+  amount: string;
+  netAmount: string;
+  description: string;
+  status: string;
+  sourceType: string;
+  createdAt: string;
+  paidAt: string;
+  paymentFee: string;
+  isAcknowledged: boolean;
+  acknowledgedBy: string;
+  acknowledgedAt: string;
+  projId: string;
+  projName: string;
+  billingEmail: string;
+  billingName: string;
+  billingPhone: string;
+}
+
+export const getAllPayment = () => {
+  return useQuery<IAllPayment[], Error>({
+    queryKey: ["all-payment"],
+    queryFn: async () => {
+      const response = await api.get("api/Payment/GetAllPayment");
+      return response.data;
+    },
+  });
+};
+
 export const useCreatePayment = () => {
   const userEmail = useUserEmail();
   return useMutation({
