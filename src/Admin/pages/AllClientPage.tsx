@@ -2,7 +2,7 @@ import React from "react";
 import { RiArrowRightWideFill } from "react-icons/ri";
 import ClientTable from "../../Admin/components/tables/ClientTable";
 
-const ClientPage = () => {
+const AllClientPage = () => {
   return (
     <div>
       <h1 className="flex items-center mb-4">
@@ -13,11 +13,10 @@ const ClientPage = () => {
         Information
       </h1>
       <div className="container mx-auto mt-20 p-4 bg-white shadow-lg rounded-lg">
-        {/* <ClientTable /> */}
-        Dashboard
+        <ClientTable />
       </div>
     </div>
   );
 };
 
-export default ClientPage;
+export default AllClientPage;

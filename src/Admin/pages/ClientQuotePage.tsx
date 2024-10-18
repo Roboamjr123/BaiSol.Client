@@ -21,8 +21,10 @@ const ClientQuotePage = () => {
   const { projId } = useParams<{ projId: string }>();
   const sealQuotation = useUpdateProjectToOnWork();
   const createPayment = useCreatePayment();
-  const { data: isProjectOnGoing } = getIsOnGoingProject(projId!);
-  const { data: isPayedDown } = getIsProjectPayedDownpayment(projId!);
+  const { data: isProjectOnGoing, refetch: refetchProjStatus } =
+    getIsOnGoingProject(projId!);
+  const { data: isPayedDown, refetch: refetchProjPay } =
+    getIsProjectPayedDownpayment(projId!);
 
   const handleSealQuotation = () => {
     if (
@@ -40,6 +42,8 @@ const ClientQuotePage = () => {
                 onSuccess: (data) => {
                   toast.success(pay);
                   toast.success(data);
+                  refetchProjStatus();
+                  refetchProjPay();
                 },
               }
             );

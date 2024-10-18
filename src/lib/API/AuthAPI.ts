@@ -97,8 +97,8 @@ export const use2FAMutation = () => {
       return response.data;
     },
     onSuccess: (res) => {
-      const accessToken = res.data.accessToken;
-      const refreshToken = res.data.refreshToken;
+      const accessToken = res.accessToken;
+      const refreshToken = res.refreshToken;
       Cookies.set("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
       const decoded: any = jwtDecode(accessToken);
@@ -122,7 +122,7 @@ export const use2FAMutation = () => {
       dispatch(setUser(user));
     },
     onError: (err: any) => {
-      toast.error(err.response.data.message);
+      toast.error(err?.response.data?.message);
     },
   });
 };
@@ -141,7 +141,8 @@ export const useLogOut = () => {
       toast.success(data);
     },
     onError: (err: any) => {
-      toast.error(err);
+      toast.error(err.data.message);
+      console.log(err);
     },
   });
 };

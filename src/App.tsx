@@ -35,6 +35,7 @@ import { registerLicense } from "@syncfusion/ej2/base";
 import ActivityLogPage from "./Admin/pages/ActivityLogPage";
 import ProjectPayment from "./main/components/Payment/ProjectPayment";
 import PaymentPage from "./Admin/pages/PaymentPage";
+import AllClientPage from "./Admin/pages/AllClientPage";
 
 const queryClient = new QueryClient({});
 
@@ -58,7 +59,7 @@ function App() {
           <Route path="*" element={<PageNotFound />} />
         </Route> */}
 
-        <Route element={<AdminLayout />}>
+        {/* <Route element={<AdminLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="Confirm-Email" element={<ConfirmEmail />} />
           <Route path="project" element={<ProjectPage />} />
@@ -70,7 +71,7 @@ function App() {
           <Route path="billing" element={<PaymentPage />} />
           <Route path="form" element={<Form />} />
           <Route path="*" element={<PageNotFound />} />
-        </Route>
+        </Route> */}
         {/* 
         <Route element={<ClientLayout />}>
           <Route path="/" element={<ClientPage />} />
@@ -91,16 +92,16 @@ function App() {
           <Route path="*" element={<PageNotFound />} />
         </Route> */}
 
-        {/* {userRole === "Admin" ? (
+        {userRole === "Admin" ? (
           <Route element={<AdminLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="project" element={<ProjectPage />} />
             <Route path="project/:projId" element={<ClientQuotePage />} />
             <Route path="personnel" element={<Personnel />} />
-            <Route path="clients" element={<ClientPage />} />
+            <Route path="clients" element={<AllClientPage />} />
             <Route path="activity" element={<ActivityLogPage />} />
             <Route path="supply" element={<Supply />} />
-          <Route path="billing" element={<PaymentPage />} />
+            <Route path="billing" element={<PaymentPage />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>
         ) : userRole === "Facilitator" ? (
@@ -128,7 +129,7 @@ function App() {
             <Route path="change-password" element={<ChangePass />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>
-        )} */}
+        )}
 
         <Route path="/verify-2FA" element={<Verify2FA />} />
         <Route path="/home" element={<Home />} />
