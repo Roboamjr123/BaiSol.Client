@@ -36,7 +36,7 @@ function Header({ isSidebarOpen, setIsSidebarOpen }: HeaderProps) {
       localStorage.removeItem("refreshToken");
       Cookies.remove("accessToken");
       window.location.reload();
-      navigate("/");
+      navigate("/BaiSol");
     } catch (err) {
       console.error("Logout error:", err); // Log error for debugging
       // Optionally show an error toast here if needed

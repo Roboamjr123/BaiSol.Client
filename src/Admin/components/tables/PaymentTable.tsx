@@ -25,16 +25,18 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
+  useDisclosure,
 } from "@nextui-org/react";
 import { BiDotsVertical } from "react-icons/bi";
 import { iconClasses } from "../../../lib/utils/usersTable";
 import { CiSearch } from "react-icons/ci";
+import PaymentDetailsModal from "../modal/payment/PaymentDetailsModal";
 
 const PaymentTable = () => {
   const { data: payments, isLoading, refetch } = getAllPayment();
   const paymentLength = payments ? payments.length : 0;
 
-  const [paymentInfo, setPaymentInfo] = useState<IAllPayment>();
+  const [paymentInfo, setPaymentInfo] = useState<IAllPayment | null>(null);
 
   const [filterValue, setFilterValue] = useState("");
   const filteredItems = useMemo(() => {
@@ -111,6 +113,7 @@ const PaymentTable = () => {
                   startContent={
                     <BsThreeDots className={cn(iconClasses, "text-default")} />
                   }
+                  onClick={() => handleViewInfo(payment)}
                 >
                   View Details
                 </DropdownItem>
@@ -174,6 +177,17 @@ const PaymentTable = () => {
     []
   );
 
+  const {
+    isOpen: viewIsOpen,
+    onOpen: viewOnOpen,
+    onClose: viewOnClose,
+  } = useDisclosure();
+
+  const handleViewInfo = (info: IAllPayment) => {
+    setPaymentInfo(info);
+    viewOnOpen();
+  };
+
   return (
     <div className="bg-gray-100 flex items-center justify-center">
       <div className="container mx-auto p-4 bg-white h-full">
@@ -213,6 +227,11 @@ const PaymentTable = () => {
               </TableBody>
             </Table>
           </div>
+          <PaymentDetailsModal
+            isOpen={viewIsOpen}
+            onClose={viewOnClose}
+            paymentDetails={paymentInfo!}
+          />
         </div>
       </div>
     </div>

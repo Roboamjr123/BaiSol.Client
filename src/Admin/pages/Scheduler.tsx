@@ -13,7 +13,7 @@ const Scheduler: React.FC<{ isOnGoing: boolean; isPayedDown: boolean }> = ({
     return <>Payment is pending for the ongoing project...</>; // Message for ongoing projects with pending payment
   }
 
-  if (isOnGoing && isPayedDown) {
+  if (!isOnGoing && isPayedDown) {
     return <Gantt />; // Show Gantt chart for ongoing projects with payment completed
   }
 

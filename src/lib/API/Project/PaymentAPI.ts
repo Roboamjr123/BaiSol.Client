@@ -52,6 +52,7 @@ export interface IAllPayment {
   createdAt: string;
   paidAt: string;
   paymentFee: string;
+  paymentFeePercent: string;
   isAcknowledged: boolean;
   acknowledgedBy: string;
   acknowledgedAt: string;
@@ -105,7 +106,7 @@ export const useAcknowledgePayment = () => {
       referenceNumber: string;
       description: string;
     }) => {
-      const response = await api.post(
+      const response = await api.put(
         "api/Payment/AcknowledgePayment",
         {
           ...data,
@@ -121,7 +122,7 @@ export const useAcknowledgePayment = () => {
     },
     onError: (error: any) => {
       toast.error(error.response.data);
-      console.error("Error request supply:", error);
+      console.error("Error akcnowledge:", error);
     },
   });
 };

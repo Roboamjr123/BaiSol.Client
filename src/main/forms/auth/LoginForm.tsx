@@ -7,6 +7,10 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../../../lib/API/AuthAPI";
 import { pricingPlans } from "../../../Landing-Page/constants/landing-page";
 import { Check } from "lucide-react";
+import {
+  Option,
+  ProjectDescriptionSystemType,
+} from "../../../lib/constants/ProjectPackage";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -135,39 +139,45 @@ const LoginPage = () => {
           </Button>
         </form>
       </div>
-      <div className="flex flex-col items-center justify-center w-full lg:1/2">
-        <h4 className="font-semibold text-orange-500 tracking-wider">
+
+      {/* Project Cost Estimations */}
+      <div className="flex flex-col items-center justify-center w-full lg:w-1/2 mx-auto">
+        <h4 className="font-semibold text-orange-500 tracking-wide mb-2">
           Choose the Right Plan for You
         </h4>
-        <h1 className="text-base lg:text-xl text-center font-bold mb-4 tracking-wider">
-          Pricing Plans
+        <h1 className="text-lg lg:text-2xl text-center font-bold mb-6 tracking-wider">
+          Project Cost Estimations
         </h1>
-        <div className="flex flex-wrap">
-          {pricingPlans.map((option, index) => (
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full px-2 gap-3">
+          {ProjectDescriptionSystemType.map((system, index) => (
             <div
               key={index}
-              className="w-full sm:w-1/2 lg:w-1/3 m-6 lg:m-0  text-center lg:px-4 hover:scale-105 duration-300"
+              className="bg-white p-6 border rounded-lg shadow-md hover:scale-105 transition-transform duration-300 sm:max-w-sm max-w-lg"
             >
-              <div className="p-5 border rounded-xl">
-                <p className="font-bold text-2xl lg:text-base">
-                  Package{" "}
-                  <span className="text-orange-500">{option.title}</span>
-                </p>
-                <p className="text-xl lg:text-lg  font-extrabold py-5 tracking-wider">
-                  {option.price}
-                </p>
-                <p className="lg:text-xs font-bold">{option.type}</p>
-                <ul>
-                  {option.features.map((feature, index) => (
-                    <li key={index} className="flex mt-5 items-center">
-                      <Check className="text-green-600" />
-                      <span className="ml-2 text-left lg:text-xs">
-                        {feature}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              <p className="text-lg lg:text-base font-bold text-orange-500 mb-2 text-center">
+                {system.type}
+              </p>
+              {system.options.map((option, i) => (
+                <div key={i} className="py-2">
+                  <div className="flex justify-between items-center mb-1">
+                    <div className="flex items-center space-x-1">
+                      <Check className="text-green-600 text-xs" />
+                      <p className="text-xs lg:text-sm font-bold tracking-wider">
+                        {option.kWCapacity}
+                      </p>
+                    </div>
+                    <p className="text-xs font-semibold text-gray-500 text-right">
+                      ₱{" "}
+                      {new Intl.NumberFormat("en-PH", {
+                        style: "decimal",
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      }).format(option.cost)}
+                    </p>
+                  </div>
+                </div>
+              ))}
             </div>
           ))}
         </div>

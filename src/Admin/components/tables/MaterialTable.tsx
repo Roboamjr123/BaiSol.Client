@@ -34,6 +34,7 @@ import AddSupply from "../modal/supply/AddSupply";
 import EditSupply from "../modal/supply/EditSupply";
 import AddQuantitySupply from "../modal/supply/AddQuantitySupply";
 import { HistoryIcon } from "lucide-react";
+import ItemLogs from "../log/ItemLogs";
 // import ItemLogs from "../logs/ItemLogs";
 
 export const defaultMaterial: IAllMaterials = {
@@ -409,12 +410,12 @@ const MaterialTable = () => {
             onClose={addExistOnClose}
             refetch={refetch}
           />
-          {/* <ItemLogs
+          <ItemLogs
             id={logMaterialId}
             isMaterial={true}
             isOpen={logIsOpen}
             onClose={logOnClose}
-          /> */}
+          />
         </div>
       </div>
     </div>

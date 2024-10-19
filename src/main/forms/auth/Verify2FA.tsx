@@ -91,13 +91,12 @@ const Verify2FA: React.FC = () => {
       code: otp.join("").toString(),
     };
 
-    OTPConfirmation.mutateAsync(formData,{
-      onSuccess:(data)=>{
-        toast.success(data)
+    OTPConfirmation.mutateAsync(formData, {
+      onSuccess: (data) => {
+        toast.success(data);
         navigate("/");
-      }
-    })
-
+      },
+    });
   };
 
   const handleResendOTP = (e: React.FormEvent<HTMLFormElement>) => {
