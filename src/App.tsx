@@ -59,7 +59,7 @@ function App() {
           <Route path="*" element={<PageNotFound />} />
         </Route> */}
 
-        {/* <Route element={<AdminLayout />}>
+        <Route element={<AdminLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="Confirm-Email" element={<ConfirmEmail />} />
           <Route path="project" element={<ProjectPage />} />
@@ -71,7 +71,8 @@ function App() {
           <Route path="billing" element={<PaymentPage />} />
           <Route path="form" element={<Form />} />
           <Route path="*" element={<PageNotFound />} />
-        </Route> */}
+        </Route>
+        
         {/* 
         <Route element={<ClientLayout />}>
           <Route path="/" element={<ClientPage />} />
@@ -92,7 +93,7 @@ function App() {
           <Route path="*" element={<PageNotFound />} />
         </Route> */}
 
-        {userRole === "Admin" ? (
+        {/* {userRole === "Admin" ? (
           <Route element={<AdminLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="project" element={<ProjectPage />} />
@@ -129,7 +130,7 @@ function App() {
             <Route path="change-password" element={<ChangePass />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>
-        )}
+        )} */}
 
         <Route path="/verify-2FA" element={<Verify2FA />} />
         <Route path="/home" element={<Home />} />

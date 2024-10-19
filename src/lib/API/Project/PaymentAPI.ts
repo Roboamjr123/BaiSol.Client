@@ -52,6 +52,7 @@ export interface IAllPayment {
   createdAt: string;
   paidAt: string;
   paymentFee: string;
+  paymentFeePercent: string;
   isAcknowledged: boolean;
   acknowledgedBy: string;
   acknowledgedAt: string;
