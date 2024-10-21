@@ -65,7 +65,7 @@ function App() {
           <Route path="project" element={<ProjectPage />} />
           <Route path="project/:projId" element={<ClientQuotePage />} />
           <Route path="personnel" element={<Personnel />} />
-          <Route path="clients" element={<ClientPage />} />
+          <Route path="clients" element={<AllClientPage />} />
           <Route path="activity" element={<ActivityLogPage />} />
           <Route path="supply" element={<Supply />} />
           <Route path="billing" element={<PaymentPage />} />

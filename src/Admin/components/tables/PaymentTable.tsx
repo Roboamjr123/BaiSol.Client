@@ -44,21 +44,27 @@ const PaymentTable = () => {
 
     filteredMaterials = filteredMaterials.filter(
       (payment) =>
-        payment.referenceNumber
-          .toLowerCase()
-          .includes(filterValue.toLowerCase()) ||
-        payment.acknowledgedBy
-          .toLowerCase()
-          .includes(filterValue.toLowerCase()) ||
-        payment.projName.toLowerCase().includes(filterValue.toLowerCase()) ||
-        payment.billingEmail
-          .toLowerCase()
-          .includes(filterValue.toLowerCase()) ||
-        payment.billingName.toLowerCase().includes(filterValue.toLowerCase()) ||
-        payment.billingPhone
-          .toLowerCase()
-          .includes(filterValue.toLowerCase()) ||
-        payment.projId.toLowerCase().includes(filterValue.toLowerCase())
+        (payment.referenceNumber?.toLowerCase() || "").includes(
+          filterValue.toLowerCase()
+        ) ||
+        (payment.acknowledgedBy?.toLowerCase() || "").includes(
+          filterValue.toLowerCase()
+        ) ||
+        (payment.projName?.toLowerCase() || "").includes(
+          filterValue.toLowerCase()
+        ) ||
+        (payment.billingEmail?.toLowerCase() || "").includes(
+          filterValue.toLowerCase()
+        ) ||
+        (payment.billingName?.toLowerCase() || "").includes(
+          filterValue.toLowerCase()
+        ) ||
+        (payment.billingPhone?.toLowerCase() || "").includes(
+          filterValue.toLowerCase()
+        ) ||
+        (payment.projId?.toLowerCase() || "").includes(
+          filterValue.toLowerCase()
+        )
     );
 
     return filteredMaterials;
