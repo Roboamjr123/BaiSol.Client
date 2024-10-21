@@ -262,13 +262,14 @@ export const useAddNewInstaller = () => {
 
 // Approve Email
 export const useApproveClientAccount = () => {
+  const adminEmail = useUserEmail();
   return useMutation({
     mutationFn: async (clientId: string) => {
       const response = await api.put("user/User/Approve-Client-Account", null, {
         headers: {
           "Content-Type": "application/json", // Ensure it matches the server requirements
         },
-        params: { clientId },
+        params: { clientId, adminEmail },
       });
       return response.data;
     },
