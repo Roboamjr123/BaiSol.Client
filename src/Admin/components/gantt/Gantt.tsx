@@ -20,6 +20,7 @@ import {
   SortSettingsModel,
 } from "@syncfusion/ej2-react-gantt";
 import { DataManager, WebApiAdaptor } from "@syncfusion/ej2/data";
+import { useParams } from "react-router-dom";
 
 const Gantt = () => {
   const toolbarOptions: ToolbarItem[] = [
@@ -61,12 +62,13 @@ const Gantt = () => {
     parentID: "ParentId",
   };
 
-  // Initialize DataManager
-  const dataManager: DataManager = new DataManager({
-    url: "https://localhost:7233/api/Gantt",
-    adaptor: new WebApiAdaptor(),
-    crossDomain: true,
-  });
+  const { projId } = useParams<{ projId: string }>();
+  
+    const dataManager: DataManager = new DataManager({
+      url: `https://localhost:7233/api/Gantt/${projId}`,
+      adaptor: new WebApiAdaptor(),
+      crossDomain: true,
+    });
 
   const sortingOptions: SortSettingsModel = {
     columns: [{ field: "TaskId", direction: "Descending" }],

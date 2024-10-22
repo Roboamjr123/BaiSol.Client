@@ -19,6 +19,7 @@ import {
 
 const ClientQuotePage = () => {
   const { projId } = useParams<{ projId: string }>();
+  
   const sealQuotation = useUpdateProjectToOnWork();
   const createPayment = useCreatePayment();
   const { data: isProjectOnGoing, refetch: refetchProjStatus } =
