@@ -52,6 +52,8 @@ const ProjectPayment: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
 
   if (isLoading) return <Loader />;
 
+  if (paymentArray.length === 0) return <>Quotation not sealed yet!</>;
+
   return (
     <div className="container mx-auto p-6">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

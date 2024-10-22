@@ -19,7 +19,7 @@ import {
 
 const ClientQuotePage = () => {
   const { projId } = useParams<{ projId: string }>();
-  
+
   const sealQuotation = useUpdateProjectToOnWork();
   const createPayment = useCreatePayment();
   const { data: isProjectOnGoing, refetch: refetchProjStatus } =
@@ -33,11 +33,11 @@ const ClientQuotePage = () => {
         "Are you sure you want to seal this quotation? This action cannot be undone."
       )
     ) {
-      createPayment.mutateAsync(
+      sealQuotation.mutateAsync(
         { projId: projId! },
         {
           onSuccess: (pay) => {
-            sealQuotation.mutateAsync(
+            createPayment.mutateAsync(
               { projId: projId! },
               {
                 onSuccess: (data) => {
