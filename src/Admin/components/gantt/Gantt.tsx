@@ -18,28 +18,48 @@ import {
   HolidayDirective,
   SortSettings,
   SortSettingsModel,
+  UndoRedo,
+  ColumnDirective,
+  ColumnsDirective,
+  EditDialogFieldsDirective,
+  EditDialogFieldDirective,
 } from "@syncfusion/ej2-react-gantt";
 import { DataManager, WebApiAdaptor } from "@syncfusion/ej2/data";
 import { useParams } from "react-router-dom";
+import { useUpdateProjectToOnWork } from "../../../lib/API/Project/ProjectApi";
+import { useEffect } from "react";
 
-const Gantt = () => {
-  const toolbarOptions: ToolbarItem[] = [
-    "Add",
-    "Edit",
-    "Delete",
-    "Cancel",
-    "Update",
-    "PrevTimeSpan",
-    "NextTimeSpan",
-    "ExpandAll",
-    "CollapseAll",
-    "Search",
-    "Indent",
-    "Outdent",
-    "ZoomIn",
-    "ZoomOut",
-    "ZoomToFit",
-  ];
+const Gantt: React.FC<{ isOnProcess: boolean }> = ({ isOnProcess }) => {
+  const toolbarOptions: ToolbarItem[] = isOnProcess
+    ? [
+        "Add",
+        "Edit",
+        "Delete",
+        "Cancel",
+        "Update",
+        "PrevTimeSpan",
+        "NextTimeSpan",
+        "ExpandAll",
+        "CollapseAll",
+        "Search",
+        "Indent",
+        "Outdent",
+        "ZoomIn",
+        "ZoomOut",
+        "ZoomToFit",
+      ]
+    : [
+        "PrevTimeSpan",
+        "NextTimeSpan",
+        "ExpandAll",
+        "CollapseAll",
+        "Search",
+        "Indent",
+        "Outdent",
+        "ZoomIn",
+        "ZoomOut",
+        "ZoomToFit",
+      ];
 
   const editOptions: EditSettingsModel = {
     allowAdding: true,
@@ -63,12 +83,24 @@ const Gantt = () => {
   };
 
   const { projId } = useParams<{ projId: string }>();
+
+  const dataManager: DataManager = new DataManager({
+    url: `https://localhost:7233/api/Gantt/${projId}`,
+    adaptor: new WebApiAdaptor(),
+    crossDomain: true,
+  }); 
   
-    const dataManager: DataManager = new DataManager({
-      url: `https://localhost:7233/api/Gantt/${projId}`,
-      adaptor: new WebApiAdaptor(),
-      crossDomain: true,
-    });
+  // Helper function to format date as 'MM dd, yyyy'
+  const formatDate = (date: Date): string => {
+    const options: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
+
+    return new Intl.DateTimeFormat("en-US", options).format(date);
+  };
+
 
   const sortingOptions: SortSettingsModel = {
     columns: [{ field: "TaskId", direction: "Descending" }],
@@ -77,6 +109,7 @@ const Gantt = () => {
   return (
     <div className="p-5">
       <GanttComponent
+        projectStartDate={new Date("2024-10-23")}
         loadingIndicator={{ indicatorType: "Shimmer" }}
         dataSource={dataManager}
         taskFields={taskFieldData}
@@ -94,11 +127,11 @@ const Gantt = () => {
         renderBaseline={true}
         showColumnMenu={true}
         editSettings={editOptions}
-        allowRowDragAndDrop={true}
+        allowRowDragAndDrop={isOnProcess}
         allowReordering={true}
         allowParentDependency={true}
         sortSettings={sortingOptions}
-        allowSorting={true}
+        // allowSorting={true}
       >
         <Inject
           services={[
@@ -109,9 +142,34 @@ const Gantt = () => {
             RowDD,
             Reorder,
             DayMarkers,
-            Sort,
+            // Sort,
+            UndoRedo,
           ]}
         />
+        <ColumnsDirective>
+          <ColumnDirective field="TaskId"></ColumnDirective>
+          <ColumnDirective
+            field="TaskName"
+            headerText="Task Name"
+          ></ColumnDirective>
+          <ColumnDirective field="PlannedStartDate"></ColumnDirective>
+          <ColumnDirective field="PlannedEndDate"></ColumnDirective>
+          <ColumnDirective field="Duration"></ColumnDirective>
+        </ColumnsDirective>
+
+        <EditDialogFieldsDirective>
+          <EditDialogFieldDirective
+            type="General"
+            headerText="General"
+            fields={[
+              "TaskID",
+              "TaskName",
+              "PlannedStartDate",
+              "PlannedEndDate",
+            ]}
+          ></EditDialogFieldDirective>
+          <EditDialogFieldDirective type="Dependency"></EditDialogFieldDirective>
+        </EditDialogFieldsDirective>
       </GanttComponent>
     </div>
   );

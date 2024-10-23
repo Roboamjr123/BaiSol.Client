@@ -9,7 +9,8 @@ import Form from "../../main/components/Quotation/Form";
 import { useParams } from "react-router-dom";
 import {
   getIsOnGoingProject,
-  useUpdateProjectToOnWork,
+  getIsOnProcessProject,
+  useUpdateProjectToOnProcess,
 } from "../../lib/API/Project/ProjectApi";
 import { toast } from "react-toastify";
 import {
@@ -20,12 +21,11 @@ import {
 const ClientQuotePage = () => {
   const { projId } = useParams<{ projId: string }>();
 
-  const sealQuotation = useUpdateProjectToOnWork();
+  const sealQuotation = useUpdateProjectToOnProcess();
   const createPayment = useCreatePayment();
   const { data: isProjectOnGoing, refetch: refetchProjStatus } =
     getIsOnGoingProject(projId!);
-  const { data: isPayedDown, refetch: refetchProjPay } =
-    getIsProjectPayedDownpayment(projId!);
+  const { data: isOnProcess } = getIsOnProcessProject(projId!);
 
   const handleSealQuotation = () => {
     if (
@@ -44,7 +44,6 @@ const ClientQuotePage = () => {
                   toast.success(pay);
                   toast.success(data);
                   refetchProjStatus();
-                  refetchProjPay();
                 },
               }
             );
@@ -66,12 +65,7 @@ const ClientQuotePage = () => {
       index: 2,
     },
     {
-      component: (
-        <Scheduler
-          isOnGoing={isProjectOnGoing ?? false}
-          isPayedDown={isPayedDown ?? false}
-        />
-      ),
+      component: <Scheduler isOnProcess={isOnProcess!} isOnGoing={isProjectOnGoing!} />,
       name: "Schedule",
       index: 3,
     },
@@ -117,6 +111,7 @@ const ClientQuotePage = () => {
           {isProjectOnGoing ? (
             <Button
               onClick={handleSealQuotation}
+              isLoading={sealQuotation.isPending}
               className="bg-orange-400 w-full ml-auto text-white rounded-lg py-2 px-3 hover:bg-gray-200 hover:text-orange-500 transition-all duration-300 ease-in"
             >
               Seal Quotation

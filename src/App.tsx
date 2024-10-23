@@ -36,6 +36,8 @@ import ActivityLogPage from "./Admin/pages/ActivityLogPage";
 import ProjectPayment from "./main/components/Payment/ProjectPayment";
 import PaymentPage from "./Admin/pages/PaymentPage";
 import AllClientPage from "./Admin/pages/AllClientPage";
+import { useEffect, useState } from "react";
+import { Spinner, spinner } from "@nextui-org/react";
 
 const queryClient = new QueryClient({});
 
@@ -72,7 +74,7 @@ function App() {
           <Route path="form" element={<Form />} />
           <Route path="*" element={<PageNotFound />} />
         </Route>
-        
+
         {/* 
         <Route element={<ClientLayout />}>
           <Route path="/" element={<ClientPage />} />
