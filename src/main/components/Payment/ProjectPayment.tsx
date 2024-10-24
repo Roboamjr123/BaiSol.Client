@@ -3,6 +3,7 @@ import { paymentsData } from "../../constants/PaymentsData";
 import {
   getClientPayments,
   useAcknowledgePayment,
+  usePayOnCash,
 } from "../../../lib/API/Project/PaymentAPI";
 import { useParams } from "react-router-dom";
 import Loader from "../Loader";
@@ -14,6 +15,7 @@ const ProjectPayment: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
   const { data: payment, isLoading, refetch } = getClientPayments(projId!);
   const paymentArray = Array.isArray(payment) ? payment : [];
   const acknowledgePayment = useAcknowledgePayment();
+  const payOnCash = usePayOnCash();
 
   const handleAcknowledge = (referenceNumber: string, descript: string) => {
     if (window.confirm("Click OK to acknowledge payment.")) {
@@ -25,7 +27,23 @@ const ProjectPayment: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
         {
           onSuccess: (data) => {
             toast.success(data);
-            refetch;
+            refetch();
+          },
+        }
+      );
+    }
+  };
+
+  const handlePayOnCash = (referenceNumber: string) => {
+    if (window.confirm("Click OK to acknowledge the cash payment.")) {
+      payOnCash.mutateAsync(
+        {
+          referenceNumber: referenceNumber,
+        },
+        {
+          onSuccess: (data) => {
+            toast.success(data);
+            refetch();
           },
         }
       );
@@ -33,6 +51,8 @@ const ProjectPayment: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
   };
 
   if (isLoading) return <Loader />;
+
+  if (paymentArray.length === 0) return <>Quotation not sealed yet!</>;
 
   return (
     <div className="container mx-auto p-6">
@@ -132,12 +152,10 @@ const ProjectPayment: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
                       className={`bg-orange-400 w-full ml-auto text-white rounded-lg py-2 px-3 hover:bg-gray-200 hover:text-orange-500 transition-all duration-300 ease-in ${
                         payment.isAcknowledged ? "hidden" : ""
                       }`}
-                      onClick={() =>
-                        handleRedirectToCheckoutAsAdmin(payment.checkoutUrl)
-                      }
+                      onClick={() => handlePayOnCash(payment.referenceNumber)}
                       isDisabled={isButtonDisabled}
                     >
-                      Pay Now
+                      Payed In Cash
                     </Button>
                   )
                 ) : (

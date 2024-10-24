@@ -127,6 +127,31 @@ export const useAcknowledgePayment = () => {
   });
 };
 
+export const usePayOnCash = () => {
+  const userEmail = useUserEmail();
+  return useMutation({
+    mutationFn: async (data: { referenceNumber: string }) => {
+      const response = await api.put(
+        "api/Payment/PayOnCash",
+        {
+          ...data,
+          userEmail: userEmail,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      return response.data;
+    },
+    onError: (error: any) => {
+      toast.error(error.response.data);
+      console.error("Error pay:", error);
+    },
+  });
+};
+
 // Check downpayment if payed
 export const getIsProjectPayedDownpayment = (projId: string) => {
   return useQuery<boolean, Error>({

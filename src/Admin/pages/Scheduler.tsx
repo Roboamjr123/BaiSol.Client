@@ -1,23 +1,59 @@
 import React from "react";
 import Gantt from "../components/gantt/Gantt";
+import {
+  getIsOnProcessProject,
+  useUpdateProjectToOnWork,
+} from "../../lib/API/Project/ProjectApi";
+import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import { Button } from "@nextui-org/react";
 
-const Scheduler: React.FC<{ isOnGoing: boolean; isPayedDown: boolean }> = ({
+const Scheduler: React.FC<{ isOnProcess: boolean; isOnGoing: boolean }> = ({
+  isOnProcess,
   isOnGoing,
-  isPayedDown,
 }) => {
-  if (!isOnGoing && !isPayedDown) {
+  const { projId } = useParams<{ projId: string }>();
+  const updateProjectToOnWork = useUpdateProjectToOnWork();
+
+  const handleMakeProjectToWork = () => {
+    if (
+      window.confirm(
+        "Click OK to make the project start to work. This action cannot be undone."
+      )
+    ) {
+      updateProjectToOnWork.mutateAsync(
+        { projId: projId! },
+        {
+          onSuccess: (data) => {
+            toast.success(data);
+            window.location.reload();
+          },
+        }
+      );
+    }
+  };
+
+  if (isOnGoing) {
     return <>Project is upcoming and not yet paid down...</>; // Message for upcoming projects
   }
 
-  if (isOnGoing && !isPayedDown) {
-    return <>Payment is pending for the ongoing project...</>; // Message for ongoing projects with pending payment
-  }
+  return (
+    <div className="flex flex-col gap-2">
+      <div className="flex justify-end">
+        {isOnProcess && (
+          <Button
+            onClick={() => handleMakeProjectToWork()}
+            isLoading={updateProjectToOnWork.isPending}
+            className="bg-orange-400  text-white rounded-lg hover:bg-gray-200 hover:text-orange-500 transition-all duration-300 ease-in"
+          >
+            Start Project
+          </Button>
+        )}
+      </div>
 
-  if (!isOnGoing && isPayedDown) {
-    return <Gantt />; // Show Gantt chart for ongoing projects with payment completed
-  }
-
-  return <>Invalid project state.</>; // Fallback for unexpected states
+      <Gantt isOnProcess={isOnProcess} />
+    </div>
+  );
 };
 
 export default Scheduler;
