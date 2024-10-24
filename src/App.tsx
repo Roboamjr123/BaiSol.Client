@@ -38,6 +38,7 @@ import PaymentPage from "./Admin/pages/PaymentPage";
 import AllClientPage from "./Admin/pages/AllClientPage";
 import { useEffect, useState } from "react";
 import { Spinner, spinner } from "@nextui-org/react";
+import TestImage from "./TestImage";
 
 const queryClient = new QueryClient({});
 
@@ -133,6 +134,8 @@ function App() {
             <Route path="*" element={<PageNotFound />} />
           </Route>
         )} */}
+
+        {/* <Route path="/" element={<TestImage />} /> */}
 
         <Route path="/verify-2FA" element={<Verify2FA />} />
         <Route path="/home" element={<Home />} />

@@ -88,8 +88,8 @@ const Gantt: React.FC<{ isOnProcess: boolean }> = ({ isOnProcess }) => {
     url: `https://localhost:7233/api/Gantt/${projId}`,
     adaptor: new WebApiAdaptor(),
     crossDomain: true,
-  }); 
-  
+  });
+
   // Helper function to format date as 'MM dd, yyyy'
   const formatDate = (date: Date): string => {
     const options: Intl.DateTimeFormatOptions = {
@@ -100,7 +100,6 @@ const Gantt: React.FC<{ isOnProcess: boolean }> = ({ isOnProcess }) => {
 
     return new Intl.DateTimeFormat("en-US", options).format(date);
   };
-
 
   const sortingOptions: SortSettingsModel = {
     columns: [{ field: "TaskId", direction: "Descending" }],
@@ -152,9 +151,18 @@ const Gantt: React.FC<{ isOnProcess: boolean }> = ({ isOnProcess }) => {
             field="TaskName"
             headerText="Task Name"
           ></ColumnDirective>
-          <ColumnDirective field="PlannedStartDate"></ColumnDirective>
-          <ColumnDirective field="PlannedEndDate"></ColumnDirective>
-          <ColumnDirective field="Duration"></ColumnDirective>
+          <ColumnDirective
+            field="PlannedStartDate"
+            format="MMMM d, yyyy"
+          ></ColumnDirective>
+          <ColumnDirective
+            field="PlannedEndDate"
+            format="MMMM d, yyyy"
+          ></ColumnDirective>
+          <ColumnDirective
+            field="Duration"
+            allowEditing={false}
+          ></ColumnDirective>
         </ColumnsDirective>
 
         <EditDialogFieldsDirective>
