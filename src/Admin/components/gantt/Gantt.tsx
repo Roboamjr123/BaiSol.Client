@@ -30,6 +30,7 @@ import { useUpdateProjectToOnWork } from "../../../lib/API/Project/ProjectApi";
 import { useEffect } from "react";
 
 const Gantt: React.FC<{ isOnProcess: boolean }> = ({ isOnProcess }) => {
+  isOnProcess = true;
   const toolbarOptions: ToolbarItem[] = isOnProcess
     ? [
         "Add",
