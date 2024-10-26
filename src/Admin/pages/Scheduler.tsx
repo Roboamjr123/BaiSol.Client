@@ -33,9 +33,9 @@ const Scheduler: React.FC<{ isOnProcess: boolean; isOnGoing: boolean }> = ({
     }
   };
 
-  if (isOnGoing) {
-    return <>Project is upcoming and not yet paid down...</>; // Message for upcoming projects
-  }
+  // if (isOnGoing) {
+  //   return <>Project is upcoming and not yet paid down...</>; // Message for upcoming projects
+  // }
 
   return (
     <div className="flex flex-col gap-2">
