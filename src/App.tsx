@@ -40,6 +40,7 @@ import { useEffect, useState } from "react";
 import { Spinner, spinner } from "@nextui-org/react";
 import TestImage from "./TestImage";
 import { ToDos } from "./Facilitator/components/task/ToDOs";
+import ClientProjectReport from "./Client/pages/ClientProjectReport";
 
 const queryClient = new QueryClient({});
 
@@ -63,7 +64,7 @@ function App() {
           <Route path="*" element={<PageNotFound />} />
         </Route> */}
 
-        <Route element={<AdminLayout />}>
+        {/* <Route element={<AdminLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="Confirm-Email" element={<ConfirmEmail />} />
           <Route path="project" element={<ProjectPage />} />
@@ -75,18 +76,22 @@ function App() {
           <Route path="billing" element={<PaymentPage />} />
           <Route path="form" element={<Form />} />
           <Route path="*" element={<PageNotFound />} />
-        </Route>
+        </Route> */}
 
-        {/* 
+        
         <Route element={<ClientLayout />}>
           <Route path="/" element={<ClientPage />} />
+          <Route
+            path="project/:projId"
+            element={<ClientProjectReport />}
+          />
           <Route
             path="quotation/:projId"
             element={<ClientProjectQuotationPage />}
           />
           <Route path="payment/:projId" element={<ProjectPayment />} />
           <Route path="*" element={<PageNotFound />} />
-        </Route> */}
+        </Route>
 
         {/* <Route element={<FacilitatorLayout />}>
           <Route path="/" element={<FacilitatorDashboard />} />

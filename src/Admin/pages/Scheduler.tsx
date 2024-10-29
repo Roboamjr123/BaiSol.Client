@@ -7,6 +7,8 @@ import {
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Button } from "@nextui-org/react";
+import { getProjectStatus } from "../../lib/API/Project/GanttAPI";
+import TasksUpdates from "../../main/components/Tasks/TasksUpdates";
 
 const Scheduler: React.FC<{ isOnProcess: boolean; isOnGoing: boolean }> = ({
   isOnProcess,
@@ -14,6 +16,7 @@ const Scheduler: React.FC<{ isOnProcess: boolean; isOnGoing: boolean }> = ({
 }) => {
   const { projId } = useParams<{ projId: string }>();
   const updateProjectToOnWork = useUpdateProjectToOnWork();
+  const projectTaskStatus = getProjectStatus(projId!);
 
   const handleMakeProjectToWork = () => {
     if (
@@ -52,6 +55,8 @@ const Scheduler: React.FC<{ isOnProcess: boolean; isOnGoing: boolean }> = ({
       </div>
 
       <Gantt isOnProcess={isOnProcess} />
+
+      <TasksUpdates tasks={projectTaskStatus.data?.tasks} />
     </div>
   );
 };

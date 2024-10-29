@@ -43,6 +43,8 @@ export const getProjectProgress = (projId: string) => {
 export interface ProjectTasks {
   id: number;
   taskName?: string;
+  plannedStartDate?: string;
+  plannedEndDate?: string;
   startDate?: string;
   endDate?: string;
   startProofImage?: string;

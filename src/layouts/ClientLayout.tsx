@@ -6,9 +6,10 @@ import { jwtDecode } from "jwt-decode";
 import { selectUser, setUser } from "../state/authSlice";
 import Sidebar from "./shared/Sidebar/Sidebar";
 import Header from "./shared/Header/Header";
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet, useParams } from "react-router-dom";
 import { getClientSidebarLinks } from "../lib/constants/SidebarLinks";
 import { getClientProjId } from "../lib/API/Client/ClientProjectAPI";
+import Loader from "../main/components/Loader";
 
 const ClientLayout = () => {
   const dispatch = useDispatch();
@@ -17,8 +18,7 @@ const ClientLayout = () => {
   // const customerEmail = user.role === "Client" ? user.email : "";
   // const customerEmail = "richardddquirante98@gmail.com";
   // const customerEmail = "richardddquirante98@gmail.com";
-  const { data: clientProjId, isLoading, error } = getClientProjId();
-
+  const { data: clientProjId, isLoading } = getClientProjId();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const sidebarLinks = getClientSidebarLinks(clientProjId?.projId);
@@ -55,6 +55,11 @@ const ClientLayout = () => {
     };
     validateAndSetUser();
   }, [dispatch]);
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
 
   return (
     <div className="flex h-screen overflow-hidden">
