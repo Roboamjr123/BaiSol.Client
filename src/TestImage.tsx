@@ -18,15 +18,15 @@ const TestImage = () => {
   };
 
   const handleSubmit = () => {
-    if (selectedImage) {
-      // Call your mutation or API function with the selected image here
-      submit.mutate(
-        { ProofImage: selectedImage },
-        { onSuccess: (Data) => toast.success(Data) }
-      );
-    } else {
-      console.error("No image selected");
-    }
+    // if (selectedImage) {
+    //   // Call your mutation or API function with the selected image here
+    //   submit.mutate(
+    //     { ProofImage: selectedImage, },
+    //     { onSuccess: (Data) => toast.success(Data) }
+    //   );
+    // } else {
+    //   console.error("No image selected");
+    // }
   };
 
   const baseURL = import.meta.env.VITE_APP_IMAGE_PROOF;
