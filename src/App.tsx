@@ -41,6 +41,7 @@ import { Spinner, spinner } from "@nextui-org/react";
 import TestImage from "./TestImage";
 import { ToDos } from "./Facilitator/components/task/ToDOs";
 import ClientProjectReport from "./Client/pages/ClientProjectReport";
+import ClientInfoDisplay from "./main/components/ClientInfo/ClientInfoDisplay";
 
 const queryClient = new QueryClient({});
 
@@ -79,7 +80,7 @@ function App() {
         </Route> */}
 
         
-        <Route element={<ClientLayout />}>
+        {/* <Route element={<ClientLayout />}>
           <Route path="/" element={<ClientPage />} />
           <Route
             path="project/:projId"
@@ -91,9 +92,9 @@ function App() {
           />
           <Route path="payment/:projId" element={<ProjectPayment />} />
           <Route path="*" element={<PageNotFound />} />
-        </Route>
+        </Route> */}
 
-        {/* <Route element={<FacilitatorLayout />}>
+        <Route element={<FacilitatorLayout />}>
           <Route path="/" element={<FacilitatorDashboard />} />
           <Route path="supply" element={<AssignedSupplyPage />} />
           <Route
@@ -101,7 +102,7 @@ function App() {
             element={<ToDos projId="73288400-fc5f-4888-96c0-6733c7c3e024" />}
           />
           <Route path="*" element={<PageNotFound />} />
-        </Route> */}
+        </Route>
 
         {/* {userRole === "Admin" ? (
           <Route element={<AdminLayout />}>
@@ -142,6 +143,7 @@ function App() {
           </Route>
         )} */}
 
+        {/* <Route path="/" element={<ClientInfoDisplay />} /> */}
         {/* <Route path="/" element={<TestImage />} /> */}
         {/* <Route
           path="/"

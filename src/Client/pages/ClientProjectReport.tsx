@@ -7,17 +7,24 @@ import {
 } from "../../lib/API/Project/GanttAPI";
 import TasksUpdates from "../../main/components/Tasks/TasksUpdates";
 import { Card, CircularProgress } from "@nextui-org/react";
+import Loader from "../../main/components/Loader";
 
 const ClientProjectReport = () => {
   const { projId } = useParams<{ projId: string }>();
-  const { data: clientProjId } = getClientProjId();
-  const { data: taskReports } = getProjectStatus(projId!);
-  const { data: progress } = getProjectProgress(projId!);
+  const { data: clientProjId, isLoading: isloadingId } = getClientProjId();
+  const { data: taskReports, isLoading: isloadingPs } = getProjectStatus(
+    projId!
+  );
+  const { data: progress, isLoading: isloadingPP } = getProjectProgress(
+    projId!
+  );
 
   if (projId && clientProjId && projId !== clientProjId.projId) {
     return <Navigate to="/" />;
   }
 
+  if (isloadingId || isloadingPP || isloadingPs) return <Loader />;
+  
   return (
     <div className="flex flex-row space-y-4">
       {/* Tasks Updates Section */}
