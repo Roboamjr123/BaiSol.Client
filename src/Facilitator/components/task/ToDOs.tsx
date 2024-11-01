@@ -22,44 +22,44 @@ import Loader from "../../../main/components/Loader";
 // }
 
 // Example task data
-const taskData: ITaskToDo[] = [
-  {
-    id: 9,
-    taskName: "New Task 5",
-    plannedStartDate: "Oct 23, 2024",
-    plannedEndDate: "Oct 25, 2024",
-    isEnable: true,
-    isFinished: true,
-    isStarting: true,
-  },
-  {
-    id: 8,
-    taskName: "New Task 4",
-    plannedStartDate: "Oct 24, 2024",
-    plannedEndDate: "Oct 25, 2024",
-    isEnable: true,
-    isFinished: false,
-    isStarting: false,
-  },
-  {
-    id: 5,
-    taskName: "New Task 1",
-    plannedStartDate: "Oct 25, 2024",
-    plannedEndDate: "Oct 30, 2024",
-    isEnable: true,
-    isFinished: false,
-    isStarting: true,
-  },
-  {
-    id: 10,
-    taskName: "New Task 6",
-    plannedStartDate: "Oct 28, 2024",
-    plannedEndDate: "Oct 31, 2024",
-    isEnable: false,
-    isFinished: false,
-    isStarting: false,
-  },
-];
+// const taskData: ITaskToDo[] = [
+//   {
+//     id: 9,
+//     taskName: "New Task 5",
+//     plannedStartDate: "Oct 23, 2024",
+//     plannedEndDate: "Oct 25, 2024",
+//     isEnable: true,
+//     isFinished: true,
+//     isStarting: true,
+//   },
+//   {
+//     id: 8,
+//     taskName: "New Task 4",
+//     plannedStartDate: "Oct 24, 2024",
+//     plannedEndDate: "Oct 25, 2024",
+//     isEnable: true,
+//     isFinished: false,
+//     isStarting: false,
+//   },
+//   {
+//     id: 5,
+//     taskName: "New Task 1",
+//     plannedStartDate: "Oct 25, 2024",
+//     plannedEndDate: "Oct 30, 2024",
+//     isEnable: true,
+//     isFinished: false,
+//     isStarting: true,
+//   },
+//   {
+//     id: 10,
+//     taskName: "New Task 6",
+//     plannedStartDate: "Oct 28, 2024",
+//     plannedEndDate: "Oct 31, 2024",
+//     isEnable: false,
+//     isFinished: false,
+//     isStarting: false,
+//   },
+// ];
 export const ToDos: React.FC<{ projId: string }> = ({ projId }) => {
   const {
     data: tasksToDo = [],
@@ -190,22 +190,45 @@ export const ToDos: React.FC<{ projId: string }> = ({ projId }) => {
               )}
             </h2>
 
-            <div className="flex flex-col md:flex-row  md:items-center justify-between text-gray-600">
-              <div className="mb-4 md:mb-0">
-                <span className="block text-sm font-medium text-gray-500">
-                  Start Date
-                </span>
-                <span className="text-lg font-medium">
-                  {new Date(selectedTask.plannedStartDate).toLocaleString()}
-                </span>
+            <div className="flex flex-col md:flex-row md:items-start justify-between text-gray-600 p-4">
+              {/* Left Column: Dates */}
+              <div className="flex flex-col mb-4 md:mb-0">
+                <div className="mb-2">
+                  <span className="block text-sm font-medium text-gray-500">
+                    Start Date
+                  </span>
+                  <span className="text-lg font-medium">
+                    {new Date(selectedTask.plannedStartDate).toLocaleString()}
+                  </span>
+                </div>
+                <div>
+                  <span className="block text-sm font-medium text-gray-500">
+                    Started
+                  </span>
+                  <span className="text-xs font-medium text-gray-700">
+                    {new Date(selectedTask.startDate).toLocaleString()}
+                  </span>
+                </div>
               </div>
-              <div>
-                <span className="block text-sm font-medium text-gray-500">
-                  End Date
-                </span>
-                <span className="text-lg font-medium">
-                  {new Date(selectedTask.plannedEndDate).toLocaleString()}
-                </span>
+
+              {/* Right Column: Dates */}
+              <div className="flex flex-col">
+                <div className="mb-2">
+                  <span className="block text-sm font-medium text-gray-500">
+                    End Date
+                  </span>
+                  <span className="text-lg font-medium">
+                    {new Date(selectedTask.plannedEndDate).toLocaleString()}
+                  </span>
+                </div>
+                <div>
+                  <span className="block text-sm font-medium text-gray-500">
+                    Finished
+                  </span>
+                  <span className="text-xs font-medium text-gray-700">
+                    {new Date(selectedTask.endDate).toLocaleString()}
+                  </span>
+                </div>
               </div>
             </div>
 

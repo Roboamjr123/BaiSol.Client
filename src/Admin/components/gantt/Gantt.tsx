@@ -28,9 +28,9 @@ import { DataManager, WebApiAdaptor } from "@syncfusion/ej2/data";
 import { useParams } from "react-router-dom";
 import { useUpdateProjectToOnWork } from "../../../lib/API/Project/ProjectApi";
 import { useEffect } from "react";
+import { getProjectDateInto } from "../../../lib/API/Project/GanttAPI";
 
 const Gantt: React.FC<{ isOnProcess: boolean }> = ({ isOnProcess }) => {
-  isOnProcess = true;
   const toolbarOptions: ToolbarItem[] = isOnProcess
     ? [
         "Add",
@@ -85,6 +85,8 @@ const Gantt: React.FC<{ isOnProcess: boolean }> = ({ isOnProcess }) => {
 
   const { projId } = useParams<{ projId: string }>();
 
+  const { data: projInfo } = getProjectDateInto(projId!);
+
   const dataManager: DataManager = new DataManager({
     url: `https://localhost:7233/api/Gantt/${projId}`,
     adaptor: new WebApiAdaptor(),
@@ -107,9 +109,20 @@ const Gantt: React.FC<{ isOnProcess: boolean }> = ({ isOnProcess }) => {
   };
 
   return (
-    <div className="p-5">
+    <div className="flex flex-col gap-y-5 p-5">
+      <div className="flex flex-row justify-between items-center">
+        <span className="font-semibold text-sm">
+          Facilitator: {projInfo?.assignedFacilitator || "No Facilitator Assigned"}
+        </span>
+        <span className="text-gray-500 text-xs">
+          Estimation Date Start: {projInfo?.estimatedStartDate || "N/A"}
+        </span>
+        <span className="text-gray-500 text-xs">
+          Estimation Date End: {projInfo?.estimatedEndDate || "N/A"}
+        </span>
+      </div>
       <GanttComponent
-        projectStartDate={new Date("2024-10-23")}
+        projectStartDate={new Date(projInfo?.startDate ?? new Date())}
         loadingIndicator={{ indicatorType: "Shimmer" }}
         dataSource={dataManager}
         taskFields={taskFieldData}

@@ -40,6 +40,8 @@ export interface ITaskToDo {
   taskName: string;
   plannedStartDate: string;
   plannedEndDate: string;
+  startDate: string;
+  endDate: string;
   isEnable: boolean;
   isFinished: boolean;
   isStarting: boolean;
