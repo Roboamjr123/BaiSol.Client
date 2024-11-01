@@ -42,6 +42,7 @@ import TestImage from "./TestImage";
 import { ToDos } from "./Facilitator/components/task/ToDOs";
 import ClientProjectReport from "./Client/pages/ClientProjectReport";
 import ClientInfoDisplay from "./main/components/ClientInfo/ClientInfoDisplay";
+import ProjectCards2 from "./Admin/components/project/ProjectCards2";
 
 const queryClient = new QueryClient({});
 
@@ -65,7 +66,7 @@ function App() {
           <Route path="*" element={<PageNotFound />} />
         </Route> */}
 
-        {/* <Route element={<AdminLayout />}>
+        <Route element={<AdminLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="Confirm-Email" element={<ConfirmEmail />} />
           <Route path="project" element={<ProjectPage />} />
@@ -77,9 +78,8 @@ function App() {
           <Route path="billing" element={<PaymentPage />} />
           <Route path="form" element={<Form />} />
           <Route path="*" element={<PageNotFound />} />
-        </Route> */}
+        </Route>
 
-        
         {/* <Route element={<ClientLayout />}>
           <Route path="/" element={<ClientPage />} />
           <Route
@@ -94,7 +94,7 @@ function App() {
           <Route path="*" element={<PageNotFound />} />
         </Route> */}
 
-        <Route element={<FacilitatorLayout />}>
+        {/* <Route element={<FacilitatorLayout />}>
           <Route path="/" element={<FacilitatorDashboard />} />
           <Route path="supply" element={<AssignedSupplyPage />} />
           <Route
@@ -102,7 +102,7 @@ function App() {
             element={<ToDos projId="73288400-fc5f-4888-96c0-6733c7c3e024" />}
           />
           <Route path="*" element={<PageNotFound />} />
-        </Route>
+        </Route> */}
 
         {/* {userRole === "Admin" ? (
           <Route element={<AdminLayout />}>
@@ -143,7 +143,7 @@ function App() {
           </Route>
         )} */}
 
-        {/* <Route path="/" element={<ClientInfoDisplay />} /> */}
+        {/* <Route path="/" element={<ProjectCards2 />} /> */}
         {/* <Route path="/" element={<TestImage />} /> */}
         {/* <Route
           path="/"

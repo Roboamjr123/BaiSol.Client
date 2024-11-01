@@ -469,7 +469,7 @@ const RequestSupply = () => {
                 </TableBody>
               </Table>
             ) : (
-              "Oncoming..."
+              "No request yet..."
             )}
           </div>
         </div>
