@@ -29,6 +29,7 @@ import { useParams } from "react-router-dom";
 import { useUpdateProjectToOnWork } from "../../../lib/API/Project/ProjectApi";
 import { useEffect } from "react";
 import { getProjectDateInto } from "../../../lib/API/Project/GanttAPI";
+import Loader from "../../../main/components/Loader";
 
 const Gantt: React.FC<{ isOnProcess: boolean }> = ({ isOnProcess }) => {
   const toolbarOptions: ToolbarItem[] = isOnProcess
@@ -85,7 +86,7 @@ const Gantt: React.FC<{ isOnProcess: boolean }> = ({ isOnProcess }) => {
 
   const { projId } = useParams<{ projId: string }>();
 
-  const { data: projInfo } = getProjectDateInto(projId!);
+  const { data: projInfo, isLoading } = getProjectDateInto(projId!);
 
   const dataManager: DataManager = new DataManager({
     url: `https://localhost:7233/api/Gantt/${projId}`,
@@ -108,11 +109,14 @@ const Gantt: React.FC<{ isOnProcess: boolean }> = ({ isOnProcess }) => {
     columns: [{ field: "TaskId", direction: "Descending" }],
   };
 
+  if (isLoading) return <Loader />;
+
   return (
     <div className="flex flex-col gap-y-5 p-5">
       <div className="flex flex-row justify-between items-center">
         <span className="font-semibold text-sm">
-          Facilitator: {projInfo?.assignedFacilitator || "No Facilitator Assigned"}
+          Facilitator:{" "}
+          {projInfo?.assignedFacilitator || "No Facilitator Assigned"}
         </span>
         <span className="text-gray-500 text-xs">
           Estimation Date Start: {projInfo?.estimatedStartDate || "N/A"}

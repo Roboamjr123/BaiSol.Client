@@ -150,7 +150,6 @@ const EditClientInfo: React.FC<IEdit> = ({
       !validFormat || // Ensure the format matches the specified pattern
       isNaN(number) || // Ensure the value is a valid number
       number < 0 || // Disallow negative numbers
-      number > 1000000000 // Example: setting a high max value for realistic limits
     );
   }, [discount]);
 

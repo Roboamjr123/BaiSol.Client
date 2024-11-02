@@ -61,11 +61,11 @@ const ProjectPayment: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
 
   if (isLoading) return <Loader />;
 
-  if (error || paymentArray.length === 0) {
+  if ((error || paymentArray.length === 0)&& !isAdmin) {
     return <Navigate to="/" />;
   }
 
-  if (projId && clientProjId && projId !== clientProjId.projId) {
+  if (projId && clientProjId && projId !== clientProjId.projId && !isAdmin) {
     return <Navigate to="/" />;
   }
 
