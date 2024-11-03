@@ -43,6 +43,7 @@ import { ToDos } from "./Facilitator/components/task/ToDOs";
 import ClientProjectReport from "./Client/pages/ClientProjectReport";
 import ClientInfoDisplay from "./main/components/ClientInfo/ClientInfoDisplay";
 import ProjectCards2 from "./Admin/components/project/ProjectCards2";
+import ReportPage from "./Facilitator/pages/ReportPage";
 
 const queryClient = new QueryClient({});
 
@@ -120,6 +121,7 @@ function App() {
           <Route element={<FacilitatorLayout />}>
             <Route path="/" element={<FacilitatorDashboard />} />
             <Route path="project" element={<AssignedSupplyPage />} />
+            <Route path="report" element={<ReportPage />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>
         ) : userRole === "Client" ? (
@@ -128,7 +130,8 @@ function App() {
             <Route
               path="quotation/:projId"
               element={<ClientProjectQuotationPage />}
-            />
+            />{" "}
+            <Route path="project/:projId" element={<ClientProjectReport />} />
             <Route path="payment/:projId" element={<ProjectPayment />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>

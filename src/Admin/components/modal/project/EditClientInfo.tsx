@@ -149,7 +149,7 @@ const EditClientInfo: React.FC<IEdit> = ({
     return (
       !validFormat || // Ensure the format matches the specified pattern
       isNaN(number) || // Ensure the value is a valid number
-      number < 0 || // Disallow negative numbers
+      number < 0 // Disallow negative numbers
     );
   }, [discount]);
 
@@ -172,20 +172,20 @@ const EditClientInfo: React.FC<IEdit> = ({
     }
 
     const formData: IClientProjectInfo = {
-      projId: infos!.projId, // Assuming projId comes from infos
+      projId: infos!.projId,
       projName: projectName,
       projDescript: description,
-      discount: parseFloat(discount), // Convert string to number
-      vatRate: parseFloat(vatRate), // Convert string to number
-      clientId: infos!.clientId, // Assuming clientId comes from infos
+      discount: parseFloat(discount),
+      vatRate: parseFloat(vatRate),
+      clientId: infos!.clientId,
       clientFName: firstName,
       clientLName: lastName,
       clientContactNum: cNum,
       clientAddress: address,
-      kWCapacity: kWCapacity, // Convert string to number,
-      isMale: isMale,
-      sex: sex,
-      systemType: systemType,
+      kWCapacity: kWCapacity,
+      isMale,
+      sex, // Ensure sex is defined
+      systemType, // Ensure systemType is defined
     };
 
     updateClientInfo.mutateAsync(formData, {
@@ -195,7 +195,7 @@ const EditClientInfo: React.FC<IEdit> = ({
         setDiscount("");
         setVATRate("");
         setCNum("");
-        setkWCapacity(0);
+        setkWCapacity("0");
         setFirstName("");
         setAddress("");
         setLastName("");
@@ -209,6 +209,7 @@ const EditClientInfo: React.FC<IEdit> = ({
       },
     });
   };
+
 
   // Handler for the first autocomplete
   const handleTypeChange = (key: string | null) => {
