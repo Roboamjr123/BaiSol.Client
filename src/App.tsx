@@ -44,6 +44,8 @@ import ClientProjectReport from "./Client/pages/ClientProjectReport";
 import ClientInfoDisplay from "./main/components/ClientInfo/ClientInfoDisplay";
 import ProjectCards2 from "./Admin/components/project/ProjectCards2";
 import ReportPage from "./Facilitator/pages/ReportPage";
+import SalesReportPage from "./Admin/pages/SalesReportPage";
+import CustomAreaChart from "./Admin/components/report/ChartSample";
 
 const queryClient = new QueryClient({});
 
@@ -78,6 +80,7 @@ function App() {
           <Route path="supply" element={<Supply />} />
           <Route path="billing" element={<PaymentPage />} />
           <Route path="form" element={<Form />} />
+          <Route path="reports/sales" element={<SalesReportPage />} />
           <Route path="*" element={<PageNotFound />} />
         </Route> */}
 
@@ -105,7 +108,7 @@ function App() {
           <Route path="*" element={<PageNotFound />} />
         </Route> */}
 
-        {userRole === "Admin" ? (
+        {/* {userRole === "Admin" ? (
           <Route element={<AdminLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="project" element={<ProjectPage />} />
@@ -115,6 +118,7 @@ function App() {
             <Route path="activity" element={<ActivityLogPage />} />
             <Route path="supply" element={<Supply />} />
             <Route path="billing" element={<PaymentPage />} />
+          <Route path="reports/sales" element={<SalesReportPage />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>
         ) : userRole === "Facilitator" ? (
@@ -144,9 +148,9 @@ function App() {
             <Route path="change-password" element={<ChangePass />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>
-        )}
+        )} */}
 
-        {/* <Route path="/" element={<ProjectCards2 />} /> */}
+        <Route path="/" element={<SalesReportPage />} />
         {/* <Route path="/" element={<TestImage />} /> */}
         {/* <Route
           path="/"

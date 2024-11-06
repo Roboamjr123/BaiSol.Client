@@ -111,6 +111,10 @@ const Gantt: React.FC<{ isOnProcess: boolean }> = ({ isOnProcess }) => {
 
   if (isLoading) return <Loader />;
 
+  const minimumEditDate = {
+    params: { min: new Date(projInfo?.startDate!) },
+  };
+
   return (
     <div className="flex flex-col gap-y-5 p-5">
       <div className="flex flex-row justify-between items-center">
@@ -172,10 +176,12 @@ const Gantt: React.FC<{ isOnProcess: boolean }> = ({ isOnProcess }) => {
           <ColumnDirective
             field="PlannedStartDate"
             format="MMMM d, yyyy"
+            edit={minimumEditDate}
           ></ColumnDirective>
           <ColumnDirective
             field="PlannedEndDate"
             format="MMMM d, yyyy"
+            edit={minimumEditDate}
           ></ColumnDirective>
           <ColumnDirective
             field="Duration"

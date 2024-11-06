@@ -41,6 +41,21 @@ export const getAllPayments = () => {
   });
 };
 
+export interface ISalesReport {
+  date: string;
+  amount: number;
+}
+
+export const getSalesReport = () => {
+  return useQuery<ISalesReport[], Error>({
+    queryKey: ["sales-report"],
+    queryFn: async () => {
+      const response = await api.get("api/Payment/SalesReport");
+      return response.data;
+    },
+  });
+};
+
 export interface IAllPayment {
   referenceNumber: string;
   checkoutUrl: string;

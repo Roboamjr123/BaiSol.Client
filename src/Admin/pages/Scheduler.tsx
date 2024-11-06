@@ -1,9 +1,6 @@
 import React from "react";
 import Gantt from "../components/gantt/Gantt";
-import {
-  getIsOnProcessProject,
-  useUpdateProjectToOnWork,
-} from "../../lib/API/Project/ProjectApi";
+import { useUpdateProjectToOnWork } from "../../lib/API/Project/ProjectApi";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Button } from "@nextui-org/react";
