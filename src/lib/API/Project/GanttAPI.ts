@@ -77,3 +77,28 @@ export const getProjectStatus = (projId: string) => {
     },
   });
 };
+
+export interface IAllProjectTasks {
+  id: number;
+  projId?: string;
+  taskName?: string;
+  plannedStartDate?: string;
+  plannedEndDate?: string;
+  startDate?: string;
+  endDate?: string;
+  startProofImage?: string;
+  finishProofImage?: string;
+  isFinished?: boolean;
+  facilitatorName?: string;
+  facilitatorEmail?: string;
+}
+
+export const getAllProjectTasksReport = () => {
+  return useQuery<IAllProjectTasks[], Error>({
+    queryKey: ["AllProjectTasksReport"],
+    queryFn: async () => {
+      const response = await api.get("api/Gantt/AllProjectTasksReport");
+      return response.data;
+    },
+  });
+};

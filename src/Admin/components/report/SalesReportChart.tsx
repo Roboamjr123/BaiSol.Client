@@ -7,11 +7,7 @@ import {
   DropdownItem,
   Button,
 } from "@nextui-org/react";
-import {
-  getSalesReport,
-  ISalesReport,
-} from "../../../lib/API/Project/PaymentAPI";
-import Loader from "../../../main/components/Loader";
+import { ISalesReport } from "../../../lib/API/Project/PaymentAPI";
 
 const SalesReportChart: React.FC<{ salesData: ISalesReport[] }> = ({
   salesData,

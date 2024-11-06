@@ -76,6 +76,20 @@ export const getRequestEquipmentSupplies = (
   });
 };
 
+export const getRequestUnrequestedEquipment = (
+  projId: string,
+) => {
+  return useQuery<IRequestSupplies[], Error>({
+    queryKey: ["available-equipment-supplies"],
+    queryFn: async () => {
+      const response = await api.get("api/Requisition/RequestUnrequestedEquipment", {
+        params: { projId},
+      });
+      return response.data;
+    },
+  });
+};
+
 interface IRequestSupply {
   requestDetails: IRequestDetail[];
 }

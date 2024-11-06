@@ -69,7 +69,7 @@ function App() {
           <Route path="*" element={<PageNotFound />} />
         </Route> */}
 
-        {/* <Route element={<AdminLayout />}>
+        <Route element={<AdminLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="Confirm-Email" element={<ConfirmEmail />} />
           <Route path="project" element={<ProjectPage />} />
@@ -82,7 +82,7 @@ function App() {
           <Route path="form" element={<Form />} />
           <Route path="reports/sales" element={<SalesReportPage />} />
           <Route path="*" element={<PageNotFound />} />
-        </Route> */}
+        </Route>
 
         {/* <Route element={<ClientLayout />}>
           <Route path="/" element={<ClientPage />} />
@@ -150,7 +150,8 @@ function App() {
           </Route>
         )} */}
 
-        <Route path="/" element={<SalesReportPage />} />
+        {/* <Route path="/" element={<SalesReportPage />} /> */}
+
         {/* <Route path="/" element={<TestImage />} /> */}
         {/* <Route
           path="/"
