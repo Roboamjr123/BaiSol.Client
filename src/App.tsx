@@ -3,7 +3,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Home from "./main/pages/Home";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import LoginPage from "./main/forms/auth/LoginForm";
 import Verify2FA from "./main/forms/auth/Verify2FA";
 import LandingPage from "./main/pages/LandingPage";
@@ -45,7 +45,9 @@ import ClientInfoDisplay from "./main/components/ClientInfo/ClientInfoDisplay";
 import ProjectCards2 from "./Admin/components/project/ProjectCards2";
 import ReportPage from "./Facilitator/pages/ReportPage";
 import SalesReportPage from "./Admin/pages/SalesReportPage";
-import CustomAreaChart from "./Admin/components/report/ChartSample";
+import ProjectProgress from "./Admin/components/report/ProjectProgress";
+import Loader from "./main/components/Loader";
+import ProjectReportPage from "./Admin/pages/ProjectReportPage";
 
 const queryClient = new QueryClient({});
 
@@ -54,6 +56,24 @@ function App() {
 
   // Default to empty object if user is null to avoid errors
   const userRole = user?.userRole || null; // Ensure user is not null
+
+  const [loading, setLoading] = useState<boolean>(true);
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  useEffect(() => {
+    setTimeout(() => setLoading(false), 1000);
+  }, []);
+
+  if (loading)
+    return (
+      <div className="flex h-screen items-center justify-center bg-white">
+        <div className="h-16 w-16 animate-spin rounded-full border-4 border-solid border-warning border-t-transparent"></div>
+      </div>
+    );
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -81,6 +101,7 @@ function App() {
           <Route path="billing" element={<PaymentPage />} />
           <Route path="form" element={<Form />} />
           <Route path="reports/sales" element={<SalesReportPage />} />
+          <Route path="reports/project" element={<ProjectReportPage />} />
           <Route path="*" element={<PageNotFound />} />
         </Route>
 
