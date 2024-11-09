@@ -179,6 +179,9 @@ export interface IClientProjectInfo {
   kWCapacity: number;
   sex: string;
   isMale: boolean;
+  paymentProgress?: number;
+  projectProgress?: number;
+  status?: "OnGoing" | "Finished" | "OnWork" | "OnProcess";
 }
 
 // fetch client Info
@@ -191,6 +194,13 @@ export const getClientProjectInfo = (projId?: string) =>
           params: { projId },
         })
         .then((res) => res.data),
+  });
+// fetch all project client Infos
+export const getClientsProjectInfos = () =>
+  useQuery<IClientProjectInfo[], Error>({
+    queryKey: ["client-Infos"],
+    queryFn: () =>
+      api.get("api/Project/GetClientsProjectInfos").then((res) => res.data),
   });
 
 //Update client Info

@@ -17,15 +17,20 @@ import {
   getIsProjectPayedDownpayment,
   useCreatePayment,
 } from "../../lib/API/Project/PaymentAPI";
+import Loader from "../../main/components/Loader";
 
 const ClientQuotePage = () => {
   const { projId } = useParams<{ projId: string }>();
 
   const sealQuotation = useUpdateProjectToOnProcess();
   const createPayment = useCreatePayment();
-  const { data: isProjectOnGoing, refetch: refetchProjStatus } =
-    getIsOnGoingProject(projId!);
-  const { data: isOnProcess } = getIsOnProcessProject(projId!);
+  const {
+    data: isProjectOnGoing,
+    refetch: refetchProjStatus,
+    isLoading: isLoadingProj,
+  } = getIsOnGoingProject(projId!);
+  const { data: isOnProcess, isLoading: isLoadingStatus } =
+    getIsOnProcessProject(projId!);
 
   const handleSealQuotation = () => {
     if (
@@ -65,7 +70,9 @@ const ClientQuotePage = () => {
       index: 2,
     },
     {
-      component: <Scheduler isOnProcess={isOnProcess!} isOnGoing={isProjectOnGoing!} />,
+      component: (
+        <Scheduler isOnProcess={isOnProcess!} isOnGoing={isProjectOnGoing!} />
+      ),
       name: "Schedule",
       index: 3,
     },
@@ -96,6 +103,8 @@ const ClientQuotePage = () => {
     setActiveName(name);
     setActiveButton(buttonIndex);
   };
+
+  if (isLoadingProj || isLoadingStatus) return <Loader />;
 
   return (
     <div>

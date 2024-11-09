@@ -189,13 +189,13 @@ const RequestsSupplyTable = () => {
                 </Button>
               </DropdownTrigger>
               <DropdownMenu variant="shadow">
-                <DropdownItem
+                {/* <DropdownItem
                   onClick={() => {
                     materialOnOpen();
                   }}
                 >
                   Material
-                </DropdownItem>
+                </DropdownItem> */}
                 <DropdownItem
                   onClick={() => {
                     equipmentOnOpen();

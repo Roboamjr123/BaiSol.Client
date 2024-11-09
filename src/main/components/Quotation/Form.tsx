@@ -5,7 +5,7 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { Download, Edit } from "lucide-react";
 import React from "react";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import {
   getClientProjectInfo,
   getIsOnGoingProject,
@@ -16,6 +16,8 @@ import {
 import { useDisclosure } from "@nextui-org/react";
 import EditClientInfo from "../../../Admin/components/modal/project/EditClientInfo";
 import { FaDownload } from "react-icons/fa";
+import { getClientProjId } from "../../../lib/API/Client/ClientProjectAPI";
+import Loader from "../Loader";
 /*************  ✨ Codeium Command ⭐  *************/
 /**
  * Component to generate a PDF of the quotation.
@@ -27,18 +29,29 @@ import { FaDownload } from "react-icons/fa";
 const Form: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
   const { projId } = useParams<{ projId: string }>();
 
-  const { data: projInfo, refetch: refetchInfo } = getProjectInfo(projId);
-  const { data: projExpense, refetch: refetchExpense } =
-    getProjectExpense(projId);
-
-  const { data: materialSupplies } = getProjectSupply(projId);
-  const { data: isProjectOnGoing } = getIsOnGoingProject(projId!);
+  const {
+    data: projInfo,
+    refetch: refetchInfo,
+    isLoading: infoLoading,
+  } = getProjectInfo(projId);
+  const {
+    data: projExpense,
+    refetch: refetchExpense,
+    isLoading: expenseLoading,
+  } = getProjectExpense(projId);
+  const { data: materialSupplies, isLoading: supplyLoading } =
+    getProjectSupply(projId);
+  const { data: isProjectOnGoing, isLoading: onGoingLoading } =
+    getIsOnGoingProject(projId!);
 
   const {
     isOpen: editIsOpen,
     onOpen: editOnOpen,
     onClose: editOnClose,
   } = useDisclosure();
+
+  if (expenseLoading || infoLoading || supplyLoading || onGoingLoading)
+    return <Loader />;
 
   /*************  ✨ Codeium Command ⭐  *************/
   /**

@@ -19,7 +19,7 @@ const HeroSection = () => {
           Discover the benefits of installing solar panels for your home or
           business. Start saving money and reducing your carbon footprint.
         </p>
-        <div className="flex justify-center my-10">
+        {/* <div className="flex justify-center my-10">
           <a
             href="#"
             className="bg-orange-400 text-white py-3 px-4 mx-3 rounded-lg hover:bg-gray-200 hover:text-orange-500 transition-all duration-300 ease-in"
@@ -35,7 +35,7 @@ const HeroSection = () => {
               <ArrowRight />
             </span>
           </a>
-        </div>
+        </div> */}
       </div>
     </div>
   );

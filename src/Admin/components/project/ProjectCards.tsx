@@ -14,6 +14,7 @@ const ProjectCards = ({
   currentPage: number;
   pageSize: number;
 }) => {
+  
   const filteredProjects = projects.slice(
     (currentPage - 1) * pageSize,
     currentPage * pageSize

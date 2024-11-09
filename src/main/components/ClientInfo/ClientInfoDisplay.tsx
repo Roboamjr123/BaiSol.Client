@@ -1,15 +1,18 @@
 import React from "react";
 import { CircularProgress } from "@nextui-org/react";
 import { ProjectDetails, exampleProject } from "./clientinfo";
+import { IClientProjectInfo } from "../../../lib/API/Project/ProjectApi";
 
-const ClientPage: React.FC<{ project: ProjectDetails }> = ({
-  project = exampleProject,
-}) => {
-  const paymentProgress = 60; // Payment completion percentage
-  const projectProgress = 60; // Project completion percentage
+const ClientInfoDisplay: React.FC<{
+  project: IClientProjectInfo;
+  paymentProgress?: number;
+  projectProgress: number;
+}> = ({ project, paymentProgress, projectProgress }) => {
+  // const paymentProgress = 60; // Payment completion percentage
+  // const projectProgress = 60; // Project completion percentage
 
   return (
-    <div className="flex flex-col items-center px-4 py-10 sm:px-12 sm:py-16">
+    <div className="flex flex-col items-center px-4 py-5 sm:px-6 sm:py-8">
       <div className="p-6 border border-gray-300 shadow-lg rounded-lg w-full max-w-3xl">
         {/* Profile and Project Details */}
         <div className="flex flex-col md:flex-row items-start md:space-x-8">
@@ -30,25 +33,25 @@ const ClientPage: React.FC<{ project: ProjectDetails }> = ({
 
           {/* Center Section: Divider and Project Details */}
           <div className="border-l-2 border-gray-300 hidden md:block h-40 mx-4"></div>
-          <div className="flex flex-col items-center md:items-start space-y-3 text-center md:text-left">
+          <div className="flex flex-col text-medium items-center md:items-start space-y-3 text-center md:text-left">
             <h1 className="text-gray-700 font-extrabold">
               {project.projDescript}
             </h1>
-            <h1 className="text-gray-700 font-bold">
+            <h1 className="text-gray-500 font-bold">
               Address:{" "}
-              <span className="font-semibold text-md text-gray-600">
+              <span className="font-semibold text-md text-gray-700">
                 {project.clientAddress}
               </span>
             </h1>
-            <h1 className="text-md font-bold text-gray-700">
+            <h1 className="text-md font-bold text-gray-500">
               System Type:{" "}
-              <span className="font-semibold text-md text-gray-600">
+              <span className="font-semibold text-md text-gray-700">
                 {project.systemType}
               </span>
             </h1>
-            <h1 className="text-md font-bold text-gray-700">
+            <h1 className="text-md font-bold text-gray-500">
               kW Capacity:{" "}
-              <span className="font-semibold text-md text-gray-600">
+              <span className="font-semibold text-md text-gray-700">
                 {project.kWCapacity} kW
               </span>
             </h1>
@@ -58,24 +61,26 @@ const ClientPage: React.FC<{ project: ProjectDetails }> = ({
         {/* Bottom Section: Progress Indicators */}
         <div className="flex flex-col sm:flex-row justify-around items-center mt-8 space-y-4 sm:space-y-0">
           {/* Payment Progress */}
-          <div className="flex flex-col items-center">
-            <div className="mt-4 custom-circular-progress">
-              <CircularProgress
-                label="Payment Progress"
-                value={paymentProgress}
-                color="success"
-                showValueLabel={true}
-                strokeWidth={4}
-                classNames={{
-                  svg: "w-24 h-24 drop-shadow-md",
-                  indicator: "stroke-green-500",
-                  track: "stroke-green-100",
-                  value: "text-md font-semibold text-orange-500",
-                }}
-                size="lg"
-              />
+          {paymentProgress !== undefined && (
+            <div className="flex flex-col items-center">
+              <div className="mt-4 custom-circular-progress">
+                <CircularProgress
+                  label="Payment Progress"
+                  value={paymentProgress}
+                  color="success"
+                  showValueLabel={true}
+                  strokeWidth={4}
+                  classNames={{
+                    svg: "w-24 h-24 drop-shadow-md",
+                    indicator: "stroke-green-500",
+                    track: "stroke-green-100",
+                    value: "text-md font-semibold text-orange-500",
+                  }}
+                  size="lg"
+                />
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Project Progress */}
           <div className="flex flex-col items-center">
@@ -102,4 +107,4 @@ const ClientPage: React.FC<{ project: ProjectDetails }> = ({
   );
 };
 
-export default ClientPage;
+export default ClientInfoDisplay;

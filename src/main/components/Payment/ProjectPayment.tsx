@@ -5,14 +5,23 @@ import {
   useAcknowledgePayment,
   usePayOnCash,
 } from "../../../lib/API/Project/PaymentAPI";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import Loader from "../Loader";
 import { toast } from "react-toastify";
+import { getClientProjId } from "../../../lib/API/Client/ClientProjectAPI";
 
 const ProjectPayment: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
   const { projId } = useParams<{ projId: string }>();
 
-  const { data: payment, isLoading, refetch } = getClientPayments(projId!);
+  const { data: clientProjId } = getClientProjId();
+
+  const {
+    data: payment,
+    error,
+    isLoading,
+    refetch,
+  } = getClientPayments(projId!);
+
   const paymentArray = Array.isArray(payment) ? payment : [];
   const acknowledgePayment = useAcknowledgePayment();
   const payOnCash = usePayOnCash();
@@ -52,7 +61,13 @@ const ProjectPayment: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
 
   if (isLoading) return <Loader />;
 
-  if (paymentArray.length === 0) return <>Quotation not sealed yet!</>;
+  if ((error || paymentArray.length === 0)&& !isAdmin) {
+    return <Navigate to="/" />;
+  }
+
+  if (projId && clientProjId && projId !== clientProjId.projId && !isAdmin) {
+    return <Navigate to="/" />;
+  }
 
   return (
     <div className="container mx-auto p-6">

@@ -111,7 +111,7 @@ const AddMaterialSupply: React.FC<IAdd> = ({
           onClose();
         },
         onError: (error: any) => {
-          toast.error(error.response.data.message);
+          toast.error(error.message);
           console.error("Something wrong with the Api: ", error);
         },
       }

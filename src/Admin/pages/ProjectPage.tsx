@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { getAllClientsProjects } from "../../lib/API/Project/ProjectApi";
+import {
+  getAllClientsProjects,
+  getClientsProjectInfos,
+} from "../../lib/API/Project/ProjectApi";
 import ProjectCards from "../components/project/ProjectCards";
 import {
   Button,
@@ -16,13 +19,16 @@ import Loader from "../../main/components/Loader";
 import { FaPlus } from "react-icons/fa";
 import ExistingClient from "../components/modal/ExistingClient";
 import NewClient from "../components/modal/NewClient";
+import ProjectCards2 from "../components/project/ProjectCards2";
 
 const ProjectPage = () => {
-  const { data: projects, isLoading, error, refetch } = getAllClientsProjects();
+  // const { data: projects, isLoading, error, refetch } = getAllClientsProjects();
+
+  const { data: projects, isLoading, refetch } = getClientsProjectInfos();
   const projectLenght = projects ? projects.length : 0;
 
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 9; // Blogs per page
+  const pageSize = 4; // Blogs per page
 
   const [filterValue, setFilterValue] = useState("");
 
@@ -51,12 +57,14 @@ const ProjectPage = () => {
 
     if (hasSearchFilter) {
       filteredProjects = filteredProjects.filter((project) => {
-        const clientName = project.clientName?.toLowerCase() || "";
+        const clientFName = project.clientFName?.toLowerCase() || "";
+        const clientLName = project.clientLName?.toLowerCase() || "";
         const projName = project.projName?.toLowerCase() || "";
         const status = project.status?.toLowerCase() || "";
 
         return (
-          clientName.includes(filterValue.toLowerCase()) ||
+          clientFName.includes(filterValue.toLowerCase()) ||
+          clientLName.includes(filterValue.toLowerCase()) ||
           projName.includes(filterValue.toLowerCase()) ||
           status.includes(filterValue.toLowerCase())
         );
@@ -80,7 +88,8 @@ const ProjectPage = () => {
 
   if (isLoading) return <Loader />;
 
-  if(!projects) return (<span className="text-gray-500">No Project Yet...</span>)
+  if (!projects)
+    return <span className="text-gray-500">No Project Yet...</span>;
 
   return (
     <div className="px-5">
@@ -131,11 +140,17 @@ const ProjectPage = () => {
         </div>
       </div>
       <div className="flex flex-col gap-y-6 items-center">
-        <ProjectCards
+        {/* <ProjectCards
+          projects={filteredItems}
+          currentPage={currentPage}
+          pageSize={pageSize}
+        /> */}
+        <ProjectCards2
           projects={filteredItems}
           currentPage={currentPage}
           pageSize={pageSize}
         />
+
         <div className="flex justify-center w-full">
           <Pagination
             loop

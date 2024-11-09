@@ -103,13 +103,13 @@ const Sidebar: React.FC<SidebarProps> = ({ links, isOpen, setOpen }) => {
     {
       name: "reports",
       icon: BiSolidReport,
-      menus: ["auth", "app settings", "stroage", "hosting"],
+      menus: ["sales", "project", "materials", "equipment"],
     },
-    {
-      name: "analytics",
-      icon: TbReportAnalytics,
-      menus: ["dashboard", "realtime", "events"],
-    },
+    // {
+    //   name: "analytics",
+    //   icon: TbReportAnalytics,
+    //   menus: ["dashboard", "realtime", "events"],
+    // },
   ];
 
   return (
@@ -147,8 +147,8 @@ const Sidebar: React.FC<SidebarProps> = ({ links, isOpen, setOpen }) => {
               </li>
             ))}
 
-            {/* {userRole === "Admin" && ( */}
-            {userRole === null && (
+            {userRole === "Admin" && (
+            // {userRole === null && (
               <>
                 {(isOpen || isTabletMid) && (
                   <div className="border-y py-5 border-orange-300">

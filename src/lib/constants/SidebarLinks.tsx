@@ -83,19 +83,21 @@ export const getClientSidebarLinks = (clientProjId?: string): SidebarLink[] => [
   {
     key: "project",
     label: "Project",
-    path: `/project`, // Use project ID if available
+    path: `/project/${clientProjId ?? "73288400-fc5f-4888-96c0-6733c7c3e024"}`, // Use project ID if available
     icon: <LuLayers size={23} className="min-w-max" />,
   },
   {
     key: "quotation",
     label: "Quotation",
-    path: `/quotation/${clientProjId ?? ""}`,
+    path: `/quotation/${
+      clientProjId ?? "73288400-fc5f-4888-96c0-6733c7c3e024"
+    }`,
     icon: <TbReport size={23} className="min-w-max" />,
   },
   {
     key: "payment",
     label: "Payment",
-    path: `/payment/${clientProjId ?? "373b08cb-8b71-4b0b-a07f-153b5e3966fa"}`,
+    path: `/payment/${clientProjId ?? "73288400-fc5f-4888-96c0-6733c7c3e024"}`,
     icon: <MdOutlinePayments size={23} className="min-w-max" />,
   },
 ];

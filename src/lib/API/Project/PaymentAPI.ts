@@ -41,6 +41,21 @@ export const getAllPayments = () => {
   });
 };
 
+export interface ISalesReport {
+  date: string;
+  amount: number;
+}
+
+export const getSalesReport = () => {
+  return useQuery<ISalesReport[], Error>({
+    queryKey: ["sales-report"],
+    queryFn: async () => {
+      const response = await api.get("api/Payment/SalesReport");
+      return response.data;
+    },
+  });
+};
+
 export interface IAllPayment {
   referenceNumber: string;
   checkoutUrl: string;
@@ -152,12 +167,27 @@ export const usePayOnCash = () => {
   });
 };
 
-// Check downpayment if payed
+// Check downpayment if paid
 export const getIsProjectPayedDownpayment = (projId: string) => {
   return useQuery<boolean, Error>({
     queryKey: ["IsProjectPayedDownpayment", projId],
     queryFn: async () => {
       const response = await api.get("api/Payment/IsProjectPayedDownpayment", {
+        params: {
+          projId: projId,
+        },
+      });
+      return response.data;
+    },
+  });
+};
+
+// get payment progress
+export const getPaymentProgress = (projId: string) => {
+  return useQuery<number, Error>({
+    queryKey: ["PaymentProgress", projId],
+    queryFn: async () => {
+      const response = await api.get("api/Payment/PaymentProgress", {
         params: {
           projId: projId,
         },
