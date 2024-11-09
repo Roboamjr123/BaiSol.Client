@@ -143,8 +143,9 @@ export const useDeleteProjectMaterialSupply = () => {
     onSuccess: (data) => {
       toast.success(data);
     },
-    onError: (error) => {
-      console.error("Error deleting item:", error);
+    onError: (err: any) => {
+      toast.error(err.response.data);
+      console.error("Error deleting item:", err);
     },
   });
 };

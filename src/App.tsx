@@ -89,7 +89,7 @@ function App() {
           <Route path="*" element={<PageNotFound />} />
         </Route> */}
 
-        <Route element={<AdminLayout />}>
+        {/* <Route element={<AdminLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="Confirm-Email" element={<ConfirmEmail />} />
           <Route path="project" element={<ProjectPage />} />
@@ -103,7 +103,7 @@ function App() {
           <Route path="reports/sales" element={<SalesReportPage />} />
           <Route path="reports/project" element={<ProjectReportPage />} />
           <Route path="*" element={<PageNotFound />} />
-        </Route>
+        </Route> */}
 
         {/* <Route element={<ClientLayout />}>
           <Route path="/" element={<ClientPage />} />
@@ -129,7 +129,7 @@ function App() {
           <Route path="*" element={<PageNotFound />} />
         </Route> */}
 
-        {/* {userRole === "Admin" ? (
+        {userRole === "Admin" ? (
           <Route element={<AdminLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="project" element={<ProjectPage />} />
@@ -139,13 +139,14 @@ function App() {
             <Route path="activity" element={<ActivityLogPage />} />
             <Route path="supply" element={<Supply />} />
             <Route path="billing" element={<PaymentPage />} />
-          <Route path="reports/sales" element={<SalesReportPage />} />
+            <Route path="reports/sales" element={<SalesReportPage />} />
+            <Route path="reports/project" element={<ProjectReportPage />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>
         ) : userRole === "Facilitator" ? (
           <Route element={<FacilitatorLayout />}>
             <Route path="/" element={<FacilitatorDashboard />} />
-            <Route path="project" element={<AssignedSupplyPage />} />
+            <Route path="supply" element={<AssignedSupplyPage />} />
             <Route path="report" element={<ReportPage />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>
@@ -169,7 +170,7 @@ function App() {
             <Route path="change-password" element={<ChangePass />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>
-        )} */}
+        )}
 
         {/* <Route path="/" element={<SalesReportPage />} /> */}
 

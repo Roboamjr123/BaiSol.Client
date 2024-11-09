@@ -24,9 +24,19 @@ const SalesReportChart: React.FC<{ salesData: ISalesReport[] }> = ({
   type TimeFrame = "Weekly" | "Monthly" | "Quarterly";
 
   const [timeFrame, setTimeFrame] = useState<TimeFrame>("Monthly");
-  const [year, setYear] = useState<"2024" | "2023">("2024");
+  const years = Array.from(
+    new Set(salesData.map((data) => new Date(data.date).getFullYear()))
+  );
 
-  const handleYearChange = (selectedYear: "2024" | "2023") => {
+  const formattedYears = years.map((year: any) => ({
+    value: year.toString(), // Ensure the year is a string
+    label: year.toString(), // Display label for autocomplete
+  }));
+
+  // Set up dynamic state for the year
+  const [year, setYear] = useState<string>(new Date().getFullYear().toString());
+
+  const handleYearChange = (selectedYear: string) => {
     setYear(selectedYear);
   };
 
@@ -172,12 +182,14 @@ const SalesReportChart: React.FC<{ salesData: ISalesReport[] }> = ({
               handleYearChange(key as unknown as "2024" | "2023")
             }
           >
-            <DropdownItem onClick={() => handleYearChange("2024")}>
-              2024
-            </DropdownItem>
-            <DropdownItem onClick={() => handleYearChange("2023")}>
-              2023
-            </DropdownItem>
+            {formattedYears.map((year) => (
+              <DropdownItem
+                key={year.value}
+                onClick={() => handleYearChange(year.value)}
+              >
+                {year.label}
+              </DropdownItem>
+            ))}
           </DropdownMenu>
         </Dropdown>
       </div>

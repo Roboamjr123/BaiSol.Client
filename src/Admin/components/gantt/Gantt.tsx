@@ -64,10 +64,10 @@ const Gantt: React.FC<{ isOnProcess: boolean }> = ({ isOnProcess }) => {
       ];
 
   const editOptions: EditSettingsModel = {
-    allowAdding: true,
-    allowEditing: true,
-    allowDeleting: true,
-    allowTaskbarEditing: true,
+    allowAdding: isOnProcess,
+    allowEditing: isOnProcess,
+    allowDeleting: isOnProcess,
+    allowTaskbarEditing: isOnProcess,
     showDeleteConfirmDialog: true,
   };
 
