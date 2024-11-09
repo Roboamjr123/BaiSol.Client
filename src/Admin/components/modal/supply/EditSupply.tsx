@@ -124,13 +124,13 @@ const EditSupply: React.FC<IEdit> = ({
         });
       }
 
-      // if (material.mtlPrice !== price || material.mtlqoh !== quantity) {
-      //   await handleUpdate(updatePandQ.mutateAsync, {
-      //     mtlId: material.mtlId,
-      //     mtlPrice: price,
-      //     mtlqoh: quantity,
-      //   });
-      // }
+      if (material.mtlPrice !== price || material.mtlqoh !== quantity) {
+        await handleUpdate(updatePandQ.mutateAsync, {
+          mtlId: material.mtlId,
+          mtlPrice: price,
+          mtlqoh: quantity,
+        });
+      }
     } else {
       const equipment = prevSupply as IAllEquipment;
 
@@ -145,13 +145,13 @@ const EditSupply: React.FC<IEdit> = ({
         });
       }
 
-      // if (equipment.eqptPrice !== price || equipment.eqptqoh !== quantity) {
-      //   await handleUpdate(updatePandQ.mutateAsync, {
-      //     eqptId: equipment.eqptId,
-      //     eqptPrice: price,
-      //     eqptqoh: quantity,
-      //   });
-      // }
+      if (equipment.eqptPrice !== price || equipment.eqptqoh !== quantity) {
+        await handleUpdate(updatePandQ.mutateAsync, {
+          eqptId: equipment.eqptId,
+          eqptPrice: price,
+          eqptqoh: quantity,
+        });
+      }
     }
   };
 
@@ -205,7 +205,7 @@ const EditSupply: React.FC<IEdit> = ({
                 )}
               </Autocomplete>
           </div>
-          {/* <div className="flex flex-row gap-2">
+          <div className="flex flex-row gap-2">
             <Input
               isRequired
               value={String(price)}
@@ -216,7 +216,7 @@ const EditSupply: React.FC<IEdit> = ({
               errorMessage={"Please fill the blank!"}
               onChange={handlePriceChange}
             />
-            <Input
+            {/* <Input
               isRequired
               value={String(quantity)}
               type="text"
@@ -224,8 +224,8 @@ const EditSupply: React.FC<IEdit> = ({
               variant="flat"
               errorMessage={"Please fill the blank!"}
               onChange={handleQuantityChange}
-            />
-          </div> */}
+            /> */}
+          </div>
         </ModalBody>
         <ModalFooter>
           <Button
