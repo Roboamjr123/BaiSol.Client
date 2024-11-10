@@ -123,9 +123,9 @@ const AddInstaller: React.FC<AddNewInstaller> = ({
                     setPosition(selectedKey || ""); // Default to empty string if no key is selected
                   }}
                 >
-                  <DropdownItem key="Engineer">Engineer</DropdownItem>
-                  <DropdownItem key="Tig-Alsa">Tig-Alsa</DropdownItem>
-                  <DropdownItem key="Tambay">Tambay</DropdownItem>
+                  {/* <DropdownItem key="Engineer">Engineer</DropdownItem> */}
+                  <DropdownItem key="Electrician">Electrician</DropdownItem>
+                  <DropdownItem key="Helper">Helper</DropdownItem>
                 </DropdownMenu>
               </Dropdown>
             </div>

@@ -31,6 +31,8 @@ import { BiDotsVertical } from "react-icons/bi";
 import { iconClasses } from "../../../lib/utils/usersTable";
 import { CiSearch } from "react-icons/ci";
 import PaymentDetailsModal from "../modal/payment/PaymentDetailsModal";
+import { IoIosInformationCircleOutline } from "react-icons/io";
+import { FaInfoCircle } from "react-icons/fa";
 
 const PaymentTable = () => {
   const { data: payments, isLoading, refetch } = getAllPayment();
@@ -107,24 +109,15 @@ const PaymentTable = () => {
           return <div>{payment.projName}</div>;
         case "action":
           return (
-            <Dropdown className="bg-background border-1 border-default-200">
-              <DropdownTrigger>
-                <Button isIconOnly radius="full" size="sm" variant="light">
-                  <BiDotsVertical className="text-default-400" />
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu variant="shadow">
-                <DropdownItem
-                  color="primary"
-                  startContent={
-                    <BsThreeDots className={cn(iconClasses, "text-default")} />
-                  }
-                  onClick={() => handleViewInfo(payment)}
-                >
-                  View Details
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
+            <Button
+              isIconOnly
+              onClick={() => handleViewInfo(payment)}
+              radius="full"
+              size="sm"
+              variant="light"
+            >
+              <FaInfoCircle className="text-default-400" />
+            </Button>
           );
 
         default:
@@ -211,7 +204,7 @@ const PaymentTable = () => {
                 {(column) => (
                   <TableColumn
                     key={column.uid}
-                    align={column.uid === "actions" ? "center" : "start"}
+                    align={column.uid === "action" ? "center" : "start"}
                   >
                     {column.name}
                   </TableColumn>

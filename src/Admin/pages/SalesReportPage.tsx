@@ -1,3 +1,4 @@
+import { RiArrowRightWideFill } from "react-icons/ri";
 import { getSalesReport } from "../../lib/API/Project/PaymentAPI";
 import Loader from "../../main/components/Loader";
 import SalesReportChart from "../components/report/SalesReportChart";
@@ -123,7 +124,14 @@ const SalesReportPage = () => {
 
   if (isLoading) return <Loader label="Loading sales..." />;
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center px-3 md:px-8 xl:px-10">
+    <main className="flex flex-col">
+      <h1 className="flex items-center mb-4">
+        Report
+        <span className="mx-2 text-gray-400">
+          <RiArrowRightWideFill />
+        </span>
+        Sales
+      </h1>
       <div className="grid w-full">
         <div className="flex flex-col justify-between border p-6 border-gray-300 bg-white shadow-lg rounded-md h-[400px] transition-transform transform hover:scale-105">
           <h3 className="text-xl font-semibold text-gray-800 mb-4">

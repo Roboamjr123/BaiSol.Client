@@ -48,6 +48,9 @@ import SalesReportPage from "./Admin/pages/SalesReportPage";
 import ProjectProgress from "./Admin/components/report/ProjectProgress";
 import Loader from "./main/components/Loader";
 import ProjectReportPage from "./Admin/pages/ProjectReportPage";
+import InventoryReportPage from "./Admin/pages/InventoryReportPage";
+import Dashboard from "./Admin/components/dashboard/Dashboard";
+import ProjectHistoriesPage from "./Facilitator/pages/ProjectHistoriesPage";
 
 const queryClient = new QueryClient({});
 
@@ -90,7 +93,7 @@ function App() {
         </Route> */}
 
         {/* <Route element={<AdminLayout />}>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Dashboard />} />
           <Route path="Confirm-Email" element={<ConfirmEmail />} />
           <Route path="project" element={<ProjectPage />} />
           <Route path="project/:projId" element={<ClientQuotePage />} />
@@ -102,6 +105,11 @@ function App() {
           <Route path="form" element={<Form />} />
           <Route path="reports/sales" element={<SalesReportPage />} />
           <Route path="reports/project" element={<ProjectReportPage />} />
+          <Route
+            path="reports/materials"
+            element={<InventoryReportPage isMaterial={true} />}
+          />
+          <Route path="reports/equipment" element={<InventoryReportPage />} />
           <Route path="*" element={<PageNotFound />} />
         </Route> */}
 
@@ -121,17 +129,15 @@ function App() {
 
         {/* <Route element={<FacilitatorLayout />}>
           <Route path="/" element={<FacilitatorDashboard />} />
+          <Route path="project" element={<ProjectHistoriesPage />} />
           <Route path="supply" element={<AssignedSupplyPage />} />
-          <Route
-            path="report"
-            element={<ToDos projId="73288400-fc5f-4888-96c0-6733c7c3e024" />}
-          />
+          <Route path="report" element={<ReportPage />} />
           <Route path="*" element={<PageNotFound />} />
         </Route> */}
 
         {userRole === "Admin" ? (
           <Route element={<AdminLayout />}>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Dashboard />} />
             <Route path="project" element={<ProjectPage />} />
             <Route path="project/:projId" element={<ClientQuotePage />} />
             <Route path="personnel" element={<Personnel />} />
@@ -141,11 +147,17 @@ function App() {
             <Route path="billing" element={<PaymentPage />} />
             <Route path="reports/sales" element={<SalesReportPage />} />
             <Route path="reports/project" element={<ProjectReportPage />} />
+            <Route
+              path="reports/materials"
+              element={<InventoryReportPage isMaterial={true} />}
+            />
+            <Route path="reports/equipment" element={<InventoryReportPage />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>
         ) : userRole === "Facilitator" ? (
           <Route element={<FacilitatorLayout />}>
             <Route path="/" element={<FacilitatorDashboard />} />
+            <Route path="project" element={<ProjectHistoriesPage />} />
             <Route path="supply" element={<AssignedSupplyPage />} />
             <Route path="report" element={<ReportPage />} />
             <Route path="*" element={<PageNotFound />} />

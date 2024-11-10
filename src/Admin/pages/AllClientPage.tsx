@@ -12,7 +12,7 @@ const AllClientPage = () => {
         </span>
         Information
       </h1>
-      <div className="container mx-auto mt-20 p-4 bg-white shadow-lg rounded-lg">
+      <div className="container mx-auto p-4 bg-white shadow-lg rounded-lg">
         <ClientTable />
       </div>
     </div>

@@ -132,6 +132,9 @@ export const ToDos: React.FC<{ projId: string }> = ({ projId }) => {
 
   if (isLoading) return <Loader label="Loading tasks" />;
 
+  if (tasksToDo.length <= 0)
+    return <span className="text-gray-500">Assigned Project Yet...</span>;
+
   return (
     <div className="flex flex-col md:flex-row md:flex-auto">
       {/* Sidebar Task List */}

@@ -101,3 +101,20 @@ export const getAllEquipmentReport = () => {
     },
   });
 };
+
+export interface IDashboardDTO {
+  totalPersonnel: number;
+  finishedProjects: number;
+  pendingProjects: number;
+  onWorkProjects: number;
+}
+
+export const getDashboardData = () => {
+  return useQuery<IDashboardDTO, Error>({
+    queryKey: ["DashboardData"],
+    queryFn: async () => {
+      const response = await api.get("api/Report/DashboardData");
+      return response.data;
+    },
+  });
+};

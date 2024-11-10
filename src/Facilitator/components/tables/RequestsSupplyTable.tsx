@@ -128,7 +128,7 @@ const RequestsSupplyTable = () => {
       acknowledgeRequest.mutateAsync(
         { reqId: id },
         {
-          onSuccess: (data) => {
+          onSuccess: (data: any) => {
             toast.info(data);
             refetch();
           },

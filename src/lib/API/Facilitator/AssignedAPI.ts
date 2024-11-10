@@ -16,3 +16,37 @@ export const getAssignedProject = () => {
     },
   });
 };
+
+export interface IClientProjectInfoDTO {
+  projId: string;
+  projName: string;
+  projDescript: string;
+  discount: number;
+  vatRate: number;
+  clientId: string;
+  clientFName: string;
+  clientLName: string;
+  clientContactNum: string;
+  clientAddress: string;
+  systemType: string;
+  kWCapacity: number;
+  sex: string;
+  isMale: boolean;
+  projectProgress: number;
+  status: string;
+}
+
+export const getProjectHistories = () => {
+  const userEmail = useUserEmail();
+  return useQuery<IClientProjectInfoDTO[], Error>({
+    queryKey: ["GetProjectHistories", userEmail],
+    queryFn: async () => {
+      const response = await api.get("api/Facilitator/GetProjectHistories", {
+        params: {
+          userEmail: userEmail,
+        },
+      });
+      return response.data;
+    },
+  });
+};

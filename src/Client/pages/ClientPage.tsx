@@ -15,7 +15,7 @@ const ClientPage = () => {
   const { data: clientProjId, isLoading } = getClientProjId();
   const validatedClientProjId = clientProjId
     ? clientProjId.projId
-    : "73288400-fc5f-4888-96c0-6733c7c3e024";
+    : "86b027fd-82bf-4501-87c4-02221b56266e";
 
   const { data: infos, isLoading: isLoadingCPI } = getClientProjectInfo(
     validatedClientProjId
