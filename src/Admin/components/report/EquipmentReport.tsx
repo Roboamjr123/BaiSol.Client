@@ -15,6 +15,7 @@ import {
 import { BiDotsVertical } from "react-icons/bi";
 import { inventory_report_columns } from "../../../lib/utils/reportInventoryTable";
 import { FaInfoCircle } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const EquipmentReport: React.FC<{ equipmentReport: IEquipmentReport[] }> = ({
   equipmentReport,
@@ -88,15 +89,9 @@ const EquipmentReport: React.FC<{ equipmentReport: IEquipmentReport[] }> = ({
           );
         case "action":
           return (
-            <Button
-              onClick={() => handleOpenMoreInfo(report.projId)}
-              isIconOnly
-              radius="full"
-              size="sm"
-              variant="light"
-            >
+            <Link to={`/project/${report.projId}`}>
               <FaInfoCircle className="text-default-400" />
-            </Button>
+            </Link>
           );
         default:
           return cellValue;

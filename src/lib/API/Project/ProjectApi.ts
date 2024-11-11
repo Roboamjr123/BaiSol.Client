@@ -182,6 +182,9 @@ export interface IClientProjectInfo {
   paymentProgress?: number;
   projectProgress?: number;
   status?: "OnGoing" | "Finished" | "OnWork" | "OnProcess";
+  installers?: [{ name: string; position: string }];
+  facilitatorName?: string;
+  facilitatorEmail?: string;
 }
 
 // fetch client Info
@@ -195,6 +198,7 @@ export const getClientProjectInfo = (projId?: string) =>
         })
         .then((res) => res.data),
   });
+
 // fetch all project client Infos
 export const getClientsProjectInfos = () =>
   useQuery<IClientProjectInfo[], Error>({

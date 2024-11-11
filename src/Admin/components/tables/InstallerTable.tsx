@@ -37,6 +37,8 @@ import {
 import { MdOutlineDeleteForever } from "react-icons/md";
 import InstallerActionModal from "../modal/InstallerActionModal";
 import AddInstaller from "../modal/AddInstaller";
+import { FaInfoCircle } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const InstallerTable = () => {
   const { data: installers, isLoading, error, refetch } = getAllInstaller();
@@ -219,7 +221,6 @@ const InstallerTable = () => {
                   </Button>
                 </DropdownTrigger>
                 <DropdownMenu variant="shadow">
-                  <DropdownItem>View</DropdownItem>
                   {installer.status === "Active" ? (
                     <DropdownItem
                       onClick={() =>
@@ -276,6 +277,24 @@ const InstallerTable = () => {
                     </DropdownItem>
                   ) : (
                     <DropdownItem className="hidden"></DropdownItem>
+                  )}
+                </DropdownMenu>
+              </Dropdown>
+
+              <Dropdown className="bg-background border-1 border-default-200">
+                <DropdownTrigger>
+                  <Button isIconOnly radius="full" size="sm" variant="light">
+                    <FaInfoCircle className="text-default-400" />
+                  </Button>
+                </DropdownTrigger>
+                <DropdownMenu
+                  variant="shadow"
+                  items={installer.assignedProjects}
+                >
+                  {(item) => (
+                    <DropdownItem key={item.projId}>
+                      <Link to={`/project/${item.projId}`}>{item.projId}</Link>
+                    </DropdownItem>
                   )}
                 </DropdownMenu>
               </Dropdown>
@@ -459,7 +478,7 @@ const InstallerTable = () => {
     []
   );
 
-  const disabledInstallers = installers
+  const disabledInstallers = items
     ?.filter(
       (installer) =>
         installer.status === "InActive" || installer.status === "OnWork"
@@ -487,7 +506,7 @@ const InstallerTable = () => {
               }}
               classNames={classNames}
               selectedKeys={selectedKeys}
-              selectionMode="multiple"
+              selectionMode="single"
               sortDescriptor={sortDescriptor}
               topContent={topContent}
               topContentPlacement="outside"

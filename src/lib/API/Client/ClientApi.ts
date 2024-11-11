@@ -12,6 +12,8 @@ interface ClientUser {
   ClientContactNum: string;
   clientAddress: string;
   clientMonthlyElectricBill: number;
+  currentProjId: string;
+  clientProjects: [{ projId: string }];
 }
 
 //fetch all client users
@@ -32,6 +34,8 @@ export const getAllClientUsers = () => {
         ClientContactNum: user.ClientContactNum, // Fixed field name
         clientAddress: user.clientAddress, // Ensure correct field mapping
         clientMonthlyElectricBill: user.clientMonthlyElectricBill,
+        currentProjId: user.currentProjId,
+        clientProjects: user.clientProjects,
       }));
       return filteredData;
     },

@@ -7,10 +7,10 @@ import { RiAdminLine } from "react-icons/ri";
 import { GrUserWorker } from "react-icons/gr";
 import { MdOutlinePerson4 } from "react-icons/md";
 
-const ActivitityLogs = () => {
+const ActivitityLogs: React.FC<{ userEmail?: string }> = ({ userEmail }) => {
   const activitiyLogs = getActivityLogs();
 
-  const [filterValue, setFilterValue] = useState<string>("");
+  const [filterValue, setFilterValue] = useState<string>(userEmail ?? "");
 
   // Filtered and sorted items based on the filter value
   const filteredItems = useMemo(() => {
@@ -72,7 +72,9 @@ const ActivitityLogs = () => {
                         <div className="items-center justify-between mb-3 sm:flex">
                           <time className="mb-1 text-xs font-normal text-gray-400 sm:order-last sm:mb-0">
                             {log.timestamp}
-                            {log.action === "Create" || log.action === "Add" || log.action === "Logged In"? (
+                            {log.action === "Create" ||
+                            log.action === "Add" ||
+                            log.action === "Logged In" ? (
                               <Chip
                                 className="capitalize border-none gap-1 text-default-600"
                                 size="sm"
@@ -86,7 +88,8 @@ const ActivitityLogs = () => {
                                 variant="dot"
                                 color="primary"
                               />
-                            ) : log.action === "Delete" || log.action === "Logged Out" ? (
+                            ) : log.action === "Delete" ||
+                              log.action === "Logged Out" ? (
                               <Chip
                                 className="capitalize border-none gap-1 text-default-600"
                                 size="sm"

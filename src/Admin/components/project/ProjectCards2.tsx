@@ -140,6 +140,44 @@ const ProjectCards2: React.FC<Project> = ({
                       />
                     </div>
                   </div>
+
+                  {/* Installer Information */}
+                  <div className="flex flex-col items-center w-1/3 p-3 bg-gray-50 rounded-md shadow text-xs">
+                    <h2 className="text-sm font-semibold mb-4 text-gray-700">
+                      Personnel
+                    </h2>
+
+                    {/* Facilitator Section */}
+                    <div className="w-full mb-3">
+                      <h3 className="text-xs font-semibold text-gray-600 mb-1">
+                        Facilitator
+                      </h3>
+                      <div className="flex flex-col justify-between items-start w-full px-2 py-1 bg-white rounded shadow-sm">
+                        <span className="text-gray-700">
+                          {p.facilitatorName}
+                        </span>
+                        <span className="text-gray-500">
+                          {p.facilitatorEmail}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Installers Section */}
+                    <div className="w-full">
+                      <h3 className="text-xs font-semibold text-gray-600 mb-1">
+                        Installers
+                      </h3>
+                      {p.installers?.map((info, index) => (
+                        <div
+                          key={index}
+                          className="flex justify-between items-center w-full px-2 py-1 bg-white rounded shadow-sm mb-1"
+                        >
+                          <span className="text-gray-700">{info.name}</span>
+                          <span className="text-gray-500">{info.position}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
             </Card>

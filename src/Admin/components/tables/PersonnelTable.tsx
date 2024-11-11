@@ -39,6 +39,8 @@ import { MdOutlineDeleteForever } from "react-icons/md";
 import UserModal from "../modal/UserActionModal";
 import RegisterPersonnelUserModal from "../modal/RegisterPersonnelUserModal";
 import { getAllPersonnelUsers } from "../../../lib/API/UsersApi";
+import { FaInfoCircle } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 interface UserProps {
   // personnelUsers: UserTableProps[] | undefined;
@@ -193,8 +195,8 @@ const PersonnelTable: React.FC<UserProps> = ({ role }) => {
               </span>
             </div>
           );
-        // case "project":
-        //   return user.project;
+        case "project":
+          return user.currentProjId;
         case "creator":
           return user.adminEmail;
         case "timestamps":
@@ -235,7 +237,9 @@ const PersonnelTable: React.FC<UserProps> = ({ role }) => {
                   </Button>
                 </DropdownTrigger>
                 <DropdownMenu variant="shadow">
-                  <DropdownItem>View</DropdownItem>
+                  <DropdownItem>
+                    <Link to={`/activity/${user.email}`}>View Activities</Link>
+                  </DropdownItem>
                   {user.status === "Active" ? (
                     <DropdownItem
                       onClick={() =>
@@ -298,6 +302,24 @@ const PersonnelTable: React.FC<UserProps> = ({ role }) => {
                   )}
                 </DropdownMenu>
               </Dropdown>
+              {role == "Facilitator" && (
+                <Dropdown className="bg-background border-1 border-default-200">
+                  <DropdownTrigger>
+                    <Button isIconOnly radius="full" size="sm" variant="light">
+                      <FaInfoCircle className="text-default-400" />
+                    </Button>
+                  </DropdownTrigger>
+                  <DropdownMenu variant="shadow" items={user.clientProjects}>
+                    {(item) => (
+                      <DropdownItem key={item.projId}>
+                        <Link to={`/project/${item.projId}`}>
+                          {item.projId}
+                        </Link>
+                      </DropdownItem>
+                    )}
+                  </DropdownMenu>
+                </Dropdown>
+              )}
             </div>
           );
         default:

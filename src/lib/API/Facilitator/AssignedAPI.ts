@@ -34,6 +34,7 @@ export interface IClientProjectInfoDTO {
   isMale: boolean;
   projectProgress: number;
   status: string;
+  installers?: [{ name: string; position: string }];
 }
 
 export const getProjectHistories = () => {

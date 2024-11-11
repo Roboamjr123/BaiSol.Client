@@ -33,6 +33,8 @@ import {
 import { useApproveClientAccount } from "../../../lib/API/UsersApi";
 import { toast } from "react-toastify";
 import Loader from "../../../main/components/Loader";
+import { FaInfoCircle } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const ClientTable = () => {
   const { data: clients, isLoading, error, refetch } = getAllClientUsers();
@@ -186,7 +188,7 @@ const ClientTable = () => {
           );
 
         case "project":
-          return null; // TODO Add the client project here
+          return <span>{client.currentProjId ?? "No Project"}</span>;
 
         case "details":
           return (
@@ -231,13 +233,13 @@ const ClientTable = () => {
               size="sm"
               variant="dot"
             >
-              {cellValue}
+              {client.status}
             </Chip>
           );
 
         case "actions":
           return (
-            <div className="relative flex justify-end items-center gap-2">
+            <div className="relative flex flex-row justify-between items-center gap-2">
               <Dropdown className="bg-background border-1 border-default-200">
                 <DropdownTrigger>
                   <Button isIconOnly radius="full" size="sm" variant="light">
@@ -245,8 +247,12 @@ const ClientTable = () => {
                   </Button>
                 </DropdownTrigger>
                 <DropdownMenu variant="shadow">
-                  <DropdownItem>View</DropdownItem>
-                  {client.status === "Pending" ? (
+                  <DropdownItem>
+                    <Link to={`/activity/${client.email}`}>
+                      View Activities
+                    </Link>
+                  </DropdownItem>
+                  {client.status === "Pending" && (
                     <DropdownItem
                       onClick={() =>
                         handleDropdownActionItemClick(
@@ -261,8 +267,6 @@ const ClientTable = () => {
                     >
                       Activate
                     </DropdownItem>
-                  ) : (
-                    <DropdownItem className="hidden"></DropdownItem>
                   )}
                   {/* {client.status !== "InActive" ? (
                     <DropdownItem
@@ -287,6 +291,21 @@ const ClientTable = () => {
                   ) : (
                     <DropdownItem className="hidden"></DropdownItem>
                   )} */}
+                </DropdownMenu>
+              </Dropdown>
+
+              <Dropdown className="bg-background border-1 border-default-200">
+                <DropdownTrigger>
+                  <Button isIconOnly radius="full" size="sm" variant="light">
+                    <FaInfoCircle className="text-default-400" />
+                  </Button>
+                </DropdownTrigger>
+                <DropdownMenu variant="shadow" items={client.clientProjects}>
+                  {(item) => (
+                    <DropdownItem key={item.projId}>
+                      <Link to={`/project/${item.projId}`}>{item.projId}</Link>
+                    </DropdownItem>
+                  )}
                 </DropdownMenu>
               </Dropdown>
             </div>

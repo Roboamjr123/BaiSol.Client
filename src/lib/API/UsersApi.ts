@@ -14,6 +14,8 @@ interface PersonnelUser {
   status: string;
   updatedAt: string;
   createdAt: string;
+  currentProjId: string;
+  clientProjects: [{ projId: string }];
 }
 
 // Create New Admin
@@ -147,6 +149,8 @@ export const getAllPersonnelUsers = (role: string) => {
         status: user.status,
         updatedAt: user.updatedAt, // Format updatedAt
         createdAt: user.createdAt, // Format createdAt
+        currentProjId:user.currentProjId,
+        clientProjects:user.clientProjects
       }));
       return filteredData;
     },
@@ -163,6 +167,8 @@ interface Installer {
   adminEmail: string;
   updatedAt: string;
   createdAt: string;
+
+  assignedProjects: [{ projId: string }];
 }
 
 // Get all installers

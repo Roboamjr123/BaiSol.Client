@@ -2,6 +2,7 @@ import React from "react";
 import { CircularProgress } from "@nextui-org/react";
 import { ProjectDetails, exampleProject } from "./clientinfo";
 import { IClientProjectInfo } from "../../../lib/API/Project/ProjectApi";
+import { info } from "console";
 
 const ClientInfoDisplay: React.FC<{
   project: IClientProjectInfo;
@@ -100,6 +101,23 @@ const ClientInfoDisplay: React.FC<{
                 size="lg"
               />
             </div>
+          </div>
+          {/* Installer Information */}
+          <div className="flex flex-col text-xs items-center w-1/3 p-2 bg-gray-50 rounded-md shadow">
+            <h2 className="text-sm font-semibold mb-3 text-gray-700">
+              Personnel
+            </h2>
+            {project.installers?.map((info, index) => (
+              <div
+                key={index}
+                className="flex justify-between items-center w-full px-2 py-1 bg-white rounded shadow-sm mb-1"
+              >
+                <span className="text-gray-700 text-xs font-medium">
+                  {info.name}
+                </span>
+                <span className="text-gray-500 text-xs">{info.position}</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>

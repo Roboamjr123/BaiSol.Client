@@ -9,6 +9,8 @@ export type UserTableProps = {
   status: string;
   updatedAt: string;
   createdAt: string;
+  currentProjId: string;
+  clientProjects: [{ projId: string }];
 };
 
 export type InstallerTableProps = {
@@ -20,6 +22,8 @@ export type InstallerTableProps = {
   adminEmail: string;
   updatedAt: string;
   createdAt: string;
+  
+  assignedProjects: [{ projId: string }];
 };
 
 export type ClientTableProps = {
@@ -33,6 +37,8 @@ export type ClientTableProps = {
   ClientContactNum: string;
   clientAddress: string;
   clientMonthlyElectricBill: number;
+  currentProjId: string;
+  clientProjects: [{ projId: string }];
 };
 
 export const admin_columns = [

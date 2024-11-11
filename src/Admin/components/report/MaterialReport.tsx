@@ -15,6 +15,7 @@ import { inventory_report_columns } from "../../../lib/utils/reportInventoryTabl
 import { CiSearch } from "react-icons/ci";
 import { BiDotsVertical } from "react-icons/bi";
 import { FaInfoCircle } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const MaterialReport: React.FC<{ materialReport: IMaterialReport[] }> = ({
   materialReport,
@@ -88,15 +89,9 @@ const MaterialReport: React.FC<{ materialReport: IMaterialReport[] }> = ({
           );
         case "action":
           return (
-            <Button
-              onClick={() => handleOpenMoreInfo(report.projId)}
-              isIconOnly
-              radius="full"
-              size="sm"
-              variant="light"
-            >
+            <Link to={`/project/${report.projId}`}>
               <FaInfoCircle className="text-default-400" />
-            </Button>
+            </Link>
           );
         default:
           return cellValue;

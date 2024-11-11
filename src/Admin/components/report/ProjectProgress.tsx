@@ -151,7 +151,7 @@ const ProjectProgress: React.FC<{
                           </div>
                           <div>
                             <span className="flex flex-row gap-3">
-                              <strong>Project ID:</strong>{" "}
+                              <strong>Quote #:</strong>{" "}
                               {task.projId || "N/A"}
                             </span>
                             <span className="flex flex-row gap-3">

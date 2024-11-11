@@ -3,6 +3,7 @@ import { selectUser } from "../authSlice";
 
 export const useUserEmail = () => {
   const user = useSelector(selectUser);
+  // return user?.email || "dosdos.maker@gmail.com";
   return user?.email || "richardquirante98@gmail.com";
   // return "richardquirante98@gmail.com";
 };

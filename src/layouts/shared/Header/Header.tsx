@@ -65,7 +65,7 @@ function Header({ isSidebarOpen, setIsSidebarOpen }: HeaderProps) {
       </NavbarContent>
 
       <NavbarContent as="div" justify="end" className="gap-3">
-        <Dropdown placement="bottom-end" className="lg:mr-8">
+        {/* <Dropdown placement="bottom-end" className="lg:mr-8">
           <DropdownTrigger>
             <button className="p-1.5 rounded inline-flex items-center text-gray-700 hover:text-opacity-100 focus:outline-none transition-transform">
               <HiOutlineBell fontSize={26} />
@@ -86,7 +86,7 @@ function Header({ isSidebarOpen, setIsSidebarOpen }: HeaderProps) {
               Log Out
             </DropdownItem>
           </DropdownMenu>
-        </Dropdown>
+        </Dropdown> */}
         <span className="hidden sm:block md:block lg:block">
           {useUserRole()}
         </span>
@@ -99,7 +99,8 @@ function Header({ isSidebarOpen, setIsSidebarOpen }: HeaderProps) {
               color="warning"
               name="Jason Hughes"
               size="sm"
-              src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+              src="https://img-s1.onedio.com/id-636fbd5fa99378ac2941e5cf/rev-0/w-600/h-600/f-jpg/s-8f6b0c51641bfe96893ea3ded522a020e4a0753b.jpg"
+              // src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
             />
           </DropdownTrigger>
           <DropdownMenu aria-label="Profile Actions" variant="flat">
@@ -107,12 +108,12 @@ function Header({ isSidebarOpen, setIsSidebarOpen }: HeaderProps) {
               <p className="font-semibold">Signed in as</p>
               <p className="font-semibold">{useUserEmail()}</p>
             </DropdownItem>
-            <DropdownItem key="settings">My Settings</DropdownItem>
+            {/* <DropdownItem key="settings">My Settings</DropdownItem>
             <DropdownItem key="team_settings">Team Settings</DropdownItem>
             <DropdownItem key="analytics">Analytics</DropdownItem>
             <DropdownItem key="system">System</DropdownItem>
             <DropdownItem key="configurations">Configurations</DropdownItem>
-            <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
+            <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem> */}
             <DropdownItem onClick={handleLogout} key="logout" color="danger">
               Log Out
             </DropdownItem>
