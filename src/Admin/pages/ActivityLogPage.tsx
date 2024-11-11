@@ -1,9 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ActivitityLogs from "../components/log/ActivitityLogs";
 import { useParams } from "react-router-dom";
+import Loader from "../../main/components/Loader";
 
 const ActivityLogPage = () => {
   const { userEmail } = useParams<{ userEmail: string }>();
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    // Simulate an async operation to "fetch" userEmail (or any other logic you need)
+    if (userEmail) {
+      setLoading(false); // Stop loading once userEmail is available
+    } else {
+      setLoading(false); // Stop loading if no userEmail is passed
+    }
+  }, [userEmail]);
+
+  if (loading) {
+    return <Loader />; // You can replace this with a spinner or placeholder
+  }
 
   return (
     <div>
