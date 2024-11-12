@@ -72,12 +72,16 @@ const FacilitatorLayout = () => {
             {/* Accessing isDemobilization directly here */}
             {!dataMobilize?.isDemobilization ? ( // Check if isDemobilization is true
               <main className="flex-1 p-5">
-                <Outlet /> // Render Outlet if project is on demobilization
+                <Outlet />
               </main>
             ) : (
-              <AssignedSupplyTable
-                isDemobilization={dataMobilize.isDemobilization}
-              />
+              <div className="flex justify-center items-center h-full w-full p-5">
+                <div className="overflow-x-auto overflow-y-hidden scrollbar-thin scrollbar-track-white scrollbar-thumb-orange-100">
+                  <AssignedSupplyTable
+                    isDemobilization={dataMobilize.isDemobilization}
+                  />
+                </div>
+              </div>
             )}
           </>
         )}

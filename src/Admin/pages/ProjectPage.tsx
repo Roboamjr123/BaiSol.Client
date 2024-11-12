@@ -88,7 +88,7 @@ const ProjectPage = () => {
 
   if (isLoading) return <Loader />;
 
-  if (!projects)
+  if (projects == null)
     return <span className="text-gray-500">No Project Yet...</span>;
 
   return (
