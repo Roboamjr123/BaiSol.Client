@@ -118,6 +118,7 @@ export const ToDos: React.FC<{ projId: string }> = ({ projId }) => {
               setUploadedImage(null);
               setImagePreview("");
               refetch();
+              window.location.reload();
             },
           }
         );
@@ -140,9 +141,9 @@ export const ToDos: React.FC<{ projId: string }> = ({ projId }) => {
       {/* Sidebar Task List */}
       <div className="md:w-1/4 w-full p-4 border-b md:border-r border-gray-300 font-sans shadow-md">
         <h2 className="text-xl font-semibold mb-4 text-center">Tasks</h2>
-        <div className="relative flex flex-col pl-6 space-y-4">
+        <div className="relative flex flex-col pl-6 space-y-4 h-96 overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-track-white scrollbar-thumb-orange-100">
           {/* Timeline vertical line */}
-          <ol className="relative border-l border-orange-400 dark:border-gray-700">
+          <ol className="relative border-l py-2 border-orange-400 dark:border-gray-700">
             {tasks.map((task, index) => (
               <li key={task.id} className="mb-10 ms-6 ">
                 <span className="absolute flex items-center justify-center w-6 h-6 bg-gray-200 rounded-full -start-3 ring-8 ring-white ">

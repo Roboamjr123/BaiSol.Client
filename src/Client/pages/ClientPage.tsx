@@ -13,28 +13,38 @@ const ClientPage = () => {
   // const { projId } = useParams<{ projId: string }>();
 
   const { data: clientProjId, isLoading } = getClientProjId();
-  const validatedClientProjId = clientProjId
-    ? clientProjId.projId
-    : "86b027fd-82bf-4501-87c4-02221b56266e";
+
+  // If `clientProjId` is still loading or is null, return a loading state or handle appropriately.
+  if (isLoading) {
+    return <Loader />;
+  }
+
+  if (clientProjId === null) {
+    return <div>No project yet...</div>;
+  }
+
+  // Now safely access `projId` after validating that `clientProjId` is not null
+  const validatedClientProjId = clientProjId.projId;
 
   const { data: infos, isLoading: isLoadingCPI } = getClientProjectInfo(
     validatedClientProjId
   );
-
   const { data: payProg, isLoading: isLoadingPay } = getPaymentProgress(
     validatedClientProjId
   );
-
   const { data: projProg, isLoading: isLoadingproj } = getProjectProgress(
     validatedClientProjId
   );
 
-  // const { data: infos, isLoading } = getClientProjectInfo(projId!);
-
-  if (isLoading || isLoadingCPI || isLoadingPay || isLoadingproj) {
+  // Check if any of the data is still loading
+  if (isLoadingCPI || isLoadingPay || isLoadingproj) {
     return <Loader />;
   }
 
+  // Once data is loaded, check if any data is null
+  if (infos === null || payProg === null || projProg === null) {
+    return <div>No project data available...</div>;
+  }
   return (
     <div>
       <ClientInfoDisplay

@@ -14,6 +14,8 @@ const ProjectPayment: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
   const { projId } = useParams<{ projId: string }>();
 
   const { data: clientProjId } = getClientProjId();
+  
+  if (clientProjId === null) return <div>No project yet...</div>;
 
   const {
     data: payment,

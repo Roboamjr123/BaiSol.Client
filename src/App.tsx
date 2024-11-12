@@ -128,15 +128,15 @@ function App() {
           <Route path="*" element={<PageNotFound />} />
         </Route> */}
 
-        <Route element={<FacilitatorLayout />}>
+        {/* <Route element={<FacilitatorLayout />}>
           <Route path="/" element={<FacilitatorDashboard />} />
           <Route path="project" element={<ProjectHistoriesPage />} />
           <Route path="supply" element={<AssignedSupplyPage />} />
           <Route path="report" element={<ReportPage />} />
           <Route path="*" element={<PageNotFound />} />
-        </Route>
+        </Route> */}
 
-        {/* {userRole === "Admin" ? (
+        {userRole === "Admin" ? (
           <Route element={<AdminLayout />}>
             <Route path="/" element={<Dashboard />} />
             <Route path="project" element={<ProjectPage />} />
@@ -184,7 +184,7 @@ function App() {
             <Route path="change-password" element={<ChangePass />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>
-        )} */}
+        )}
 
         {/* <Route path="/" element={<SalesReportPage />} /> */}
 

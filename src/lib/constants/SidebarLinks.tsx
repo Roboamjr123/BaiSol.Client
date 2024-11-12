@@ -1,4 +1,4 @@
-import { FaTools } from "react-icons/fa";
+import { FaHistory, FaTools } from "react-icons/fa";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { LuLayers } from "react-icons/lu";
 import { MdOutlinePayment, MdOutlinePayments } from "react-icons/md";
@@ -83,21 +83,25 @@ export const getClientSidebarLinks = (clientProjId?: string): SidebarLink[] => [
   {
     key: "project",
     label: "Project",
-    path: `/project/${clientProjId ?? "73288400-fc5f-4888-96c0-6733c7c3e024"}`, // Use project ID if available
+    path: `/project/${clientProjId}`, // Use project ID if available
     icon: <LuLayers size={23} className="min-w-max" />,
   },
   {
     key: "quotation",
     label: "Quotation",
-    path: `/quotation/${
-      clientProjId ?? "73288400-fc5f-4888-96c0-6733c7c3e024"
-    }`,
+    path: `/quotation/${clientProjId}`,
     icon: <TbReport size={23} className="min-w-max" />,
   },
   {
     key: "payment",
     label: "Payment",
-    path: `/payment/${clientProjId ?? "73288400-fc5f-4888-96c0-6733c7c3e024"}`,
+    path: `/payment/${clientProjId}`,
     icon: <MdOutlinePayments size={23} className="min-w-max" />,
+  },
+  {
+    key: "history",
+    label: "History",
+    path: `/history`,
+    icon: <FaHistory size={23} className="min-w-max" />,
   },
 ];

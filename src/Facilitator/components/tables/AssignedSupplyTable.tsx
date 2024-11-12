@@ -116,7 +116,8 @@ const AssignedSupplyTable: React.FC<ISupply> = ({
 
   const { data: assignedMaterials, isLoading } =
     getAssignedMaterialsByFacilitator();
-  const { data: assignedEquipment } = getAssignedEquipmentByFacilitator();
+  const { data: assignedEquipment, isLoading: isLoadingAssignedEquipment } =
+    getAssignedEquipmentByFacilitator();
   const supplyData = isMaterial ? assignedMaterials : assignedEquipment;
   let itemNo = 1;
 
@@ -213,7 +214,7 @@ const AssignedSupplyTable: React.FC<ISupply> = ({
                   </tr>
                 </thead>
                 <tbody>
-                  {isLoading ? (
+                  {isLoading || isLoadingAssignedEquipment ? (
                     <tr>
                       <td colSpan={8} className="text-center">
                         <div className="flex justify-center items-center h-64">

@@ -7,9 +7,14 @@ const ClientProjectQuotationPage = () => {
   const { data: clientProjId } = getClientProjId();
   const { projId } = useParams<{ projId: string }>();
 
-  if (projId && clientProjId && projId !== clientProjId.projId) {
+  if (
+    (projId && clientProjId && projId !== clientProjId.projId) ||
+    !clientProjId ||
+    !projId
+  ) {
     return <Navigate to="/" />;
   }
+
   return <Form />;
 };
 

@@ -19,12 +19,15 @@ const ClientProjectReport = () => {
     projId!
   );
 
-  if (projId && clientProjId && projId !== clientProjId.projId) {
+  if (
+    (projId && clientProjId && projId !== clientProjId.projId) ||
+    !clientProjId
+  ) {
     return <Navigate to="/" />;
   }
 
   if (isloadingId || isloadingPP || isloadingPs) return <Loader />;
-  
+
   return (
     <div className="flex flex-row space-y-4">
       {/* Tasks Updates Section */}

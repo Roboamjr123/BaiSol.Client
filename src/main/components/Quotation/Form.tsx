@@ -53,6 +53,8 @@ const Form: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
   if (expenseLoading || infoLoading || supplyLoading || onGoingLoading)
     return <Loader />;
 
+  if (!projInfo || !projExpense || !materialSupplies)
+    return <div>No project yet...</div>;
   /*************  ✨ Codeium Command ⭐  *************/
   /**
    * Prints the page.

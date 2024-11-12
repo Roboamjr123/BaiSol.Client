@@ -35,8 +35,8 @@ function Header({ isSidebarOpen, setIsSidebarOpen }: HeaderProps) {
       // Only execute the following lines if the mutation is successful
       localStorage.removeItem("refreshToken");
       Cookies.remove("accessToken");
+      navigate("/");
       window.location.reload();
-      navigate("/BaiSol");
     } catch (err) {
       console.error("Logout error:", err); // Log error for debugging
       // Optionally show an error toast here if needed

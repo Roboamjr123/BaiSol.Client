@@ -6,6 +6,7 @@ import {
 } from "../../../lib/API/EquipmentAPI";
 import {
   Button,
+  Chip,
   cn,
   Dropdown,
   DropdownItem,
@@ -74,6 +75,7 @@ const EquipmentTable = () => {
         (user) =>
           user.eqptCode.toLowerCase().includes(filterValue.toLowerCase()) ||
           user.eqptDescript.toLowerCase().includes(filterValue.toLowerCase()) ||
+          user.eqptStatus.toLowerCase().includes(filterValue.toLowerCase()) ||
           user.eqptCtgry.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
@@ -199,63 +201,77 @@ const EquipmentTable = () => {
           );
         case "actions":
           return (
-            <Dropdown className="bg-background border-1 border-default-200">
-              <DropdownTrigger>
-                <Button isIconOnly radius="full" size="sm" variant="light">
-                  <BiDotsVertical className="text-default-400" />
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu variant="shadow">
-                <DropdownItem
-                  onClick={() => {
-                    handleEditMaterial(equipment);
-                  }}
-                  color="primary"
-                  startContent={
-                    <FaEdit className={cn(iconClasses, "text-primary")} />
-                  }
-                >
-                  Edit
-                </DropdownItem>
-                <DropdownItem
-                  color="success"
-                  onClick={() => {
-                    handleAddQOHEquipment(equipment);
-                  }}
-                  startContent={
-                    <MdOutlineProductionQuantityLimits
-                      className={cn(iconClasses, "text-success")}
-                    />
-                  }
-                >
-                  Add Quantity
-                </DropdownItem>
-                <DropdownItem
-                  onClick={() => handleDeleteMaterial(equipment.eqptId)}
+            <div>
+              {equipment.eqptStatus === "Damaged" ? (
+                <Chip
                   color="danger"
-                  className="text-danger"
-                  startContent={
-                    <MdOutlineDeleteForever
-                      className={cn(iconClasses, "text-danger")}
-                    />
-                  }
+                  variant="dot"
+                  className="capitalize border-none gap-1 text-default-600"
+                ></Chip>
+              ) : (
+                <Dropdown
+                  className={`bg-background border-1 border-default-200 ${
+                    equipment.eqptStatus === "Damaged" ? "hidden" : ""
+                  }`}
                 >
-                  Delete
-                </DropdownItem>
-                <DropdownItem
-                  startContent={
-                    <MdOutlineHistory
-                      className={cn(iconClasses, "text-default")}
-                    />
-                  }
-                  onClick={() => {
-                    handleLogOpen(String(equipment.eqptId));
-                  }}
-                >
-                  History
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
+                  <DropdownTrigger>
+                    <Button isIconOnly radius="full" size="sm" variant="light">
+                      <BiDotsVertical className="text-default-400" />
+                    </Button>
+                  </DropdownTrigger>
+                  <DropdownMenu variant="shadow">
+                    <DropdownItem
+                      onClick={() => {
+                        handleEditMaterial(equipment);
+                      }}
+                      color="primary"
+                      startContent={
+                        <FaEdit className={cn(iconClasses, "text-primary")} />
+                      }
+                    >
+                      Edit
+                    </DropdownItem>
+                    <DropdownItem
+                      color="success"
+                      onClick={() => {
+                        handleAddQOHEquipment(equipment);
+                      }}
+                      startContent={
+                        <MdOutlineProductionQuantityLimits
+                          className={cn(iconClasses, "text-success")}
+                        />
+                      }
+                    >
+                      Add Quantity
+                    </DropdownItem>
+                    <DropdownItem
+                      onClick={() => handleDeleteMaterial(equipment.eqptId)}
+                      color="danger"
+                      className="text-danger"
+                      startContent={
+                        <MdOutlineDeleteForever
+                          className={cn(iconClasses, "text-danger")}
+                        />
+                      }
+                    >
+                      Delete
+                    </DropdownItem>
+                    <DropdownItem
+                      startContent={
+                        <MdOutlineHistory
+                          className={cn(iconClasses, "text-default")}
+                        />
+                      }
+                      onClick={() => {
+                        handleLogOpen(String(equipment.eqptId));
+                      }}
+                    >
+                      History
+                    </DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+              )}
+            </div>
           );
         default:
           return cellValue;
@@ -370,9 +386,7 @@ const EquipmentTable = () => {
                 emptyContent={"No equipment found"}
                 isLoading={isLoading}
                 items={filteredItems}
-                loadingContent={
-                  <Spinner color="warning">Loading...</Spinner>
-                }
+                loadingContent={<Spinner color="warning">Loading...</Spinner>}
               >
                 {(item) => (
                   <TableRow key={item.eqptId}>

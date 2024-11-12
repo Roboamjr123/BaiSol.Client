@@ -5,13 +5,16 @@ import { IClientProjectInfo } from "../../../lib/API/Project/ProjectApi";
 import { info } from "console";
 
 const ClientInfoDisplay: React.FC<{
-  project: IClientProjectInfo;
+  project: IClientProjectInfo | null;
   paymentProgress?: number;
   projectProgress: number;
 }> = ({ project, paymentProgress, projectProgress }) => {
   // const paymentProgress = 60; // Payment completion percentage
   // const projectProgress = 60; // Project completion percentage
 
+  if (!project || !project.projId ) {
+    return <div>No project yet...</div>;
+  }
   return (
     <div className="flex flex-col items-center px-4 py-5 sm:px-6 sm:py-8">
       <div className="p-6 border border-gray-300 shadow-lg rounded-lg w-full max-w-3xl">
