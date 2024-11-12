@@ -92,7 +92,7 @@ function App() {
           <Route path="*" element={<PageNotFound />} />
         </Route> */}
 
-        <Route element={<AdminLayout />}>
+        {/* <Route element={<AdminLayout />}>
           <Route path="/" element={<Dashboard />} />
           <Route path="Confirm-Email" element={<ConfirmEmail />} />
           <Route path="project" element={<ProjectPage />} />
@@ -112,7 +112,7 @@ function App() {
           />
           <Route path="reports/equipment" element={<InventoryReportPage />} />
           <Route path="*" element={<PageNotFound />} />
-        </Route>
+        </Route> */}
 
         {/* <Route element={<ClientLayout />}>
           <Route path="/" element={<ClientPage />} />
@@ -128,13 +128,13 @@ function App() {
           <Route path="*" element={<PageNotFound />} />
         </Route> */}
 
-        {/* <Route element={<FacilitatorLayout />}>
+        <Route element={<FacilitatorLayout />}>
           <Route path="/" element={<FacilitatorDashboard />} />
           <Route path="project" element={<ProjectHistoriesPage />} />
           <Route path="supply" element={<AssignedSupplyPage />} />
           <Route path="report" element={<ReportPage />} />
           <Route path="*" element={<PageNotFound />} />
-        </Route> */}
+        </Route>
 
         {/* {userRole === "Admin" ? (
           <Route element={<AdminLayout />}>
@@ -144,7 +144,7 @@ function App() {
             <Route path="personnel" element={<Personnel />} />
             <Route path="clients" element={<AllClientPage />} />
             <Route path="activity" element={<ActivityLogPage />} />
-          <Route path="activity/:userEmail" element={<ActivityLogPage />} />
+            <Route path="activity/:userEmail" element={<ActivityLogPage />} />
             <Route path="supply" element={<Supply />} />
             <Route path="billing" element={<PaymentPage />} />
             <Route path="reports/sales" element={<SalesReportPage />} />

@@ -1,6 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useUserEmail } from "../../../state/Hooks/userHook";
 import { api } from "../AuthAPI";
+import { toast } from "react-toastify";
 
 export const getAssignedProject = () => {
   const userEmail = useUserEmail();
@@ -48,6 +49,59 @@ export const getProjectHistories = () => {
         },
       });
       return response.data;
+    },
+  });
+};
+
+export interface IIsAssignedProjectOnDemobilization {
+  isDemobilization: boolean;
+  projId: string;
+}
+
+export const getIsAssignedProjectOnDemobilization = () => {
+  const userEmail = useUserEmail();
+  return useQuery<IIsAssignedProjectOnDemobilization, Error>({
+    queryKey: ["IsAssignedProjectOnDemobilization", userEmail],
+    queryFn: async () => {
+      const response = await api.get(
+        "api/Facilitator/IsAssignedProjectOnDemobilization",
+        {
+          params: {
+            userEmail: userEmail,
+          },
+        }
+      );
+      return response.data;
+    },
+  });
+};
+
+export interface IReturnSupplyDTO {
+  eqptCode: string; // Represents the equipment code
+  returnedQuantity: number; // Represents the returned quantity of the equipment
+}
+
+export const useReturnAssignedEquipment = () => {
+  const userEmail = useUserEmail();
+  return useMutation({
+    mutationFn: async (formData: IReturnSupplyDTO[]) => {
+      const response = await api.put(
+        "api/Facilitator/ReturnAssignedEquipment",
+        formData, // Sending the form data directly in the body
+        {
+          params: {
+            userEmail, // Adding the user email as a query parameter
+          },
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      return response.data;
+    },
+    onError: (error: any) => {
+      toast.error(error.response.data);
+      console.error("Error return supply:", error);
     },
   });
 };

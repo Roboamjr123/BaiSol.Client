@@ -8,6 +8,9 @@ import Sidebar from "./shared/Sidebar/Sidebar";
 import Header from "./shared/Header/Header";
 import { FacilitatorSidebarLinks } from "../lib/constants/SidebarLinks";
 import { Outlet } from "react-router-dom";
+import { getIsAssignedProjectOnDemobilization } from "../lib/API/Facilitator/AssignedAPI";
+import Loader from "../main/components/Loader";
+import AssignedSupplyTable from "../Facilitator/components/tables/AssignedSupplyTable";
 
 const FacilitatorLayout = () => {
   const dispatch = useDispatch();
@@ -47,8 +50,10 @@ const FacilitatorLayout = () => {
     validateAndSetUser();
   }, [dispatch]);
 
-  return (
+  const { data: dataMobilize, isLoading: isLoadingMobilize } =
+    getIsAssignedProjectOnDemobilization();
 
+  return (
     <div className="flex h-screen overflow-hidden">
       <Sidebar
         links={FacilitatorSidebarLinks}
@@ -60,10 +65,25 @@ const FacilitatorLayout = () => {
           isSidebarOpen={isSidebarOpen}
           setIsSidebarOpen={setIsSidebarOpen}
         />
-        <main className="flex-1 p-5">{<Outlet />}</main>
+        {isLoadingMobilize ? (
+          <Loader /> // Show Loader while loading
+        ) : (
+          <>
+            {/* Accessing isDemobilization directly here */}
+            {!dataMobilize?.isDemobilization ? ( // Check if isDemobilization is true
+              <main className="flex-1 p-5">
+                <Outlet /> // Render Outlet if project is on demobilization
+              </main>
+            ) : (
+              <AssignedSupplyTable
+                isDemobilization={dataMobilize.isDemobilization}
+              />
+            )}
+          </>
+        )}
       </div>
-    </div>  
-);
+    </div>
+  );
 };
 
 export default FacilitatorLayout;

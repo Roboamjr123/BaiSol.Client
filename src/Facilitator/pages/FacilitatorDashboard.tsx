@@ -23,10 +23,13 @@ const FacilitatorDashboard = () => {
   }
   console.log(projId);
 
+  if (!infos)
+    return <span className="text-gray-500">Assigned Project Yet...</span>;
+
   return (
     <div>
       <ClientInfoDisplay
-        project={infos!}
+        project={infos}
         projectProgress={projProg?.progress!}
       />
     </div>

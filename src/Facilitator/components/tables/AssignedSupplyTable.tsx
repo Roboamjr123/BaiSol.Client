@@ -8,6 +8,7 @@ import {
 
 interface ISupply {
   isMaterial?: boolean;
+  isDemobilization?: boolean;
 }
 
 const SupplyRows = ({ supplyData, itemNo }: any) => {
@@ -51,7 +52,10 @@ const SupplyRows = ({ supplyData, itemNo }: any) => {
   );
 };
 
-const AssignedSupplyTable: React.FC<ISupply> = ({ isMaterial }) => {
+const AssignedSupplyTable: React.FC<ISupply> = ({
+  isMaterial,
+  isDemobilization,
+}) => {
   const { data: assignedMaterials, isLoading } =
     getAssignedMaterialsByFacilitator();
   const { data: assignedEquipment } = getAssignedEquipmentByFacilitator();
