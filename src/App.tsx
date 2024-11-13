@@ -51,6 +51,8 @@ import ProjectReportPage from "./Admin/pages/ProjectReportPage";
 import InventoryReportPage from "./Admin/pages/InventoryReportPage";
 import Dashboard from "./Admin/components/dashboard/Dashboard";
 import ProjectHistoriesPage from "./Facilitator/pages/ProjectHistoriesPage";
+import ClientHistoryPage from "./Client/pages/ClientHistoryPage";
+import ClientHistoryInfo from "./Client/pages/ClientHistoryInfo";
 
 const queryClient = new QueryClient({});
 
@@ -173,6 +175,8 @@ function App() {
             />{" "}
             <Route path="project/:projId" element={<ClientProjectReport />} />
             <Route path="payment/:projId" element={<ProjectPayment />} />
+            <Route path="history" element={<ClientHistoryPage />} />
+            <Route path="history/:projId" element={<ClientHistoryInfo />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>
         ) : (

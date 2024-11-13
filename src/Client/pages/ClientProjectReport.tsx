@@ -9,21 +9,25 @@ import TasksUpdates from "../../main/components/Tasks/TasksUpdates";
 import { Card, CircularProgress } from "@nextui-org/react";
 import Loader from "../../main/components/Loader";
 
-const ClientProjectReport = () => {
+const ClientProjectReport: React.FC<{ projectId?: string }> = ({
+  projectId,
+}) => {
   const { projId } = useParams<{ projId: string }>();
   const { data: clientProjId, isLoading: isloadingId } = getClientProjId();
   const { data: taskReports, isLoading: isloadingPs } = getProjectStatus(
-    projId!
+    projectId ?? projId!
   );
   const { data: progress, isLoading: isloadingPP } = getProjectProgress(
-    projId!
+    projectId ?? projId!
   );
 
-  if (
-    (projId && clientProjId && projId !== clientProjId.projId) ||
-    !clientProjId
-  ) {
-    return <Navigate to="/" />;
+  if (!projectId) {
+    if (
+      (projId && clientProjId && projId !== clientProjId.projId) ||
+      !clientProjId
+    ) {
+      return <Navigate to="/" />;
+    }
   }
 
   if (isloadingId || isloadingPP || isloadingPs) return <Loader />;

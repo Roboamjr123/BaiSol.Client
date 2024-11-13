@@ -182,9 +182,14 @@ export interface IClientProjectInfo {
   paymentProgress?: number;
   projectProgress?: number;
   status?: "OnGoing" | "Finished" | "OnWork" | "OnProcess";
+  
   installers?: [{ name: string; position: string }];
   facilitatorName?: string;
   facilitatorEmail?: string;
+
+  projectStarted?: string;
+  projectEnded?: string;
+  totalDays?: number;
 }
 
 // fetch client Info
