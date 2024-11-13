@@ -53,6 +53,9 @@ import Dashboard from "./Admin/components/dashboard/Dashboard";
 import ProjectHistoriesPage from "./Facilitator/pages/ProjectHistoriesPage";
 import ClientHistoryPage from "./Client/pages/ClientHistoryPage";
 import ClientHistoryInfo from "./Client/pages/ClientHistoryInfo";
+import NotificationsPage from "./Client/pages/NotificationsPage";
+import NotificationInfoPage from "./Client/pages/NotificationInfoPage";
+import NotificationInfoDisplay from "./Client/components/NotificationInfoDisplay";
 
 const queryClient = new QueryClient({});
 
@@ -119,14 +122,15 @@ function App() {
         {/* <Route element={<ClientLayout />}>
           <Route path="/" element={<ClientPage />} />
           <Route
-            path="project/:projId"
-            element={<ClientProjectReport />}
-          />
-          <Route
             path="quotation/:projId"
             element={<ClientProjectQuotationPage />}
-          />
+          />{" "}
+          <Route path="project/:projId" element={<ClientProjectReport />} />
           <Route path="payment/:projId" element={<ProjectPayment />} />
+          <Route path="history" element={<ClientHistoryPage />} />
+          <Route path="history/:projId" element={<ClientHistoryInfo />} />
+          <Route path="notifications" element={<NotificationsPage />} />
+          <Route path="notifications/:notifId" element={<NotificationInfoDisplay />} />
           <Route path="*" element={<PageNotFound />} />
         </Route> */}
 
@@ -177,6 +181,8 @@ function App() {
             <Route path="payment/:projId" element={<ProjectPayment />} />
             <Route path="history" element={<ClientHistoryPage />} />
             <Route path="history/:projId" element={<ClientHistoryInfo />} />
+          <Route path="notifications" element={<NotificationsPage />} />
+          <Route path="notifications/:notifId" element={<NotificationInfoDisplay />} />
             <Route path="*" element={<PageNotFound />} />
           </Route>
         ) : (

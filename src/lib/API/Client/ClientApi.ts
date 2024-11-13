@@ -1,5 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "../AuthAPI";
+import { useUserEmail } from "../../../state/Hooks/userHook";
 
 interface ClientUser {
   id: string;
@@ -38,6 +39,61 @@ export const getAllClientUsers = () => {
         clientProjects: user.clientProjects,
       }));
       return filteredData;
+    },
+  });
+};
+
+export interface INotificationMessage {
+  notifId: number;
+  title: string;
+  message: string;
+  type: string;
+  createdAt: string;
+  isRead: boolean;
+  facilitatorName: string;
+  facilitatorEmail: string;
+}
+
+export interface INotificationMessageAndCount {
+  notifs: INotificationMessage[];
+  notifCount: boolean;
+}
+
+export const getNotificationMessages = () => {
+  const userEmail = useUserEmail();
+  return useQuery<INotificationMessageAndCount, Error>({
+    queryKey: ["Notification-Messages", userEmail],
+    queryFn: async () => {
+      const response = await api.get(`api/Client/NotificationMessages`, {
+        params: { userEmail },
+      });
+      return response.data;
+    },
+  });
+};
+
+export const getNotificationMessage = () => {
+  const userEmail = useUserEmail();
+  return useQuery<INotificationMessage, Error>({
+    queryKey: ["Notification-Messages", userEmail],
+    queryFn: async () => {
+      const response = await api.get(`api/Client/NotificationMessage`, {
+        params: { userEmail },
+      });
+      return response.data;
+    },
+  });
+};
+
+export const useReadNotif = () => {
+  const clientEmail = useUserEmail();
+
+  return useMutation({
+    mutationFn: async ({ notifId }: { notifId: number }) => {
+      const response = await api.delete("api/Client/ReadNotif", {
+        params: { notifId, clientEmail },
+      });
+      return response.data;
     },
   });
 };

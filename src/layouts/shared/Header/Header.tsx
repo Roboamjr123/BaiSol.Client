@@ -8,6 +8,8 @@ import {
   Dropdown,
   DropdownMenu,
   Avatar,
+  Button,
+  Badge,
 } from "@nextui-org/react";
 import { MdMenu } from "react-icons/md";
 import Cookies from "js-cookie";
@@ -16,6 +18,8 @@ import { selectUser } from "../../../state/authSlice";
 import { useNavigate } from "react-router-dom";
 import { useLogOut } from "../../../lib/API/AuthAPI";
 import { useUserEmail, useUserRole } from "../../../state/Hooks/userHook";
+import { IoNotificationsSharp } from "react-icons/io5";
+import Notification from "./Notification";
 
 interface HeaderProps {
   isSidebarOpen: boolean;
@@ -64,29 +68,8 @@ function Header({ isSidebarOpen, setIsSidebarOpen }: HeaderProps) {
         </NavbarBrand>
       </NavbarContent>
 
-      <NavbarContent as="div" justify="end" className="gap-3">
-        {/* <Dropdown placement="bottom-end" className="lg:mr-8">
-          <DropdownTrigger>
-            <button className="p-1.5 rounded inline-flex items-center text-gray-700 hover:text-opacity-100 focus:outline-none transition-transform">
-              <HiOutlineBell fontSize={26} />
-            </button>
-          </DropdownTrigger>
-          <DropdownMenu aria-label="Profile Actions" variant="flat">
-            <DropdownItem key="profile" className="h-14 gap-2">
-              <p className="font-semibold">Signed in as</p>
-              <p className="font-semibold">{useUserEmail()}</p>
-            </DropdownItem>
-            <DropdownItem key="settings">My Settings</DropdownItem>
-            <DropdownItem key="team_settings">Team Settings</DropdownItem>
-            <DropdownItem key="analytics">Analytics</DropdownItem>
-            <DropdownItem key="system">System</DropdownItem>
-            <DropdownItem key="configurations">Configurations</DropdownItem>
-            <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem>
-            <DropdownItem key="logout" onClick={handleLogout} color="danger">
-              Log Out
-            </DropdownItem>
-          </DropdownMenu>
-        </Dropdown> */}
+      <NavbarContent as="div" justify="end" className="gap-4">
+        {useUserRole() === "Client" && <Notification />}
         <span className="hidden sm:block md:block lg:block">
           {useUserRole()}
         </span>
@@ -108,12 +91,7 @@ function Header({ isSidebarOpen, setIsSidebarOpen }: HeaderProps) {
               <p className="font-semibold">Signed in as</p>
               <p className="font-semibold">{useUserEmail()}</p>
             </DropdownItem>
-            {/* <DropdownItem key="settings">My Settings</DropdownItem>
-            <DropdownItem key="team_settings">Team Settings</DropdownItem>
-            <DropdownItem key="analytics">Analytics</DropdownItem>
-            <DropdownItem key="system">System</DropdownItem>
-            <DropdownItem key="configurations">Configurations</DropdownItem>
-            <DropdownItem key="help_and_feedback">Help & Feedback</DropdownItem> */}
+
             <DropdownItem onClick={handleLogout} key="logout" color="danger">
               Log Out
             </DropdownItem>
