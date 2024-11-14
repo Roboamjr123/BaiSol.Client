@@ -189,16 +189,20 @@ const EditLaborCost: React.FC<IEdit> = ({
               size="sm"
               onChange={handleChange}
             />
-            <Input
-              isRequired
-              name="unitNum"
-              value={String(formData.unitNum)}
-              type="text"
-              label="No. of Units"
-              variant="flat"
-              onChange={handleChange}
-              size="sm"
-            />
+
+            {labor.description !== "Project Manager - Electrical Engr." &&
+              labor.description !== "Manpower" && (
+                <Input
+                  isRequired
+                  name="unitNum"
+                  value={String(formData.unitNum)}
+                  type="text"
+                  label="No. of Units"
+                  variant="flat"
+                  onChange={handleChange}
+                  size="sm"
+                />
+              )}
           </div>
         </ModalBody>
         <ModalFooter>
@@ -211,7 +215,7 @@ const EditLaborCost: React.FC<IEdit> = ({
               formData.quantity <= 0 ||
               !formData.description ||
               !formData.unit ||
-              formData.unitNum === 0 ||
+              // formData.unitNum === 0 ||
               !formData.unitCost ||
               checkManPower
             }

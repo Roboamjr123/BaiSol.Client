@@ -4,6 +4,8 @@ import { Button, Input, Spinner } from "@nextui-org/react";
 import {
   getAssignedEquipmentByFacilitator,
   getAssignedMaterialsByFacilitator,
+  IAssignedEquipment,
+  IAssignedMaterials,
 } from "../../../lib/API/Facilitator/RequestAPI";
 import {
   IReturnSupplyDTO,
@@ -11,6 +13,7 @@ import {
 } from "../../../lib/API/Facilitator/AssignedAPI";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import Loader from "../../../main/components/Loader";
 
 interface ISupply {
   isMaterial?: boolean;
@@ -22,41 +25,43 @@ const SupplyRows = ({
   itemNo,
   isDemobilization,
   onInputChange,
+  invalidQuantities, // Object that holds invalid state for each row
+  setInvalidQuantities, // Function to update invalid state
 }: any) => {
-  let itemCount = itemNo;
-
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     eqptCode: string,
     quantity: number
   ) => {
     const value = e.target.value;
-
-    // Validate and parse the input to ensure it's a number
     const returnedQuantity = value ? parseInt(value, 10) : 0;
 
-    // Call the callback passed down to parent to update returnSupply state
     if (returnedQuantity > 0) {
       onInputChange(eqptCode, returnedQuantity, quantity);
     }
   };
 
+  const handleInput = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    quantity: number,
+    suppId: string
+  ) => {
+    const value = e.target.value;
+    const isInvalid = quantity < parseInt(value);
+    // Update invalid status for this specific row
+    setInvalidQuantities((prev: any) => ({ ...prev, [suppId]: isInvalid }));
+  };
+
   return supplyData?.length ? (
-    supplyData.map((supply: any) =>
+    supplyData?.map((supply: any) =>
       supply.details?.map((item: any, index: number) => {
-        const currentItemNo = itemCount++;
+        const currentItemNo = itemNo++;
         const totalDetails = supply.details?.length;
         const category = supply.mtlCategory || supply.eqptCategory;
         const description = item.mtlDescription || item.eqptDescript;
         const quantity = item.mtlQuantity ?? item.quantity ?? "N/A";
         const unit = item.mtlUnit || item.eqptUnit;
-        const [isInvalid, setIsInvalid] = useState<boolean>(false);
-        const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-          const value = e.target.value;
-          if (quantity < value) {
-            setIsInvalid(true);
-          } else setIsInvalid(false);
-        };
+        const isInvalid = invalidQuantities[item.suppId] || false; // Get invalid state from the object
 
         return (
           <tr
@@ -81,17 +86,16 @@ const SupplyRows = ({
                   isInvalid={isInvalid}
                   size="sm"
                   className="px-2"
-                  type="text" // Set to text to enable custom validation
+                  type="text"
                   placeholder="Enter a number"
                   onKeyPress={(e) => {
-                    // Prevent non-numeric characters, minus signs, and dots
                     if (!/[0-9]/.test(e.key)) {
                       e.preventDefault();
                     }
                   }}
                   onChange={(e) => {
-                    handleInputChange(e, item.eqptCode, item.quantity); // Call your existing function
-                    handleInput(e); // Call the additional function
+                    handleInputChange(e, item.eqptCode, item.quantity);
+                    handleInput(e, item.quantity, item.suppId); // Call to set invalid status
                   }}
                 />
               </td>
@@ -113,33 +117,30 @@ const AssignedSupplyTable: React.FC<ISupply> = ({
 }) => {
   const returnEquipment = useReturnAssignedEquipment();
   const navigate = useNavigate();
-
   const { data: assignedMaterials, isLoading } =
     getAssignedMaterialsByFacilitator();
   const { data: assignedEquipment, isLoading: isLoadingAssignedEquipment } =
     getAssignedEquipmentByFacilitator();
+
   const supplyData = isMaterial ? assignedMaterials : assignedEquipment;
   let itemNo = 1;
 
-  // State to store return supply data
   const [returnSupply, setReturnSupply] = useState<IReturnSupplyDTO[]>([]);
-  const [isInvalidQuantity, setInvalidQuantity] = useState<boolean>(false);
+  const [invalidQuantities, setInvalidQuantities] = useState<{
+    [key: string]: boolean;
+  }>({}); // Track invalid state
 
-  // Callback to update the returnSupply state using useCallback
   const handleInputChange = useCallback(
     (eqptCode: string, returnedQuantity: number, quantity: number) => {
-      // Ensure returnedQuantity is a valid number, defaulting to 0 if it's empty or NaN
       const validReturnedQuantity = isNaN(returnedQuantity)
         ? 0
         : returnedQuantity;
 
-      // Handle case when quantity is 0 or undefined, reset invalid state
       if (quantity === 0 || quantity === undefined) {
-        setInvalidQuantity(false);
+        setInvalidQuantities((prev) => ({ ...prev, [eqptCode]: false }));
         return;
       }
 
-      // Update the returnSupply state
       setReturnSupply((prev) => {
         const updated = prev.map((item) =>
           item.eqptCode === eqptCode
@@ -147,30 +148,24 @@ const AssignedSupplyTable: React.FC<ISupply> = ({
             : item
         );
 
-        // If no existing entry is found, push a new one
         if (!updated.some((item) => item.eqptCode === eqptCode)) {
           updated.push({ eqptCode, returnedQuantity: validReturnedQuantity });
         }
 
-        // Check if the returnedQuantity is greater than the available quantity
         const hasInvalidQuantity = updated.some(
           (item) => item.returnedQuantity > quantity
         );
+        setInvalidQuantities((prev) => ({
+          ...prev,
+          [eqptCode]: hasInvalidQuantity,
+        }));
 
-        if (updated.length === 0) {
-          setInvalidQuantity(false);
-        }
-
-        // If returnedQuantity exceeds the available quantity, set invalid state to true
-        setInvalidQuantity(hasInvalidQuantity);
-        console.log(updated);
         return updated;
       });
     },
     [] // No dependencies for the callback
   );
 
-  // Function to handle the button click and log the returnSupply state
   const handleButtonClick = async () => {
     const isConfirmed = window.confirm(
       "Press OK to return the assigned supplies."
@@ -215,19 +210,15 @@ const AssignedSupplyTable: React.FC<ISupply> = ({
                 </thead>
                 <tbody>
                   {isLoading || isLoadingAssignedEquipment ? (
-                    <tr>
-                      <td colSpan={8} className="text-center">
-                        <div className="flex justify-center items-center h-64">
-                          <Spinner color="warning" />
-                        </div>
-                      </td>
-                    </tr>
+                    <Loader />
                   ) : (
                     <SupplyRows
                       supplyData={supplyData}
                       itemNo={itemNo}
                       isDemobilization={isDemobilization}
-                      onInputChange={handleInputChange} // Pass callback to child
+                      onInputChange={handleInputChange}
+                      invalidQuantities={invalidQuantities} // Pass invalid state
+                      setInvalidQuantities={setInvalidQuantities} // Pass the setter function
                     />
                   )}
                 </tbody>
@@ -236,10 +227,12 @@ const AssignedSupplyTable: React.FC<ISupply> = ({
                 <span className="flex tracking-wider font-semibold w-full">
                   {isDemobilization && (
                     <Button
-                      isDisabled={isInvalidQuantity}
+                      isDisabled={Object.values(invalidQuantities).includes(
+                        true
+                      )} // Disable button if any invalid quantity
                       className="bg-orange-400 ml-auto w-max text-white rounded-lg py-2 px-3 hover:bg-gray-200 hover:text-orange-500 transition-all duration-300 ease-in"
                       isLoading={returnEquipment.isPending}
-                      onClick={handleButtonClick} // Add onClick handler here
+                      onClick={handleButtonClick}
                     >
                       {returnEquipment.isPending ? "Returning..." : "Return"}
                     </Button>

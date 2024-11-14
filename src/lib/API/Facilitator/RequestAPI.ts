@@ -127,7 +127,7 @@ interface IMaterialsDetails {
 }
 
 // Define the AssignedMaterialsDTO interface
-interface IAssignedMaterials {
+export interface IAssignedMaterials {
   mtlCategory: string; // Required string field
   details?: IMaterialsDetails[]; // Optional list of IMaterialsDetails
 }
@@ -160,7 +160,7 @@ interface IEquipmentDetails {
 }
 
 // Define the AssignedEquipmentDTO interface
-interface IAssignedEquipment {
+export interface IAssignedEquipment {
   eqptCategory: string; // Required string field
   details?: IEquipmentDetails[]; // Optional list of IEquipmentDetails
 }

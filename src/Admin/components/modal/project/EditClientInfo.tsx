@@ -139,8 +139,10 @@ const EditClientInfo: React.FC<IEdit> = ({
   const isInvalidDiscount = useMemo(() => {
     const trimmed = discount.trim();
 
-    // Regular expression to match numbers formatted as 11,333,333.33
-    const validFormat = /^(\d{1,3}(,\d{3})*)(\.\d{1,2})?$/.test(trimmed);
+    // Updated regular expression to match any number with optional commas and up to two decimal places
+    const validFormat = /^\d{1,3}(,\d{3})*(\.\d{1,2})?$|^\d+(\.\d{1,2})?$/.test(
+      trimmed
+    );
 
     // Remove commas to convert the string into a number correctly
     const sanitizedValue = trimmed.replace(/,/g, "");
@@ -149,7 +151,8 @@ const EditClientInfo: React.FC<IEdit> = ({
     return (
       !validFormat || // Ensure the format matches the specified pattern
       isNaN(number) || // Ensure the value is a valid number
-      number < 0 // Disallow negative numbers
+      number < 0 || // Disallow negative numbers
+      (sanitizedValue.includes(".") && sanitizedValue.split(".")[1].length > 2) // Limit decimal places to two
     );
   }, [discount]);
 
@@ -195,7 +198,7 @@ const EditClientInfo: React.FC<IEdit> = ({
         setDiscount("");
         setVATRate("");
         setCNum("");
-        setkWCapacity("0");
+        setkWCapacity(0);
         setFirstName("");
         setAddress("");
         setLastName("");
@@ -209,7 +212,6 @@ const EditClientInfo: React.FC<IEdit> = ({
       },
     });
   };
-
 
   // Handler for the first autocomplete
   const handleTypeChange = (key: string | null) => {

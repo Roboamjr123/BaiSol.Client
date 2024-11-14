@@ -104,7 +104,9 @@ const Notification = () => {
         content={notifications.notifCount}
         shape="circle"
         color={`${notifying ? "default" : "danger"}`}
-        className={`${isOnNotificationsPage && "hidden"}`}
+        className={
+          isOnNotificationsPage || notifications.notifCount < 1 ? "hidden" : ""
+        }
       >
         <Button
           onClick={() => {

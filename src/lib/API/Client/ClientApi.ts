@@ -56,7 +56,7 @@ export interface INotificationMessage {
 
 export interface INotificationMessageAndCount {
   notifs: INotificationMessage[];
-  notifCount: boolean;
+  notifCount: number;
 }
 
 export const getNotificationMessages = () => {

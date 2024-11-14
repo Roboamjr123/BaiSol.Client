@@ -84,6 +84,8 @@ export const ToDos: React.FC<{ projId: string }> = ({ projId }) => {
   const openTaskDetails = (task: ITaskToDo) => {
     setSelectedTaskId(task.id);
     setSelectedTask(task);
+    setUploadedImage(null);
+    setImagePreview("");
   };
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {

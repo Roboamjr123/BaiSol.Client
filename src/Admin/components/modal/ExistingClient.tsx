@@ -64,10 +64,11 @@ const ExistingClient = ({
         setDescription("");
         setProjectName("");
         setClientId("");
+        window.location.reload();
       },
-      onError: (error: any) => {
+      onError: (err: any) => {
         const errorMessage =
-          error?.response?.data?.message || "An unexpected error occurred";
+          err?.response?.data || "An unexpected error occurred";
         toast.error(errorMessage);
       },
     });

@@ -233,7 +233,7 @@ const EditSupply: React.FC<IEdit> = ({
             isDisabled={
               description === "" ||
               unit === "" ||
-              quantity <= 0 ||
+              // quantity <= 0 ||
               Number(price) <= 0
             }
             isLoading={updateDandU.isPending || updatePandQ.isPending}

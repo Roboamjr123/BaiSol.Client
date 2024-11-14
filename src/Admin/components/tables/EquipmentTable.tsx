@@ -207,7 +207,9 @@ const EquipmentTable = () => {
                   color="danger"
                   variant="dot"
                   className="capitalize border-none gap-1 text-default-600"
-                ></Chip>
+                >
+                  Damaged
+                </Chip>
               ) : (
                 <Dropdown
                   className={`bg-background border-1 border-default-200 ${

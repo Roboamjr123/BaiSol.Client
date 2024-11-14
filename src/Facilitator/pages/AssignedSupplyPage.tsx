@@ -3,16 +3,30 @@ import AssignedSupplyTable from "../components/tables/AssignedSupplyTable";
 import { RiArrowRightWideFill } from "react-icons/ri";
 import { Button } from "@nextui-org/react";
 import RequestsSupplyTable from "../components/tables/RequestsSupplyTable";
+import {
+  getAssignedEquipmentByFacilitator,
+  getAssignedMaterialsByFacilitator,
+} from "../../lib/API/Facilitator/RequestAPI";
+import Loader from "../../main/components/Loader";
 
 const AssignedSupplyPage = () => {
+  const { data: assignedMaterials, isLoading } =
+    getAssignedMaterialsByFacilitator();
+  const { data: assignedEquipment, isLoading: isLoadingAssignedEquipment } =
+    getAssignedEquipmentByFacilitator();
+
   const components = [
     {
-      component: <AssignedSupplyTable isMaterial={true} />,
+      component: (
+        <AssignedSupplyTable
+          isMaterial={true}
+        />
+      ),
       name: "Material",
       index: 1,
     },
     {
-      component: <AssignedSupplyTable />,
+      component: <AssignedSupplyTable/>,
       name: "Equipment",
       index: 2,
     },
@@ -38,6 +52,8 @@ const AssignedSupplyPage = () => {
     setActiveName(name);
     setActiveButton(buttonIndex);
   };
+
+  if (isLoading || isLoadingAssignedEquipment) return <Loader />;
 
   return (
     <div>

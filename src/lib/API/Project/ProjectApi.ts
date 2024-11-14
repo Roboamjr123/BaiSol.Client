@@ -85,7 +85,11 @@ export const useAddNewProjectExistClient = () => {
       try {
         const { data } = await api.post(
           "api/Project/Add-Client-Project",
-          formData,
+          {
+            ...formData, // Spread formData properties
+            systemType: "Select type",
+            kWCapacity: 0,
+          },
           {
             headers: {
               "Content-Type": "application/json",
@@ -182,7 +186,7 @@ export interface IClientProjectInfo {
   paymentProgress?: number;
   projectProgress?: number;
   status?: "OnGoing" | "Finished" | "OnWork" | "OnProcess";
-  
+
   installers?: [{ name: string; position: string }];
   facilitatorName?: string;
   facilitatorEmail?: string;
