@@ -22,9 +22,7 @@ const ClientProjectReport: React.FC<{ projectId?: string }> = ({
   const { data: progress, isLoading: isloadingPP } = getProjectProgress(
     projectId ?? projId!
   );
-  const { data: toDos, isLoading: isLoadingToDos } = getTaskToDo(
-    projectId ?? projId!
-  );
+  const projectTaskToDos = getTaskToDo(projId!);
 
   if (!projectId) {
     if (
@@ -35,14 +33,14 @@ const ClientProjectReport: React.FC<{ projectId?: string }> = ({
     }
   }
 
-  if (isloadingId || isloadingPP || isloadingPs || isLoadingToDos)
+  if (isloadingId || isloadingPP || isloadingPs || projectTaskToDos.isLoading)
     return <Loader />;
 
   return (
     <div className="flex flex-row space-y-4">
       {/* Tasks Updates Section */}
       <div className="w-3/4">
-        <TaskToDos taskToDo={toDos!} />
+        <TaskToDos taskToDo={projectTaskToDos.data!} />
       </div>
 
       {/* Assigned Facilitator Section */}

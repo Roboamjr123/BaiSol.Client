@@ -72,13 +72,12 @@ export const getNotificationMessages = () => {
   });
 };
 
-export const getNotificationMessage = () => {
-  const userEmail = useUserEmail();
+export const getNotificationMessage = (notifId: number) => {
   return useQuery<INotificationMessage, Error>({
-    queryKey: ["Notification-Messages", userEmail],
+    queryKey: ["Notification-Message", notifId],
     queryFn: async () => {
       const response = await api.get(`api/Client/NotificationMessage`, {
-        params: { userEmail },
+        params: { notifId },
       });
       return response.data;
     },
@@ -90,7 +89,7 @@ export const useReadNotif = () => {
 
   return useMutation({
     mutationFn: async ({ notifId }: { notifId: number }) => {
-      const response = await api.delete("api/Client/ReadNotif", {
+      const response = await api.put("api/Client/ReadNotif", null, {
         params: { notifId, clientEmail },
       });
       return response.data;

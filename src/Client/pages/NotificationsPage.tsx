@@ -1,6 +1,6 @@
 import React from "react";
 // import { notifications } from "../../layouts/shared/Header/Notification";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Chip } from "@nextui-org/react";
 import {
   getNotificationMessages,
@@ -11,15 +11,23 @@ import Loader from "../../main/components/Loader";
 const NotificationsPage = () => {
   const { data: notifications, isLoading, refetch } = getNotificationMessages();
   const readNotif = useReadNotif();
+  const navigate = useNavigate();
 
   const handleReadNotif = (notifId: number) => {
-    readNotif.mutateAsync({ notifId });
-    refetch();
+    readNotif.mutateAsync(
+      { notifId },
+      {
+        onSuccess: () => {
+          refetch();
+          navigate(`/notifications/${notifId}`);
+        },
+      }
+    );
   };
 
   if (isLoading) return <Loader />;
 
-  if(!notifications) return <div>Empty notification...</div>
+  if (!notifications) return <div>Empty notification...</div>;
 
   return (
     <div className="bg-gray-100 flex items-center justify-center">
@@ -33,22 +41,25 @@ const NotificationsPage = () => {
             <ul className="flex flex-col overflow-y-auto scrollbar-thin scrollbar-track-white scrollbar-thumb-orange-100 max-h-full">
               {notifications?.notifs.map((notif) => (
                 <li key={notif.notifId}>
-                  <Link
+                  <button
                     className={`flex flex-col gap-2.5 border-t px-4 py-3 hover:bg-gray-100 dark:hover:bg-meta-4 ${
                       notif.isRead
                         ? "bg-gray-50 dark:bg-gray-800"
                         : "bg-white dark:bg-boxdark"
                     }`}
                     onClick={() => handleReadNotif(notif.notifId)}
-                    to={{
-                      pathname: `/notifications/${notif.notifId}`, // Target route
-                    }}
+                    // to={{
+                    //   pathname: `/notifications/${notif.notifId}`, // Target route
+                    // }}
+                    disabled={readNotif.isPending}
                   >
                     <p className="text-sm ">
                       <span className="font-semibold text-black dark:text-white">
                         {notif.title}
                       </span>{" "}
-                      <p>{notif.message}</p>
+                      <p className="text-start justify-stretch indent-10">
+                        {notif.message}
+                      </p>
                     </p>
                     <p className="text-xs text-gray-500">
                       {notif.createdAt}
@@ -61,7 +72,7 @@ const NotificationsPage = () => {
                         variant="dot"
                       ></Chip>
                     </p>
-                  </Link>
+                  </button>
                 </li>
               ))}
             </ul>

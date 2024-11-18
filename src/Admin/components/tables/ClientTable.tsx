@@ -252,7 +252,7 @@ const ClientTable = () => {
                       View Activities
                     </Link>
                   </DropdownItem>
-                  {client.status === "Pending" && (
+                  {client.status === "Pending" ? (
                     <DropdownItem
                       onClick={() =>
                         handleDropdownActionItemClick(
@@ -267,6 +267,8 @@ const ClientTable = () => {
                     >
                       Activate
                     </DropdownItem>
+                  ) : (
+                    <DropdownItem className="hidden"></DropdownItem>
                   )}
                   {/* {client.status !== "InActive" ? (
                     <DropdownItem
@@ -303,7 +305,9 @@ const ClientTable = () => {
                 <DropdownMenu variant="shadow" items={client.clientProjects}>
                   {(item) => (
                     <DropdownItem key={item.projId}>
-                      <Link to={`/project/${item.projId}`}>{item.projId}</Link>
+                      <Link to={`/project/${item.projId}`}>
+                        {client.currentProjId}
+                      </Link>
                     </DropdownItem>
                   )}
                 </DropdownMenu>

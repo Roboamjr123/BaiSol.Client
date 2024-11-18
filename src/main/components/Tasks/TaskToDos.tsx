@@ -22,7 +22,8 @@ const TaskToDos: React.FC<{
   isFacilitator?: boolean;
   taskToDo: ITask[];
   refetch?: () => void;
-}> = ({ isFacilitator = false, taskToDo, refetch }) => {
+  refetchDateInfo?: () => void;
+}> = ({ isFacilitator = false, taskToDo, refetch, refetchDateInfo }) => {
   //   interface ITaskItem {
   //     id: number;
   //     proofImage: string | null;
@@ -316,14 +317,14 @@ const TaskToDos: React.FC<{
     const file = event.target.files?.[0];
     if (file) {
       setUploadedImage(file); // Set the selected image in the state
-      const imageUrl = URL.createObjectURL(file); // Create the object URL for the preview
+      // const imageUrl = URL.createObjectURL(file); // Create the object URL for the preview
     } else {
       setUploadedImage(null); // Reset state if no file is selected
     }
   };
 
   const handleImageSubmit = (taskId: number) => {
-    if (uploadedImage && refetch) {
+    if (uploadedImage && refetch && refetchDateInfo) {
       // Show confirmation dialog
       const confirmSubmission = window.confirm(
         "Click OK to submit task report."
@@ -337,6 +338,7 @@ const TaskToDos: React.FC<{
               toast.success(data);
               setUploadedImage(null);
               refetch();
+              refetchDateInfo();
             },
           }
         );
@@ -496,12 +498,12 @@ const TaskToDos: React.FC<{
                       !taskChild.isFinish &&
                       isFacilitator && (
                         <div className="flex flex-row justify-between">
-                          <Input
+                          <input
                             className="block mb-5 w-[50%] text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                             id="small_size"
                             type="file"
                             accept="image/*"
-                            size="sm"
+                            // size="sm"
                             onChange={handleImageUpload}
                             required
                           />

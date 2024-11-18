@@ -174,7 +174,7 @@ export const useSubmitTaskReport = () => {
       const data = new FormData(); // Create a FormData instance
       data.append("ProofImage", ProofImage); // Append the file
 
-      const response = await api.post("api/Gantt/FinishTask", data, {
+      const response = await api.post("api/Gantt/SubmitTaskReport", data, {
         params: { id }, // Pass the ID as a query parameter
         headers: {
           "Content-Type": "multipart/form-data",

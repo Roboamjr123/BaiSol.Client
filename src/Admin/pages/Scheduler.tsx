@@ -4,7 +4,10 @@ import { useUpdateProjectToOnWork } from "../../lib/API/Project/ProjectApi";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Button } from "@nextui-org/react";
-import { getProjectStatus } from "../../lib/API/Project/GanttAPI";
+import {
+  getProjectDateInto,
+  getProjectStatus,
+} from "../../lib/API/Project/GanttAPI";
 import TasksUpdates from "../../main/components/Tasks/TasksUpdates";
 import TaskToDos from "../../main/components/Tasks/TaskToDos";
 import { getTaskToDo } from "../../lib/API/Project/TasksAPI";
@@ -20,6 +23,12 @@ const Scheduler: React.FC<{
   const projectTaskStatus = getProjectStatus(projId!);
   const projectTaskToDos = getTaskToDo(projId!);
 
+  const {
+    data: projInfo,
+    isLoading,
+    refetch: refetchDateInfo,
+  } = getProjectDateInto(projId!);
+
   const handleMakeProjectToWork = () => {
     if (
       refetchIsOnProcess &&
@@ -33,6 +42,7 @@ const Scheduler: React.FC<{
           onSuccess: (data) => {
             toast.success(data);
             refetchIsOnProcess();
+            refetchDateInfo();
             window.location.reload();
           },
         }
@@ -40,7 +50,11 @@ const Scheduler: React.FC<{
     }
   };
 
-  if (updateProjectToOnWork.isPending || projectTaskToDos.isLoading) {
+  if (
+    updateProjectToOnWork.isPending ||
+    projectTaskToDos.isLoading ||
+    isLoading
+  ) {
     return <Loader />;
   }
 
@@ -58,7 +72,7 @@ const Scheduler: React.FC<{
         )}
       </div>
 
-      <Gantt isOnProcess={isOnProcess} />
+      <Gantt isOnProcess={isOnProcess} projInfo={projInfo!} />
 
       {/* <TasksUpdates tasks={projectTaskStatus.data?.tasks} /> */}
       <TaskToDos taskToDo={projectTaskToDos.data!} />

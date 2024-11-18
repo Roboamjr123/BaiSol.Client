@@ -28,11 +28,18 @@ import { DataManager, WebApiAdaptor } from "@syncfusion/ej2/data";
 import { useParams } from "react-router-dom";
 import { useUpdateProjectToOnWork } from "../../../lib/API/Project/ProjectApi";
 import { useEffect } from "react";
-import { getProjectDateInto } from "../../../lib/API/Project/GanttAPI";
+import {
+  getProjectDateInto,
+  IProjectDateInto,
+} from "../../../lib/API/Project/GanttAPI";
 import Loader from "../../../main/components/Loader";
 import { max } from "moment";
 
-const Gantt: React.FC<{ isOnProcess: boolean }> = ({ isOnProcess }) => {
+const Gantt: React.FC<{
+  isOnProcess: boolean;
+  facProjId?: string;
+  projInfo: IProjectDateInto;
+}> = ({ isOnProcess, facProjId, projInfo }) => {
   const toolbarOptions: ToolbarItem[] = isOnProcess
     ? [
         "Add",
@@ -87,10 +94,11 @@ const Gantt: React.FC<{ isOnProcess: boolean }> = ({ isOnProcess }) => {
 
   const { projId } = useParams<{ projId: string }>();
 
-  const { data: projInfo, isLoading } = getProjectDateInto(projId!);
+  const projectId = projId ? projId : facProjId;
+
 
   const dataManager: DataManager = new DataManager({
-    url: `https://localhost:7233/api/Gantt/${projId}`,
+    url: `https://localhost:7233/api/Gantt/${projectId}`,
     adaptor: new WebApiAdaptor(),
     crossDomain: true,
   });
@@ -110,8 +118,6 @@ const Gantt: React.FC<{ isOnProcess: boolean }> = ({ isOnProcess }) => {
     columns: [{ field: "TaskId", direction: "Descending" }],
   };
 
-  if (isLoading) return <Loader />;
-
   const minAndMaxEditDate = {
     params: {
       min: new Date(projInfo?.startDate!),
@@ -125,9 +131,9 @@ const Gantt: React.FC<{ isOnProcess: boolean }> = ({ isOnProcess }) => {
           Facilitator:{" "}
           {projInfo?.assignedFacilitator || "No Facilitator Assigned"}
         </span>
-        <span className="font-semibold text-sm">
+        {/* <span className="font-semibold text-sm">
           EndDate: {projInfo?.endDate || "No Facilitator Assigned"}
-        </span>
+        </span> */}
         <div className="flex flex-col justify-between items-start">
           <span className="text-gray-500 text-xs">
             Estimation Date Start: {projInfo?.estimatedStartDate || "N/A"}
@@ -141,7 +147,7 @@ const Gantt: React.FC<{ isOnProcess: boolean }> = ({ isOnProcess }) => {
         </div>
       </div>
       <GanttComponent
-        projectStartDate={new Date(projInfo?.startDate?? new Date())}
+        projectStartDate={new Date(projInfo?.startDate ?? new Date())}
         loadingIndicator={{ indicatorType: "Shimmer" }}
         dataSource={dataManager}
         taskFields={taskFieldData}

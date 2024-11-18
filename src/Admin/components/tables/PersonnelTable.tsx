@@ -313,7 +313,7 @@ const PersonnelTable: React.FC<UserProps> = ({ role }) => {
                     {(item) => (
                       <DropdownItem key={item.projId}>
                         <Link to={`/project/${item.projId}`}>
-                          {item.projId}
+                          {user.currentProjId}
                         </Link>
                       </DropdownItem>
                     )}

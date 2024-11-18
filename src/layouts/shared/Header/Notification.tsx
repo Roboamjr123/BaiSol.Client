@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import ClickOutside from "./ClickOutside";
 import { Badge, Button, Chip } from "@nextui-org/react";
 import { IoNotificationsSharp } from "react-icons/io5";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   getNotificationMessages,
   INotificationMessage,
@@ -85,10 +85,19 @@ const Notification = () => {
 
   const { data: notifications, isLoading, refetch } = getNotificationMessages();
   const readNotif = useReadNotif();
+  const navigate = useNavigate();
 
   const handleReadNotif = (notifId: number) => {
-    readNotif.mutateAsync({ notifId });
-    refetch();
+    readNotif.mutateAsync(
+      { notifId },
+      {
+        onSuccess: () => {
+          refetch();
+          navigate(`/notifications/${notifId}`);
+        },
+      }
+    );
+    setDropdownOpen(false);
   };
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -136,17 +145,19 @@ const Notification = () => {
             </h5>
           </div>
 
-          <ul className="flex flex-col overflow-y-auto scrollbar-thin scrollbar-track-white scrollbar-thumb-orange-100 max-h-80">
+          <ul className="flex flex-col overflow-y-auto overflow-x-hidden truncate scrollbar-thin scrollbar-track-white scrollbar-thumb-orange-100 max-h-80">
             {notifications.notifs.map((notif) => (
-              <li key={notif.notifId}>
-                <Link
+              <li
+                key={notif.notifId}
+                onClick={() => handleReadNotif(notif.notifId)}
+              >
+                <button
                   className={`flex flex-col gap-2.5 border-t border-stroke px-4 py-3 hover:bg-gray-100 dark:hover:bg-meta-4 ${
                     notif.isRead
                       ? "bg-gray-50 dark:bg-gray-800"
                       : "bg-white dark:bg-boxdark"
                   }`}
-                  to={`/notifications/${notif.notifId}`}
-                  onClick={() => handleReadNotif(notif.notifId)}
+                  // to={`/notifications/${notif.notifId}`}
                 >
                   <p className="text-sm truncate">
                     <span className="font-semibold text-black dark:text-white">
@@ -163,7 +174,7 @@ const Notification = () => {
                       variant="dot"
                     ></Chip>
                   </p>
-                </Link>
+                </button>
               </li>
             ))}
           </ul>
