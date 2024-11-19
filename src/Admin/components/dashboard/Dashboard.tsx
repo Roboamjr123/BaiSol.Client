@@ -34,7 +34,7 @@ const Dashboard: React.FC = () => {
             boxShadow: "inset 0px 0px 10px rgba(0, 0, 0, 0.15)",
           }}
           transition={{ type: "spring", stiffness: 300 }}
-          className="bg-gradient-to-br from-blue-300 to-gray-300 text-gray-800 border border-orange-500 p-4 rounded-lg shadow-lg cursor-pointer"
+          className="bg-gradient-to-br from-blue-300 to-gray-300 text-gray-800 border  p-4 rounded-lg shadow-lg cursor-pointer"
         >
           <h2 className="text-lg font-medium">Total Personnel</h2>
           <p className="text-3xl font-semibold">
@@ -48,7 +48,7 @@ const Dashboard: React.FC = () => {
             boxShadow: "inset 0px 0px 10px rgba(0, 0, 0, 0.15)",
           }}
           transition={{ type: "spring", stiffness: 300 }}
-          className="bg-gradient-to-br from-green-200 to-gray-300 text-gray-800 border border-orange-500 p-4 rounded-lg shadow-lg cursor-pointer"
+          className="bg-gradient-to-br from-green-200 to-gray-300 text-gray-800 border  p-4 rounded-lg shadow-lg cursor-pointer"
         >
           <h2 className="text-lg font-medium">Complete Projects</h2>
           <p className="text-3xl font-semibold">
@@ -62,7 +62,7 @@ const Dashboard: React.FC = () => {
             boxShadow: "inset 0px 0px 10px rgba(0, 0, 0, 0.15)",
           }}
           transition={{ type: "spring", stiffness: 300 }}
-          className="bg-gradient-to-br from-yellow-200 to-gray-300 text-gray-800 border border-orange-500 p-4 rounded-lg shadow-lg cursor-pointer"
+          className="bg-gradient-to-br from-yellow-200 to-gray-300 text-gray-800 border  p-4 rounded-lg shadow-lg cursor-pointer"
         >
           <h2 className="text-lg font-medium">Pending Quotation</h2>
           <p className="text-3xl font-semibold">
@@ -76,7 +76,7 @@ const Dashboard: React.FC = () => {
             boxShadow: "inset 0px 0px 10px rgba(0, 0, 0, 0.15)",
           }}
           transition={{ type: "spring", stiffness: 300 }}
-          className="bg-gradient-to-br from-red-200 to-gray-300 text-gray-800 border border-orange-500 p-4 rounded-lg shadow-lg cursor-pointer"
+          className="bg-gradient-to-br from-red-200 to-gray-300 text-gray-800 border  p-4 rounded-lg shadow-lg cursor-pointer"
         >
           <h2 className="text-lg font-medium">Projects On Work</h2>
           <p className="text-3xl font-semibold">
