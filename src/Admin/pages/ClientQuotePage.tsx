@@ -29,7 +29,7 @@ const ClientQuotePage = () => {
     refetch: refetchProjStatus,
     isLoading: isLoadingProj,
   } = getIsOnGoingProject(projId!);
-  const { data: isOnProcess, isLoading: isLoadingStatus } =
+  const { data: isOnProcess, isLoading: isLoadingStatus, refetch:refetchIsOnProcess } =
     getIsOnProcessProject(projId!);
 
   const handleSealQuotation = () => {
@@ -49,6 +49,7 @@ const ClientQuotePage = () => {
                   toast.success(pay);
                   toast.success(data);
                   refetchProjStatus();
+                  window.location.reload();
                 },
               }
             );
@@ -71,7 +72,7 @@ const ClientQuotePage = () => {
     },
     {
       component: (
-        <Scheduler isOnProcess={isOnProcess!} isOnGoing={isProjectOnGoing!} />
+        <Scheduler isOnProcess={isOnProcess!} refetchIsOnProcess={refetchIsOnProcess} isOnGoing={isProjectOnGoing!} />
       ),
       name: "Schedule",
       index: 3,

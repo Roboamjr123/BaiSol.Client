@@ -14,7 +14,7 @@ const ProjectPayment: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
   const { projId } = useParams<{ projId: string }>();
 
   const { data: clientProjId } = getClientProjId();
-  
+
   if (clientProjId === null) return <div>No project yet...</div>;
 
   const {
@@ -63,7 +63,7 @@ const ProjectPayment: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
 
   if (isLoading) return <Loader />;
 
-  if ((error || paymentArray.length === 0)&& !isAdmin) {
+  if ((error || paymentArray.length === 0) && !isAdmin) {
     return <Navigate to="/" />;
   }
 
@@ -172,7 +172,7 @@ const ProjectPayment: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
                       onClick={() => handlePayOnCash(payment.referenceNumber)}
                       isDisabled={isButtonDisabled}
                     >
-                      Payed In Cash
+                      Paid In Cash
                     </Button>
                   )
                 ) : (

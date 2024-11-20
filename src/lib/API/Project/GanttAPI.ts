@@ -3,9 +3,11 @@ import { api } from "../AuthAPI";
 
 export interface IProjectDateInto {
   startDate: string;
+  endDate: string;
   estimatedStartDate: string;
   estimatedEndDate: string;
   assignedFacilitator: string;
+  estimatedProjectDays: string;
 }
 
 export const getProjectDateInto = (projId: string) => {
@@ -54,9 +56,11 @@ export interface ProjectTasks {
 
 export interface ProjectDateInfo {
   startDate: string;
+  endDate: string;
   estimatedStartDate: string;
   estimatedEndDate: string;
   assignedFacilitator: string;
+  estimatedProjectDays: string;
 }
 
 export interface IProjectStatus {

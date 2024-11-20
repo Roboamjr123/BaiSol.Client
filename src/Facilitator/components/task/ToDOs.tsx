@@ -11,55 +11,7 @@ import {
 } from "../../../lib/API/Project/TasksAPI";
 import { toast } from "react-toastify";
 import Loader from "../../../main/components/Loader";
-// interface Task {
-//   id: number;
-//   taskName: string;
-//   plannedStartDate: string;
-//   plannedEndDate: string;
-//   isEnable: boolean;
-//   isFinished: boolean;
-//   isStarting: boolean;
-// }
 
-// Example task data
-// const taskData: ITaskToDo[] = [
-//   {
-//     id: 9,
-//     taskName: "New Task 5",
-//     plannedStartDate: "Oct 23, 2024",
-//     plannedEndDate: "Oct 25, 2024",
-//     isEnable: true,
-//     isFinished: true,
-//     isStarting: true,
-//   },
-//   {
-//     id: 8,
-//     taskName: "New Task 4",
-//     plannedStartDate: "Oct 24, 2024",
-//     plannedEndDate: "Oct 25, 2024",
-//     isEnable: true,
-//     isFinished: false,
-//     isStarting: false,
-//   },
-//   {
-//     id: 5,
-//     taskName: "New Task 1",
-//     plannedStartDate: "Oct 25, 2024",
-//     plannedEndDate: "Oct 30, 2024",
-//     isEnable: true,
-//     isFinished: false,
-//     isStarting: true,
-//   },
-//   {
-//     id: 10,
-//     taskName: "New Task 6",
-//     plannedStartDate: "Oct 28, 2024",
-//     plannedEndDate: "Oct 31, 2024",
-//     isEnable: false,
-//     isFinished: false,
-//     isStarting: false,
-//   },
-// ];
 export const ToDos: React.FC<{ projId: string }> = ({ projId }) => {
   const {
     data: tasksToDo = [],

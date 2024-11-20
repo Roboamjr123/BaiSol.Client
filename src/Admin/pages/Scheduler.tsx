@@ -6,17 +6,23 @@ import { toast } from "react-toastify";
 import { Button } from "@nextui-org/react";
 import { getProjectStatus } from "../../lib/API/Project/GanttAPI";
 import TasksUpdates from "../../main/components/Tasks/TasksUpdates";
+import TaskToDos from "../../main/components/Tasks/TaskToDos";
+import { getTaskToDo } from "../../lib/API/Project/TasksAPI";
+import Loader from "../../main/components/Loader";
 
-const Scheduler: React.FC<{ isOnProcess: boolean; isOnGoing: boolean }> = ({
-  isOnProcess,
-  isOnGoing,
-}) => {
+const Scheduler: React.FC<{
+  isOnProcess: boolean;
+  isOnGoing: boolean;
+  refetchIsOnProcess?: () => void;
+}> = ({ isOnProcess, isOnGoing, refetchIsOnProcess }) => {
   const { projId } = useParams<{ projId: string }>();
   const updateProjectToOnWork = useUpdateProjectToOnWork();
   const projectTaskStatus = getProjectStatus(projId!);
+  const projectTaskToDos = getTaskToDo(projId!);
 
   const handleMakeProjectToWork = () => {
     if (
+      refetchIsOnProcess &&
       window.confirm(
         "Click OK to make the project start to work. This action cannot be undone."
       )
@@ -26,6 +32,7 @@ const Scheduler: React.FC<{ isOnProcess: boolean; isOnGoing: boolean }> = ({
         {
           onSuccess: (data) => {
             toast.success(data);
+            refetchIsOnProcess();
             window.location.reload();
           },
         }
@@ -33,9 +40,9 @@ const Scheduler: React.FC<{ isOnProcess: boolean; isOnGoing: boolean }> = ({
     }
   };
 
-  // if (isOnGoing) {
-  //   return <>Project is upcoming and not yet paid down...</>; // Message for upcoming projects
-  // }
+  if (updateProjectToOnWork.isPending || projectTaskToDos.isLoading) {
+    return <Loader />;
+  }
 
   return (
     <div className="flex flex-col gap-2">
@@ -53,7 +60,8 @@ const Scheduler: React.FC<{ isOnProcess: boolean; isOnGoing: boolean }> = ({
 
       <Gantt isOnProcess={isOnProcess} />
 
-      <TasksUpdates tasks={projectTaskStatus.data?.tasks} />
+      {/* <TasksUpdates tasks={projectTaskStatus.data?.tasks} /> */}
+      <TaskToDos taskToDo={projectTaskToDos.data!} />
     </div>
   );
 };

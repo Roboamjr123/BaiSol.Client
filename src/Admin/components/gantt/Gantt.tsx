@@ -30,6 +30,7 @@ import { useUpdateProjectToOnWork } from "../../../lib/API/Project/ProjectApi";
 import { useEffect } from "react";
 import { getProjectDateInto } from "../../../lib/API/Project/GanttAPI";
 import Loader from "../../../main/components/Loader";
+import { max } from "moment";
 
 const Gantt: React.FC<{ isOnProcess: boolean }> = ({ isOnProcess }) => {
   const toolbarOptions: ToolbarItem[] = isOnProcess
@@ -111,10 +112,12 @@ const Gantt: React.FC<{ isOnProcess: boolean }> = ({ isOnProcess }) => {
 
   if (isLoading) return <Loader />;
 
-  const minimumEditDate = {
-    params: { min: new Date(projInfo?.startDate!) },
+  const minAndMaxEditDate = {
+    params: {
+      min: new Date(projInfo?.startDate!),
+      max: new Date(projInfo?.endDate!),
+    },
   };
-
   return (
     <div className="flex flex-col gap-y-5 p-5">
       <div className="flex flex-row justify-between items-center">
@@ -122,15 +125,23 @@ const Gantt: React.FC<{ isOnProcess: boolean }> = ({ isOnProcess }) => {
           Facilitator:{" "}
           {projInfo?.assignedFacilitator || "No Facilitator Assigned"}
         </span>
-        <span className="text-gray-500 text-xs">
-          Estimation Date Start: {projInfo?.estimatedStartDate || "N/A"}
+        <span className="font-semibold text-sm">
+          EndDate: {projInfo?.endDate || "No Facilitator Assigned"}
         </span>
-        <span className="text-gray-500 text-xs">
-          Estimation Date End: {projInfo?.estimatedEndDate || "N/A"}
-        </span>
+        <div className="flex flex-col justify-between items-start">
+          <span className="text-gray-500 text-xs">
+            Estimation Date Start: {projInfo?.estimatedStartDate || "N/A"}
+          </span>
+          <span className="text-gray-500 text-xs">
+            Estimation Date End: {projInfo?.estimatedEndDate || "N/A"}
+          </span>
+          <span className="text-gray-500 text-xs">
+            Estimation Work Days: {projInfo?.estimatedProjectDays || "N/A"}
+          </span>
+        </div>
       </div>
       <GanttComponent
-        projectStartDate={new Date(projInfo?.startDate ?? new Date())}
+        projectStartDate={new Date(projInfo?.startDate?? new Date())}
         loadingIndicator={{ indicatorType: "Shimmer" }}
         dataSource={dataManager}
         taskFields={taskFieldData}
@@ -176,12 +187,12 @@ const Gantt: React.FC<{ isOnProcess: boolean }> = ({ isOnProcess }) => {
           <ColumnDirective
             field="PlannedStartDate"
             format="MMMM d, yyyy"
-            edit={minimumEditDate}
+            edit={minAndMaxEditDate}
           ></ColumnDirective>
           <ColumnDirective
             field="PlannedEndDate"
             format="MMMM d, yyyy"
-            edit={minimumEditDate}
+            edit={minAndMaxEditDate}
           ></ColumnDirective>
           <ColumnDirective
             field="Duration"

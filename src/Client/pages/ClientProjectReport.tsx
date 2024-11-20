@@ -8,6 +8,8 @@ import {
 import TasksUpdates from "../../main/components/Tasks/TasksUpdates";
 import { Card, CircularProgress } from "@nextui-org/react";
 import Loader from "../../main/components/Loader";
+import { getTaskToDo } from "../../lib/API/Project/TasksAPI";
+import TaskToDos from "../../main/components/Tasks/TaskToDos";
 
 const ClientProjectReport: React.FC<{ projectId?: string }> = ({
   projectId,
@@ -20,6 +22,9 @@ const ClientProjectReport: React.FC<{ projectId?: string }> = ({
   const { data: progress, isLoading: isloadingPP } = getProjectProgress(
     projectId ?? projId!
   );
+  const { data: toDos, isLoading: isLoadingToDos } = getTaskToDo(
+    projectId ?? projId!
+  );
 
   if (!projectId) {
     if (
@@ -30,13 +35,14 @@ const ClientProjectReport: React.FC<{ projectId?: string }> = ({
     }
   }
 
-  if (isloadingId || isloadingPP || isloadingPs) return <Loader />;
+  if (isloadingId || isloadingPP || isloadingPs || isLoadingToDos)
+    return <Loader />;
 
   return (
     <div className="flex flex-row space-y-4">
       {/* Tasks Updates Section */}
       <div className="w-3/4">
-        <TasksUpdates tasks={taskReports?.tasks} />
+        <TaskToDos taskToDo={toDos!} />
       </div>
 
       {/* Assigned Facilitator Section */}
