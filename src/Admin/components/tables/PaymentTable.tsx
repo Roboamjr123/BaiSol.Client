@@ -87,10 +87,10 @@ const PaymentTable = () => {
       switch (columnKey) {
         case "reference":
           return (
-            <div className="flex flex-row gap-2">
+            <div className="flex flex-row justify-between">
               <span className="">{payment.referenceNumber}</span>
               <Chip
-                className="capitalize border-none gap-1"
+                className="capitalize border-none"
                 color={paymentStatusColorMap[payment.status]}
                 size="sm"
                 variant="flat"

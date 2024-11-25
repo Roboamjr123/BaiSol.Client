@@ -98,6 +98,18 @@ export const getTaskToDo = (projId: string) => {
   });
 };
 
+export const getTaskToUpdateProgress = (projId: string) => {
+  return useQuery<ITask[], Error>({
+    queryKey: ["facilitator-task-to-update", projId],
+    queryFn: async () => {
+      const response = await api.get("api/Gantt/TaskToUpdateProgress", {
+        params: { projId },
+      });
+      return response.data;
+    },
+  });
+};
+
 export interface IActionTask {
   ProofImage: File;
 }
@@ -161,6 +173,36 @@ export const useFinishTask = () => {
     },
   });
 };
+
+export const useUpdateTaskProgress = () => {
+  return useMutation({
+    mutationFn: async ({
+      id,
+      Progress,
+      ProofImage,
+    }: {
+      id: number;
+      Progress: number;
+      ProofImage: File;
+    }) => {
+      const data = new FormData(); // Create a FormData instance
+      data.append("ProofImage", ProofImage); // Append the file
+
+      const response = await api.put("api/Gantt/UpdateTaskProgress", data, {
+        params: { id, Progress }, // Pass the ID as a query parameter
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      return response.data;
+    },
+    onError: (error: any) => {
+      toast.error(error.response.data);
+      console.error("Error submit report:", error);
+    },
+  });
+};
+
 
 export const useSubmitTaskReport = () => {
   return useMutation({

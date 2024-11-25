@@ -166,7 +166,7 @@ const Gantt: React.FC<{
         showColumnMenu={true}
         editSettings={editOptions}
         allowRowDragAndDrop={isOnProcess}
-        allowReordering={true}
+        // allowReordering={true}
         allowParentDependency={true}
         sortSettings={sortingOptions}
         // allowSorting={true}
@@ -178,7 +178,7 @@ const Gantt: React.FC<{
             Filter,
             Edit,
             RowDD,
-            Reorder,
+            // Reorder,
             DayMarkers,
             // Sort,
             UndoRedo,

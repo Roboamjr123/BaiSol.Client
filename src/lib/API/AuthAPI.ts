@@ -11,6 +11,7 @@ const baseURL = import.meta.env.VITE_APP_SERVER_API_URL;
 
 export const api = axios.create({
   baseURL,
+
 });
 
 api.interceptors.request.use((config) => {
@@ -20,6 +21,7 @@ api.interceptors.request.use((config) => {
   }
   return config;
 });
+
 // Define the expected structure of the API response
 interface ILoginResponse {
   message: string;
