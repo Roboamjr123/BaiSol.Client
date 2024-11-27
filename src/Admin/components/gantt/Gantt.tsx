@@ -98,7 +98,7 @@ const Gantt: React.FC<{
 
 
   const dataManager: DataManager = new DataManager({
-    url: `https://localhost:7233/api/Gantt/${projectId}`,
+    url: `http://localhost:5152/api/Gantt/${projectId}`,
     adaptor: new WebApiAdaptor(),
     crossDomain: true,
   });
