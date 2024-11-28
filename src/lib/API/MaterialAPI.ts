@@ -89,6 +89,9 @@ export const useAddMaterial = () => {
         throw error; // Ensure the error is thrown for react-query to handle
       }
     },
+    onError: (err: any) => {
+      toast.error(err.response.data);
+    },
   });
 };
 

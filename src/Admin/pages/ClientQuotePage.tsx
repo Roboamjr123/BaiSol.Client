@@ -6,7 +6,7 @@ import Scheduler from "./Scheduler";
 import ProjectPayment from "../../main/components/Payment/ProjectPayment";
 import RequestSupply from "../components/modal/supply/RequestSupply";
 import Form from "../../main/components/Quotation/Form";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   getIsOnGoingProject,
   getIsOnProcessProject,
@@ -21,6 +21,7 @@ import Loader from "../../main/components/Loader";
 
 const ClientQuotePage = () => {
   const { projId } = useParams<{ projId: string }>();
+  const navigate = useNavigate();
 
   const sealQuotation = useUpdateProjectToOnProcess();
   const createPayment = useCreatePayment();
@@ -49,7 +50,7 @@ const ClientQuotePage = () => {
                   toast.success(pay);
                   toast.success(data);
                   refetchProjStatus();
-                  window.location.reload();
+                  navigate(`/project/${projId}`)
                 },
               }
             );

@@ -10,8 +10,12 @@ import {
 } from "../../lib/API/Project/GanttAPI";
 import TasksUpdates from "../../main/components/Tasks/TasksUpdates";
 import TaskToDos from "../../main/components/Tasks/TaskToDos";
-import { getTaskToDo } from "../../lib/API/Project/TasksAPI";
+import {
+  getTaskToDo,
+  getTaskToUpdateProgress,
+} from "../../lib/API/Project/TasksAPI";
 import Loader from "../../main/components/Loader";
+import TasksToUpdateProgress from "../../main/components/Tasks/TasksToUpdateProgress";
 
 const Scheduler: React.FC<{
   isOnProcess: boolean;
@@ -21,7 +25,7 @@ const Scheduler: React.FC<{
   const { projId } = useParams<{ projId: string }>();
   const updateProjectToOnWork = useUpdateProjectToOnWork();
   const projectTaskStatus = getProjectStatus(projId!);
-  const projectTaskToDos = getTaskToDo(projId!);
+  const projectTaskToDos = getTaskToUpdateProgress(projId!);
 
   const {
     data: projInfo,
@@ -75,7 +79,7 @@ const Scheduler: React.FC<{
       <Gantt isOnProcess={isOnProcess} projInfo={projInfo!} />
 
       {/* <TasksUpdates tasks={projectTaskStatus.data?.tasks} /> */}
-      <TaskToDos taskToDo={projectTaskToDos.data!} />
+      <TasksToUpdateProgress taskToDo={projectTaskToDos.data!} />
     </div>
   );
 };

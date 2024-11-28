@@ -118,3 +118,26 @@ export const getDashboardData = () => {
     },
   });
 };
+
+export interface IProjectDTO {
+  projId: string;
+  kWCapacity: string;
+  systemType: string;
+  customer: string;
+  facilitator: string;
+  plannedStarted: string;
+  plannedEnded: string;
+  actualStarted: string;
+  actualEnded: string;
+  cost: string;
+  status: string;
+}
+export const getAllProjectReport = () => {
+  return useQuery<IProjectDTO[], Error>({
+    queryKey: ["AllProjectReport"],
+    queryFn: async () => {
+      const response = await api.get("api/Report/AllProjectReport");
+      return response.data;
+    },
+  });
+};

@@ -20,6 +20,7 @@ api.interceptors.request.use((config) => {
   }
   return config;
 });
+
 // Define the expected structure of the API response
 interface ILoginResponse {
   message: string;

@@ -7,7 +7,7 @@ import { setUser } from "../state/authSlice";
 import Sidebar from "./shared/Sidebar/Sidebar";
 import Header from "./shared/Header/Header";
 import { FacilitatorSidebarLinks } from "../lib/constants/SidebarLinks";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { getIsAssignedProjectOnDemobilization } from "../lib/API/Facilitator/AssignedAPI";
 import Loader from "../main/components/Loader";
 import AssignedSupplyTable from "../Facilitator/components/tables/AssignedSupplyTable";
@@ -16,6 +16,7 @@ const FacilitatorLayout = () => {
   const dispatch = useDispatch();
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const validateAndSetUser = async () => {
@@ -45,10 +46,12 @@ const FacilitatorLayout = () => {
             ],
         };
         dispatch(setUser(user));
+      } else {
+        navigate("/");
       }
     };
     validateAndSetUser();
-  }, [dispatch]);
+  }, [dispatch, navigate]);
 
   const { data: dataMobilize, isLoading: isLoadingMobilize } =
     getIsAssignedProjectOnDemobilization();

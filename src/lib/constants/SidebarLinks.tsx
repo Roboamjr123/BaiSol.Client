@@ -32,9 +32,9 @@ export const AdminSidebarLinks = [
     icon: <FaTools size={23} className="min-w-max" />,
   },
   {
-    key: "billing",
-    label: "Billing",
-    path: "/billing",
+    key: "payment",
+    label: "Payment",
+    path: "/payment",
     icon: <MdOutlinePayment size={23} className="min-w-max" />,
   },
 ];

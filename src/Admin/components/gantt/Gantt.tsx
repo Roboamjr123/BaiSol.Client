@@ -98,7 +98,7 @@ const Gantt: React.FC<{
 
 
   const dataManager: DataManager = new DataManager({
-    url: `https://localhost:7233/api/Gantt/${projectId}`,
+    url: `http://localhost:5152/api/Gantt/${projectId}`,
     adaptor: new WebApiAdaptor(),
     crossDomain: true,
   });
@@ -166,8 +166,8 @@ const Gantt: React.FC<{
         showColumnMenu={true}
         editSettings={editOptions}
         allowRowDragAndDrop={isOnProcess}
-        allowReordering={true}
-        allowParentDependency={true}
+        // allowReordering={true}
+        // allowParentDependency={true}
         sortSettings={sortingOptions}
         // allowSorting={true}
       >
@@ -178,7 +178,7 @@ const Gantt: React.FC<{
             Filter,
             Edit,
             RowDD,
-            Reorder,
+            // Reorder,
             DayMarkers,
             // Sort,
             UndoRedo,

@@ -6,7 +6,7 @@ import { jwtDecode } from "jwt-decode";
 import { selectUser, setUser } from "../state/authSlice";
 import Sidebar from "./shared/Sidebar/Sidebar";
 import Header from "./shared/Header/Header";
-import { Navigate, Outlet, useParams } from "react-router-dom";
+import { Navigate, Outlet, useNavigate, useParams } from "react-router-dom";
 import { getClientSidebarLinks } from "../lib/constants/SidebarLinks";
 import { getClientProjId } from "../lib/API/Client/ClientProjectAPI";
 import Loader from "../main/components/Loader";
@@ -18,6 +18,7 @@ const ClientLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const sidebarLinks = getClientSidebarLinks(clientProjId?.projId);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const validateAndSetUser = async () => {
@@ -47,15 +48,16 @@ const ClientLayout = () => {
             ],
         };
         dispatch(setUser(user));
+      } else {
+        navigate("/");
       }
     };
     validateAndSetUser();
-  }, [dispatch]);
+  }, [dispatch, navigate]);
 
   if (isLoading) {
     return <Loader />;
   }
-
 
   return (
     <div className="flex h-screen overflow-hidden">

@@ -31,7 +31,7 @@ export async function validateToken() {
   // Check if the access token is about to expire or has expired
   if (
     accessTokenExpireTime === undefined ||
-    moment.unix(accessTokenExpireTime).diff(moment(), 'minute') < 1
+    moment.unix(accessTokenExpireTime).diff(moment(), "minute") < 2
   ) {
     // If the access token is expired or about to expire, refresh it
     let refreshTokenExpireTime;
@@ -48,11 +48,11 @@ export async function validateToken() {
     // Check if the refresh token is still valid
     if (
       refreshTokenExpireTime === undefined ||
-      moment.unix(refreshTokenExpireTime).diff(moment(),'minute') > 1
+      moment.unix(refreshTokenExpireTime).diff(moment(), "minute") > 1
     ) {
       try {
         // Make an API call to refresh the access token
-        const response = await api.post("auth/Account/Refresh-Token", {
+        const response = await api.post("auth/Auth/Refresh-Token", {
           accessToken: accessToken,
           refreshToken: refreshToken,
         });

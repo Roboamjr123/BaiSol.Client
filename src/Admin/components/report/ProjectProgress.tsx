@@ -17,12 +17,14 @@ import {
 import { GrUserWorker } from "react-icons/gr";
 import { CiSearch } from "react-icons/ci";
 import ViewImage from "../../../main/components/Tasks/ViewImage";
+import { useParams } from "react-router-dom";
 
 const ProjectProgress: React.FC<{
   tasksReports: IAllProjectTasks[];
   count: ReportCounts;
-}> = ({ count, tasksReports }) => {
-  const [filterValue, setFilterValue] = useState("");
+  projId?: string;
+}> = ({ count, tasksReports, projId }) => {
+  const [filterValue, setFilterValue] = useState(projId ?? "");
 
   const onSearchChange = useCallback((value?: string) => {
     if (value) {
@@ -71,7 +73,7 @@ const ProjectProgress: React.FC<{
   return (
     <div className="flex flex-col md:flex-row gap-6">
       <div className="flex flex-col w-full md:w-2/3 gap-4">
-        <div className="flex items-end w-full md:w-1/4 pb-2">
+        <div className="flex items-end w-full md:w-1/2 pb-2">
           <Input
             isClearable
             classNames={{
@@ -151,8 +153,7 @@ const ProjectProgress: React.FC<{
                           </div>
                           <div>
                             <span className="flex flex-row gap-3">
-                              <strong>Quote #:</strong>{" "}
-                              {task.projId || "N/A"}
+                              <strong>Quote #:</strong> {task.projId || "N/A"}
                             </span>
                             <span className="flex flex-row gap-3">
                               <strong>Facilitator Name:</strong>{" "}

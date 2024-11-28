@@ -32,11 +32,15 @@ export const useAddEquipment = () => {
             },
           }
         );
+
         return response.data;
       } catch (error) {
         console.error("Error adding equipment:", error);
         throw error; // Ensure the error is thrown for react-query to handle
       }
+    },
+    onError: (err: any) => {
+      toast.error(err.response.data);
     },
   });
 };

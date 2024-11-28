@@ -56,6 +56,8 @@ import ClientHistoryInfo from "./Client/pages/ClientHistoryInfo";
 import NotificationsPage from "./Client/pages/NotificationsPage";
 import NotificationInfoPage from "./Client/pages/NotificationInfoPage";
 import NotificationInfoDisplay from "./Client/components/NotificationInfoDisplay";
+import ProjectInfosTable from "./Admin/components/report/ProjectInfosTable";
+import ProjectQuotationTable from "./Admin/components/tables/ProjectQuotationTable";
 
 const queryClient = new QueryClient({});
 
@@ -152,9 +154,16 @@ function App() {
             <Route path="activity" element={<ActivityLogPage />} />
             <Route path="activity/:userEmail" element={<ActivityLogPage />} />
             <Route path="supply" element={<Supply />} />
-            <Route path="billing" element={<PaymentPage />} />
+            <Route path="payment" element={<PaymentPage />} />
             <Route path="reports/sales" element={<SalesReportPage />} />
-            <Route path="reports/project" element={<ProjectReportPage />} />
+            <Route path="reports/project" element={<ProjectQuotationTable />}>
+              <Route path="updates" element={<ProjectReportPage />} />
+              <Route
+                path="updates/:projectId"
+                element={<ProjectReportPage />}
+              />
+              <Route index element={<ProjectInfosTable />} />
+            </Route>
             <Route
               path="reports/materials"
               element={<InventoryReportPage isMaterial={true} />}
@@ -181,8 +190,11 @@ function App() {
             <Route path="payment/:projId" element={<ProjectPayment />} />
             <Route path="history" element={<ClientHistoryPage />} />
             <Route path="history/:projId" element={<ClientHistoryInfo />} />
-          <Route path="notifications" element={<NotificationsPage />} />
-          <Route path="notifications/:notifId" element={<NotificationInfoDisplay />} />
+            <Route path="notifications" element={<NotificationsPage />} />
+            <Route
+              path="notifications/:notifId"
+              element={<NotificationInfoDisplay />}
+            />
             <Route path="*" element={<PageNotFound />} />
           </Route>
         ) : (
