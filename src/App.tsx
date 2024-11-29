@@ -217,7 +217,7 @@ function App() {
         /> */}
 
         <Route path="/verify-2FA" element={<Verify2FA />} />
-        <Route path="/home" element={<Home />} />
+        {/* <Route path="/home" element={<Home />} /> */}
         <Route path="/register-client" element={<ClientRegistrationForm />} />
       </Routes>
 

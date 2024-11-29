@@ -13,7 +13,7 @@ export const getAssignedProject = () => {
           userEmail: userEmail,
         },
       });
-      return response.data || "73288400-fc5f-4888-96c0-6733c7c3e024";
+      return response.data;
     },
   });
 };

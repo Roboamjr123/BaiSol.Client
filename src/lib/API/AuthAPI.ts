@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
-import { setUser } from "../../state/authSlice";
+import { clearUser, setUser } from "../../state/authSlice";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { useUserEmail } from "../../state/Hooks/userHook";
@@ -14,7 +14,7 @@ export const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  const token = Cookies.get("accessToken"); // Or however you store the token
+  const token = Cookies.get("accessToken");
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -129,6 +129,7 @@ export const use2FAMutation = () => {
 };
 
 export const useLogOut = () => {
+  const dispatch = useDispatch();
   return useMutation({
     mutationFn: async (email: string) => {
       const response = await api.post(`auth/Auth/LogOut?email=${email}`, {
@@ -140,6 +141,7 @@ export const useLogOut = () => {
     },
     onSuccess: (data) => {
       toast.success(data);
+      dispatch(clearUser());
     },
     onError: (err: any) => {
       toast.error(err.data.message);

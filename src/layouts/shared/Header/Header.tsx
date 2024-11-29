@@ -14,7 +14,7 @@ import {
 import { MdMenu } from "react-icons/md";
 import Cookies from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
-import { selectUser } from "../../../state/authSlice";
+import { clearUser, selectUser } from "../../../state/authSlice";
 import { useNavigate } from "react-router-dom";
 import { useLogOut } from "../../../lib/API/AuthAPI";
 import { useUserEmail, useUserRole } from "../../../state/Hooks/userHook";
@@ -32,6 +32,7 @@ function Header({ isSidebarOpen, setIsSidebarOpen }: HeaderProps) {
 
   const email = useUserEmail();
   const user = useSelector(selectUser);
+  const dispatch = useDispatch();
 
   const handleLogout = async () => {
     try {
@@ -39,6 +40,7 @@ function Header({ isSidebarOpen, setIsSidebarOpen }: HeaderProps) {
       // Only execute the following lines if the mutation is successful
       localStorage.removeItem("refreshToken");
       Cookies.remove("accessToken");
+      dispatch(clearUser());
       navigate("/");
       window.location.reload();
     } catch (err) {

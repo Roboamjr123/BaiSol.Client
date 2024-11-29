@@ -24,7 +24,7 @@ const ClientPage = () => {
   }
 
   // Now safely access `projId` after validating that `clientProjId` is not null
-  const validatedClientProjId = clientProjId.projId;
+  const validatedClientProjId = clientProjId!.projId;
 
   const { data: infos, isLoading: isLoadingCPI } = getClientProjectInfo(
     validatedClientProjId

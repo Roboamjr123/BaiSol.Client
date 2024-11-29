@@ -2,7 +2,10 @@ import React from "react";
 import { getAssignedProject } from "../../lib/API/Facilitator/AssignedAPI";
 import { ToDos } from "../components/task/ToDOs";
 import Loader from "../../main/components/Loader";
-import { getTaskToDo, getTaskToUpdateProgress } from "../../lib/API/Project/TasksAPI";
+import {
+  getTaskToDo,
+  getTaskToUpdateProgress,
+} from "../../lib/API/Project/TasksAPI";
 import TaskToDos from "../../main/components/Tasks/TaskToDos";
 import Gantt from "../../Admin/components/gantt/Gantt";
 import { getProjectDateInto } from "../../lib/API/Project/GanttAPI";
