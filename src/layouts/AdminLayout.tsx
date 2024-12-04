@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Sidebar from "./shared/Sidebar/Sidebar";
 import { AdminSidebarLinks } from "../lib/constants/SidebarLinks";
 import Header from "./shared/Header/Header";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUser } from "../state/authSlice";
 import { validateToken } from "../lib/API/TokenValidation";
@@ -13,9 +13,11 @@ const AdminLayout = () => {
   const dispatch = useDispatch();
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const validateAndSetUser = async () => {
+      
       const isValidToken = await validateToken();
       if (isValidToken) {
         const accessToken = Cookies.get("accessToken");
@@ -42,10 +44,13 @@ const AdminLayout = () => {
             ],
         };
         dispatch(setUser(user));
+      } else {
+        navigate("/");
       }
     };
     validateAndSetUser();
-  }, [dispatch]);
+
+  }, [dispatch, navigate]);
 
   return (
     <div className="flex h-screen overflow-hidden">

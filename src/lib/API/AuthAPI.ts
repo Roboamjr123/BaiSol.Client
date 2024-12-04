@@ -11,7 +11,6 @@ const baseURL = import.meta.env.VITE_APP_SERVER_API_URL;
 
 export const api = axios.create({
   baseURL,
-
 });
 
 api.interceptors.request.use((config) => {

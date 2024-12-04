@@ -1,22 +1,8 @@
 import React, { useCallback, useMemo, useState } from "react";
-import { BsThreeDots } from "react-icons/bs";
-
-import {
-  getAllPayment,
-  IAllPayment,
-} from "../../../lib/API/Project/PaymentAPI";
-import {
-  payment_columns,
-  paymentStatusColorMap,
-} from "../../../lib/utils/paymentTable";
+import { getAllProjectReport, IProjectDTO } from "../../../lib/API/Report";
 import {
   Button,
   Chip,
-  cn,
-  Dropdown,
-  DropdownItem,
-  DropdownMenu,
-  DropdownTrigger,
   Input,
   Spinner,
   Table,
@@ -25,55 +11,43 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
-  useDisclosure,
 } from "@nextui-org/react";
-import { BiDotsVertical } from "react-icons/bi";
-import { iconClasses } from "../../../lib/utils/usersTable";
-import { CiSearch } from "react-icons/ci";
-import PaymentDetailsModal from "../modal/payment/PaymentDetailsModal";
-import { IoIosInformationCircleOutline } from "react-icons/io";
+import { projectStatusColorMap } from "../../../lib/utils/project";
 import { FaInfoCircle } from "react-icons/fa";
+import { CiSearch } from "react-icons/ci";
+import { project_report_columns } from "../../../lib/utils/projectReportTable";
+import { RiArrowRightWideFill } from "react-icons/ri";
+import { Link } from "react-router-dom";
 
-const PaymentTable = () => {
-  const { data: payments, isLoading, refetch } = getAllPayment();
-  const paymentLength = payments ? payments.length : 0;
-
-  const [paymentInfo, setPaymentInfo] = useState<IAllPayment | null>(null);
+const ProjectInfosTable = () => {
+  const { data: projects, isLoading } = getAllProjectReport();
+  const projectLength = projects ? projects.length : 0;
 
   const [filterValue, setFilterValue] = useState("");
   const filteredItems = useMemo(() => {
-    let filteredMaterials = payments ?? [];
+    let filteredMaterials = projects ?? [];
 
     filteredMaterials = filteredMaterials.filter(
-      (payment) =>
-        (payment.referenceNumber?.toLowerCase() || "").includes(
+      (project) =>
+        (project.customer?.toLowerCase() || "").includes(
           filterValue.toLowerCase()
         ) ||
-        (payment.acknowledgedBy?.toLowerCase() || "").includes(
+        (project.facilitator?.toLowerCase() || "").includes(
           filterValue.toLowerCase()
         ) ||
-        (payment.projName?.toLowerCase() || "").includes(
+        (project.systemType?.toLowerCase() || "").includes(
           filterValue.toLowerCase()
         ) ||
-        (payment.billingEmail?.toLowerCase() || "").includes(
+        (project.status?.toLowerCase() || "").includes(
           filterValue.toLowerCase()
         ) ||
-        (payment.billingName?.toLowerCase() || "").includes(
-          filterValue.toLowerCase()
-        ) ||
-        (payment.billingPhone?.toLowerCase() || "").includes(
-          filterValue.toLowerCase()
-        ) ||
-        (payment.projId?.toLowerCase() || "").includes(
-          filterValue.toLowerCase()
-        ) ||
-        (payment.status?.toLowerCase() || "").includes(
+        (project.projId?.toLowerCase() || "").includes(
           filterValue.toLowerCase()
         )
     );
 
     return filteredMaterials;
-  }, [payments, filterValue]);
+  }, [projects, filterValue]);
 
   const onSearchChange = useCallback((value?: string) => {
     if (value) {
@@ -84,43 +58,50 @@ const PaymentTable = () => {
   }, []);
 
   const renderCell = useCallback(
-    (payment: IAllPayment, columnKey: React.Key) => {
-      const cellValue = payment[columnKey as keyof IAllPayment];
+    (project: IProjectDTO, columnKey: React.Key) => {
+      const cellValue = project[columnKey as keyof IProjectDTO];
 
       switch (columnKey) {
-        case "reference":
+        case "customer":
+          return <div>{project.customer}</div>;
+        case "systemType":
           return (
-            <div className="flex flex-row justify-between">
-              <span className="">{payment.referenceNumber}</span>
-              <Chip
-                className="capitalize border-none"
-                color={paymentStatusColorMap[payment.status]}
-                size="sm"
-                variant="flat"
-              >
-                {payment.status}
-              </Chip>
+            <div>
+              {project.systemType} {project.kWCapacity}
             </div>
           );
-        case "amount":
-          return <div>₱ {payment.amount}</div>;
-        case "created date":
-          return <div>{payment.createdAt}</div>;
-        case "description":
-          return <div>{payment.description}</div>;
-        case "projName":
-          return <div>{payment.projName}</div>;
+        case "facilitator":
+          return <div>{project.facilitator}</div>;
+        case "plannedDate":
+          return (
+            <div>
+              {project.plannedStarted} - {project.plannedEnded}
+            </div>
+          );
+        case "actualDate":
+          return (
+            <div>
+              {project.actualStarted} - {project.actualEnded}
+            </div>
+          );
+        case "cost":
+          return <div>{project.cost}</div>;
+        case "status":
+          return (
+            <Chip
+              className="capitalize border-none"
+              color={projectStatusColorMap[project.status]}
+              size="sm"
+              variant="flat"
+            >
+              {project.status}
+            </Chip>
+          );
         case "action":
           return (
-            <Button
-              isIconOnly
-              onClick={() => handleViewInfo(payment)}
-              radius="full"
-              size="sm"
-              variant="light"
-            >
+            <Link to={`/reports/project/updates/${project.projId}`}>
               <FaInfoCircle className="text-default-400" />
-            </Button>
+            </Link>
           );
 
         default:
@@ -151,12 +132,12 @@ const PaymentTable = () => {
         </div>
         <div className="flex justify-between items-start">
           <span className="text-default-400 text-small">
-            Total {paymentLength} payments
+            Total {projectLength} project
           </span>
         </div>
       </div>
     );
-  }, [onSearchChange, paymentLength, filterValue]);
+  }, [onSearchChange, projectLength, filterValue]);
 
   const classNamesDesign = useMemo(
     () => ({
@@ -179,20 +160,16 @@ const PaymentTable = () => {
     []
   );
 
-  const {
-    isOpen: viewIsOpen,
-    onOpen: viewOnOpen,
-    onClose: viewOnClose,
-  } = useDisclosure();
-
-  const handleViewInfo = (info: IAllPayment) => {
-    setPaymentInfo(info);
-    viewOnOpen();
-  };
-
   return (
     <div className="bg-gray-100 flex items-center justify-center">
       <div className="container mx-auto p-4 bg-white h-full">
+        <h1 className="flex items-center mb-4">
+          Report
+          <span className="mx-2 text-gray-400">
+            <RiArrowRightWideFill />
+          </span>
+          Project
+        </h1>
         <div className="overflow-x-auto overflow-y-hidden scrollbar-thin scrollbar-track-white scrollbar-thumb-orange-100">
           <div className=" min-w-full">
             <Table
@@ -203,7 +180,7 @@ const PaymentTable = () => {
               topContent={topContent}
               topContentPlacement="outside"
             >
-              <TableHeader columns={payment_columns}>
+              <TableHeader columns={project_report_columns}>
                 {(column) => (
                   <TableColumn
                     key={column.uid}
@@ -220,7 +197,7 @@ const PaymentTable = () => {
                 loadingContent={<Spinner color="warning">Loading...</Spinner>}
               >
                 {(item) => (
-                  <TableRow key={item.referenceNumber}>
+                  <TableRow key={item.projId}>
                     {(columnKey) => (
                       <TableCell>{renderCell(item, columnKey)}</TableCell>
                     )}
@@ -229,15 +206,10 @@ const PaymentTable = () => {
               </TableBody>
             </Table>
           </div>
-          <PaymentDetailsModal
-            isOpen={viewIsOpen}
-            onClose={viewOnClose}
-            paymentDetails={paymentInfo!}
-          />
         </div>
       </div>
     </div>
   );
 };
 
-export default PaymentTable;
+export default ProjectInfosTable;
