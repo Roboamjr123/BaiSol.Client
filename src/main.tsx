@@ -9,11 +9,9 @@ import { store } from "./app/Store.ts";
 import { BrowserRouter as Router } from "react-router-dom";
 import { registerLicense } from "@syncfusion/ej2/base";
 
-const syncfusionLicense = import.meta.env.VITE_APP_SYNCFUSION_LICENSE;
 
 registerLicense(
-  syncfusionLicense
-  // `Ngo9BigBOggjHTQxAR8/V1NDaF5cWGFCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdnWH9eeHRSQmNdVURzVkY=`
+  `Ngo9BigBOggjHTQxAR8/V1NDaF5cWGFCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdnWH9eeHRSQmNdVURzVkY=`
 );
 
 disableReactDevTools();

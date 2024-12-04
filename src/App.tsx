@@ -1,4 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import "./App.css";
+
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Home from "./main/pages/Home";
 import { ToastContainer } from "react-toastify";
@@ -75,7 +77,7 @@ function App() {
   }, [pathname]);
 
   useEffect(() => {
-    setTimeout(() => setLoading(false), 1000);
+    setTimeout(() => setLoading(false), 500);
   }, []);
 
   if (loading)

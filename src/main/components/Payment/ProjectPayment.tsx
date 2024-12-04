@@ -9,6 +9,7 @@ import { Navigate, useParams } from "react-router-dom";
 import Loader from "../Loader";
 import { toast } from "react-toastify";
 import { getClientProjId } from "../../../lib/API/Client/ClientProjectAPI";
+import { getProjectExpense } from "../../../lib/API/Project/ProjectApi";
 
 const ProjectPayment: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
   const { projId } = useParams<{ projId: string }>();
@@ -23,6 +24,9 @@ const ProjectPayment: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
     isLoading,
     refetch,
   } = getClientPayments(projId!);
+
+  const { data: totalToPay, isLoading: isLoadingTotalExpense } =
+    getProjectExpense(clientProjId?.projId??projId);
 
   const paymentArray = Array.isArray(payment) ? payment : [];
   const acknowledgePayment = useAcknowledgePayment();
@@ -61,7 +65,7 @@ const ProjectPayment: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
     }
   };
 
-  if (isLoading) return <Loader />;
+  if (isLoading || isLoadingTotalExpense) return <Loader />;
 
   if ((error || paymentArray.length === 0) && !isAdmin) {
     return <Navigate to="/" />;
@@ -73,6 +77,17 @@ const ProjectPayment: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
 
   return (
     <div className="container mx-auto p-6">
+      {/* Total Project Cost Display */}
+      <div className="text-center mb-8">
+        <h2 className="text-3xl font-semibold text-gray-900 mb-2">
+          Total Project Cost
+        </h2>
+        <p className="text-2xl font-bold text-orange-500">
+          ₱ {totalToPay?.total}
+        </p>
+      </div>
+
+      {/* Payment Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {paymentArray?.map((payment) => {
           const is60PercentPaid = paymentArray.some(

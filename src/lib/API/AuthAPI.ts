@@ -6,6 +6,7 @@ import { clearUser, setUser } from "../../state/authSlice";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { useUserEmail } from "../../state/Hooks/userHook";
+import { useNavigate } from "react-router-dom";
 
 const baseURL = import.meta.env.VITE_APP_SERVER_API_URL;
 
@@ -130,6 +131,7 @@ export const use2FAMutation = () => {
 
 export const useLogOut = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   return useMutation({
     mutationFn: async (email: string) => {
       const response = await api.post(`auth/Auth/LogOut?email=${email}`, {
@@ -142,6 +144,9 @@ export const useLogOut = () => {
     onSuccess: (data) => {
       toast.success(data);
       dispatch(clearUser());
+      localStorage.removeItem("refreshToken");
+      Cookies.remove("accessToken");
+      navigate("/");
     },
     onError: (err: any) => {
       toast.error(err.data.message);

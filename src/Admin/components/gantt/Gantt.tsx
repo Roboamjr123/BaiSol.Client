@@ -90,12 +90,12 @@ const Gantt: React.FC<{
     baselineEndDate: "ActualEndDate",
     dependency: "Predecessor",
     parentID: "ParentId",
+    indicators: "Indicators",
   };
 
   const { projId } = useParams<{ projId: string }>();
 
   const projectId = projId ? projId : facProjId;
-
 
   const dataManager: DataManager = new DataManager({
     url: `http://localhost:5152/api/Gantt/${projectId}`,
@@ -124,6 +124,10 @@ const Gantt: React.FC<{
       max: new Date(projInfo?.endDate!),
     },
   };
+
+  let projectStartDate = new Date(projInfo?.startDate ?? new Date());
+  projectStartDate.setDate(projectStartDate.getDate() - 2);
+
   return (
     <div className="flex flex-col gap-y-5 p-5">
       <div className="flex flex-row justify-between items-center">
@@ -147,18 +151,19 @@ const Gantt: React.FC<{
         </div>
       </div>
       <GanttComponent
-        projectStartDate={new Date(projInfo?.startDate ?? new Date())}
+        projectStartDate={projectStartDate}
+        // projectStartDate={new Date(projInfo?.startDate ?? new Date())}
         loadingIndicator={{ indicatorType: "Shimmer" }}
         dataSource={dataManager}
         taskFields={taskFieldData}
-        height="700px"
+        height="500px"
         timelineSettings={{
           timelineViewMode: "Week",
         }}
         splitterSettings={{ position: "50%" }}
         allowSelection={true}
         toolbar={toolbarOptions}
-        allowResizing={true}
+        // allowResizing={true}
         highlightWeekends={true}
         labelSettings={{ taskLabel: "${Progress}%", rightLabel: "TaskName" }}
         baselineColor="orange"
@@ -202,6 +207,18 @@ const Gantt: React.FC<{
           ></ColumnDirective>
           <ColumnDirective
             field="Duration"
+            allowEditing={false}
+          ></ColumnDirective>
+          <ColumnDirective
+            field="Progress"
+            allowEditing={false}
+          ></ColumnDirective>
+          <ColumnDirective
+            field="ActualStartDate"
+            allowEditing={false}
+          ></ColumnDirective>
+          <ColumnDirective
+            field="ActualEndDate"
             allowEditing={false}
           ></ColumnDirective>
         </ColumnsDirective>

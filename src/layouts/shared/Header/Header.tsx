@@ -27,25 +27,27 @@ interface HeaderProps {
 }
 
 function Header({ isSidebarOpen, setIsSidebarOpen }: HeaderProps) {
-  const navigate = useNavigate();
   const logOut = useLogOut();
 
   const email = useUserEmail();
-  const user = useSelector(selectUser);
-  const dispatch = useDispatch();
 
   const handleLogout = async () => {
-    try {
-      await logOut.mutateAsync(email); // Await the logout mutation
-      // Only execute the following lines if the mutation is successful
-      localStorage.removeItem("refreshToken");
-      Cookies.remove("accessToken");
-      dispatch(clearUser());
-      navigate("/");
-      window.location.reload();
-    } catch (err) {
-      console.error("Logout error:", err); // Log error for debugging
-      // Optionally show an error toast here if needed
+    // Show confirmation dialog
+    const isConfirmed = window.confirm("Are you sure you want to log out?");
+
+    if (isConfirmed) {
+      try {
+        await logOut.mutateAsync(email); // Await the logout mutation
+        // Only execute the following lines if the mutation is successful
+        console.log("Successfully logged out");
+        // You can optionally redirect the user after logout or show a success message
+      } catch (err) {
+        console.error("Logout error:", err); // Log error for debugging
+        // Optionally show an error toast here if needed
+      }
+    } else {
+      console.log("Logout canceled");
+      // Optionally handle the case where the user cancels the logout
     }
   };
 

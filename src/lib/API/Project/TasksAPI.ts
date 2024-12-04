@@ -180,16 +180,18 @@ export const useUpdateTaskProgress = () => {
       id,
       Progress,
       ProofImage,
+      EstimationStart,
     }: {
       id: number;
       Progress: number;
       ProofImage: File;
+      EstimationStart: string;
     }) => {
       const data = new FormData(); // Create a FormData instance
       data.append("ProofImage", ProofImage); // Append the file
 
       const response = await api.put("api/Gantt/UpdateTaskProgress", data, {
-        params: { id, Progress }, // Pass the ID as a query parameter
+        params: { id, Progress, EstimationStart }, // Pass the ID as a query parameter
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -202,7 +204,6 @@ export const useUpdateTaskProgress = () => {
     },
   });
 };
-
 
 export const useSubmitTaskReport = () => {
   return useMutation({
