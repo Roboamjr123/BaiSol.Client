@@ -167,7 +167,7 @@ const Gantt: React.FC<{
         highlightWeekends={true}
         labelSettings={{ taskLabel: "${Progress}%", rightLabel: "TaskName" }}
         baselineColor="orange"
-        renderBaseline={true}
+        // renderBaseline={true}
         showColumnMenu={true}
         editSettings={editOptions}
         allowRowDragAndDrop={isOnProcess}
@@ -213,14 +213,14 @@ const Gantt: React.FC<{
             field="Progress"
             allowEditing={false}
           ></ColumnDirective>
-          <ColumnDirective
+          {/* <ColumnDirective
             field="ActualStartDate"
             allowEditing={false}
           ></ColumnDirective>
           <ColumnDirective
             field="ActualEndDate"
             allowEditing={false}
-          ></ColumnDirective>
+          ></ColumnDirective> */}
         </ColumnsDirective>
 
         <EditDialogFieldsDirective>
