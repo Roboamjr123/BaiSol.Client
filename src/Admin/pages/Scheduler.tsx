@@ -1,7 +1,7 @@
 import React from "react";
 import Gantt from "../components/gantt/Gantt";
 import { useUpdateProjectToOnWork } from "../../lib/API/Project/ProjectApi";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Button } from "@nextui-org/react";
 import {
@@ -26,6 +26,7 @@ const Scheduler: React.FC<{
   const updateProjectToOnWork = useUpdateProjectToOnWork();
   const projectTaskStatus = getProjectStatus(projId!);
   const projectTaskToDos = getTaskToUpdateProgress(projId!);
+  const navigate = useNavigate();
 
   const {
     data: projInfo,
@@ -47,7 +48,7 @@ const Scheduler: React.FC<{
             toast.success(data);
             refetchIsOnProcess();
             refetchDateInfo();
-            window.location.reload();
+            navigate(`/project/${projId}`);
           },
         }
       );

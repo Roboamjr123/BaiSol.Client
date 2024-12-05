@@ -247,7 +247,7 @@ const TasksToUpdateProgress: React.FC<{
                   }
                 >
                   <div className="flex flex-col">
-                    {taskChild.isEnable &&
+                    {(taskChild.isEnable || taskChild.isLate) &&
                       // !taskChild.isFinish &&
                       isFacilitator && (
                         <div className="flex flex-row gap-x-5 justify-between">

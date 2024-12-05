@@ -148,7 +148,7 @@ const EditLaborCost: React.FC<IEdit> = ({
               onChange={handleChange}
             />
           )}
-          <div className="grid grid-cols-2 gap-2">
+          <div >
             {isPredefined ? null : (
               <Input
                 isRequired
@@ -164,7 +164,7 @@ const EditLaborCost: React.FC<IEdit> = ({
 
             {labor.description !== "Project Manager - Electrical Engr." &&
               labor.description !== "Manpower" && (
-                <div>
+                <div className="grid grid-cols-2 gap-2">
                   <Input
                     isRequired
                     name="quantity"
@@ -188,23 +188,32 @@ const EditLaborCost: React.FC<IEdit> = ({
                     size="sm"
                     onChange={handleChange}
                   />
+                  <Input
+                    isRequired
+                    name="unitNum"
+                    value={String(formData.unitNum)}
+                    type="text"
+                    label="No. of Units"
+                    variant="flat"
+                    onChange={handleChange}
+                    size="sm"
+                  />
                 </div>
               )}
 
             {(labor.description === "Manpower" ||
               labor.description === "Project Manager - Electrical Engr.") && (
-                <Input
-                  isRequired
-                  type="text"
-                  name="unitCost"
-                  label="Salary per Person"
-                  variant="flat"
-                  value={formData.unitCost}
-                  size="sm"
-                  onChange={handleChange}
-                />
+              <Input
+                isRequired
+                type="text"
+                name="unitCost"
+                label="Salary per Person"
+                variant="flat"
+                value={formData.unitCost}
+                size="sm"
+                onChange={handleChange}
+              />
             )}
-
           </div>
         </ModalBody>
         <ModalFooter>

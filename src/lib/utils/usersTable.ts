@@ -10,7 +10,7 @@ export type UserTableProps = {
   updatedAt: string;
   createdAt: string;
   currentProjId: string;
-  clientProjects: [{ projId: string }];
+  clientProjects: [{ projId: string; projName: string }];
 };
 
 export type InstallerTableProps = {
@@ -22,8 +22,8 @@ export type InstallerTableProps = {
   adminEmail: string;
   updatedAt: string;
   createdAt: string;
-  
-  assignedProjects: [{ projId: string }];
+
+  assignedProjects: [{ projId: string; projName: string }];
 };
 
 export type ClientTableProps = {
@@ -93,7 +93,7 @@ export const clientStatusColorMap: Record<string, ChipProps["color"]> = {
   Active: "success",
   OnGoing: "primary",
   Finished: "secondary",
-  Pending: "default"
+  Pending: "default",
 };
 
 export const INITIAL_VISIBLE_COLUMNS = ["name", "status", "actions"];

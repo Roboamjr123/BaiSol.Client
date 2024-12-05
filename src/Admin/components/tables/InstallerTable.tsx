@@ -207,7 +207,7 @@ const InstallerTable = () => {
               size="sm"
               variant="dot"
             >
-              {cellValue}
+              {installer.status}
             </Chip>
           );
 
@@ -293,7 +293,7 @@ const InstallerTable = () => {
                 >
                   {(item) => (
                     <DropdownItem key={item.projId}>
-                      <Link to={`/project/${item.projId}`}>{item.projId}</Link>
+                      <Link to={`/project/${item.projId}`}>{item.projName}</Link>
                     </DropdownItem>
                   )}
                 </DropdownMenu>

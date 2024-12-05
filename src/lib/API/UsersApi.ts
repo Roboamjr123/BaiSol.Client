@@ -149,8 +149,8 @@ export const getAllPersonnelUsers = (role: string) => {
         status: user.status,
         updatedAt: user.updatedAt, // Format updatedAt
         createdAt: user.createdAt, // Format createdAt
-        currentProjId:user.currentProjId,
-        clientProjects:user.clientProjects
+        currentProjId: user.currentProjId,
+        clientProjects: user.clientProjects,
       }));
       return filteredData;
     },
@@ -168,7 +168,7 @@ interface Installer {
   updatedAt: string;
   createdAt: string;
 
-  assignedProjects: [{ projId: string }];
+  assignedProjects: [{ projId: string; projName: string }];
 }
 
 // Get all installers

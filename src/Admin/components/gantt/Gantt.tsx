@@ -172,7 +172,7 @@ const Gantt: React.FC<{
         editSettings={editOptions}
         allowRowDragAndDrop={isOnProcess}
         // allowReordering={true}
-        // allowParentDependency={true}
+        // allowParentDependency={false}
         sortSettings={sortingOptions}
         // allowSorting={true}
       >
