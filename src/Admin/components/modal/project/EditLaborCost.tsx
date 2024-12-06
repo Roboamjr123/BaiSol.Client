@@ -164,45 +164,47 @@ const EditLaborCost: React.FC<IEdit> = ({
 
             {labor.description !== "Project Manager - Electrical Engr." &&
               labor.description !== "Manpower" && (
-                <Input
-                  isRequired
-                  name="quantity"
-                  value={String(formData.quantity)}
-                  type="text"
-                  label="Quantity"
-                  isInvalid={isInvalidQuantity}
-                  variant="flat"
-                  errorMessage="Invalid quantity number!"
-                  onChange={handleChange}
-                  size="sm"
-                  maxLength={9}
-                />
+                <div>
+                  <Input
+                    isRequired
+                    name="quantity"
+                    value={String(formData.quantity)}
+                    type="text"
+                    label="Quantity"
+                    isInvalid={isInvalidQuantity}
+                    variant="flat"
+                    errorMessage="Invalid quantity number!"
+                    onChange={handleChange}
+                    size="sm"
+                    maxLength={9}
+                  />{" "}
+                  <Input
+                    isRequired
+                    type="text"
+                    name="unitCost"
+                    label="Unit Cost"
+                    variant="flat"
+                    value={formData.unitCost}
+                    size="sm"
+                    onChange={handleChange}
+                  />
+                </div>
               )}
 
-            <Input
-              isRequired
-              type="text"
-              name="unitCost"
-              label="Unit Cost"
-              variant="flat"
-              value={formData.unitCost}
-              size="sm"
-              onChange={handleChange}
-            />
-
-            {labor.description !== "Project Manager - Electrical Engr." &&
-              labor.description !== "Manpower" && (
+            {(labor.description === "Manpower" ||
+              labor.description === "Project Manager - Electrical Engr.") && (
                 <Input
                   isRequired
-                  name="unitNum"
-                  value={String(formData.unitNum)}
                   type="text"
-                  label="Salary per person"
+                  name="unitCost"
+                  label="Salary per Person"
                   variant="flat"
-                  onChange={handleChange}
+                  value={formData.unitCost}
                   size="sm"
+                  onChange={handleChange}
                 />
-              )}
+            )}
+
           </div>
         </ModalBody>
         <ModalFooter>
