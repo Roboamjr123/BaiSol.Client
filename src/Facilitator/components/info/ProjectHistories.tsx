@@ -129,6 +129,35 @@ const ProjectHistories: React.FC<{
                   </div>
                 </div>
 
+                {/* New Section: Project Dates */}
+                <div className="mt-6 p-4 bg-gray-50 rounded-lg shadow">
+                  <h2 className="text-lg font-semibold text-gray-700 mb-3">
+                    Project Dates
+                  </h2>
+                  <div className="text-sm space-y-2">
+                    <div className="flex justify-between">
+                      <span className="font-medium text-gray-600">
+                        Planned:
+                      </span>
+                      <span className="text-gray-700">
+                        {project.plannedStarted} - {project.plannedEnded}{" "}
+                        <span className="text-gray-500">
+                          ({project.plannedWorkingDays} days)
+                        </span>
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="font-medium text-gray-600">Actual:</span>
+                      <span className="text-gray-700">
+                        {project.actualStarted} - {project.actualEnded}{" "}
+                        <span className="text-gray-500">
+                          ({project.actualdWorkingDays} days)
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
                 {/* Bottom Section: Progress Indicators */}
                 <div className="flex flex-col sm:flex-row justify-around items-center mt-8 space-y-4 sm:space-y-0">
                   {/* Project Progress */}

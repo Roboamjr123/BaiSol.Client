@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Button } from "@nextui-org/react";
 import {
+  getProjectActualWorkedDate,
   getProjectDateInto,
   getProjectStatus,
 } from "../../lib/API/Project/GanttAPI";
@@ -34,6 +35,9 @@ const Scheduler: React.FC<{
     refetch: refetchDateInfo,
   } = getProjectDateInto(projId!);
 
+  const { data: projActualWorkDate, isLoading: isLoadingWorkDates } =
+    getProjectActualWorkedDate(projId!);
+
   const handleMakeProjectToWork = () => {
     if (
       refetchIsOnProcess &&
@@ -58,7 +62,8 @@ const Scheduler: React.FC<{
   if (
     updateProjectToOnWork.isPending ||
     projectTaskToDos.isLoading ||
-    isLoading
+    isLoading ||
+    isLoadingWorkDates
   ) {
     return <Loader />;
   }
@@ -77,7 +82,11 @@ const Scheduler: React.FC<{
         )}
       </div>
 
-      <Gantt isOnProcess={isOnProcess} projInfo={projInfo!} />
+      <Gantt
+        isOnProcess={isOnProcess}
+        projInfo={projInfo!}
+        projFinishDates={projActualWorkDate}
+      />
 
       {/* <TasksUpdates tasks={projectTaskStatus.data?.tasks} /> */}
       <TasksToUpdateProgress taskToDo={projectTaskToDos.data!} />

@@ -36,6 +36,13 @@ export interface IClientProjectInfoDTO {
   projectProgress: number;
   status: string;
   installers?: [{ name: string; position: string }];
+
+  plannedStarted: string;
+  plannedEnded: string;
+  plannedWorkingDays: string;
+  actualStarted: string;
+  actualEnded: string;
+  actualdWorkingDays: string;
 }
 
 export const getProjectHistories = () => {

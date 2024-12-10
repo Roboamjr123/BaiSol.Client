@@ -127,8 +127,10 @@ export interface IProjectDTO {
   facilitator: string;
   plannedStarted: string;
   plannedEnded: string;
+  plannedWorkingDays: string;
   actualStarted: string;
   actualEnded: string;
+  actualdWorkingDays: string;
   cost: string;
   status: string;
 }

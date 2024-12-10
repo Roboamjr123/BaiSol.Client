@@ -2,6 +2,7 @@ import React from "react";
 import { Navigate, useParams } from "react-router-dom";
 import { getClientProjId } from "../../lib/API/Client/ClientProjectAPI";
 import {
+  getProjectActualWorkedDate,
   getProjectDateInto,
   getProjectProgress,
   getProjectStatus,
@@ -30,6 +31,8 @@ const ClientProjectReport: React.FC<{ projectId?: string }> = ({
   );
   const projectTaskToDos = getTaskToUpdateProgress(projId!);
   const { data: projInfo, isLoading } = getProjectDateInto(projId!);
+  const { data: projActualWorkDate, isLoading: isLoadingWorkDates } =
+    getProjectActualWorkedDate(projId!);
 
   if (!projectId) {
     if (
@@ -45,7 +48,8 @@ const ClientProjectReport: React.FC<{ projectId?: string }> = ({
     isloadingPP ||
     isloadingPs ||
     projectTaskToDos.isLoading ||
-    isLoading
+    isLoading ||
+    isLoadingWorkDates
   )
     return <Loader />;
 
@@ -53,7 +57,12 @@ const ClientProjectReport: React.FC<{ projectId?: string }> = ({
     <div className="flex flex-row space-y-4">
       {/* Tasks Updates Section */}
       <div className="w-3/4">
-        <Gantt isOnProcess={false} facProjId={projId} projInfo={projInfo!} />
+        <Gantt
+          isOnProcess={false}
+          facProjId={projId}
+          projInfo={projInfo!}
+          projFinishDates={projActualWorkDate}
+        />
         <TasksToUpdateProgress taskToDo={projectTaskToDos.data!} />
       </div>
 
