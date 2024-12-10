@@ -127,7 +127,6 @@ const AssignedSupplyTable = ({ isMaterial, isDemobilization }: any) => {
       });
     }
   };
-  console.log(returnSupply);
 
   return (
     <div className="bg-gray-100 flex items-center justify-center">
