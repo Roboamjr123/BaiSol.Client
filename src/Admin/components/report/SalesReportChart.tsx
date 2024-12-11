@@ -24,6 +24,7 @@ const SalesReportChart: React.FC<{ salesData: ISalesReport[] }> = ({
   type TimeFrame = "Weekly" | "Monthly" | "Quarterly";
 
   const [timeFrame, setTimeFrame] = useState<TimeFrame>("Monthly");
+  
   const years = Array.from(
     new Set(salesData.map((data) => new Date(data.date).getFullYear()))
   );

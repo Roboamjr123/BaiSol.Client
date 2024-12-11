@@ -194,7 +194,7 @@ const ClientTable = () => {
           return (
             <div className="flex flex-col">
               <span className="font-semibold tracking-widest">
-                {client.ClientContactNum}
+                {`+639${client.clientContactNum}`}
               </span>
               <span className="text-xs text-gray-400 tracking-tight">
                 {client.clientAddress}

@@ -34,7 +34,7 @@ export type ClientTableProps = {
   status: string;
   updatedAt: string;
   createdAt: string;
-  ClientContactNum: string;
+  clientContactNum: string;
   clientAddress: string;
   clientMonthlyElectricBill: number;
   currentProjId: string;

@@ -97,7 +97,7 @@ const ProjectHistories: React.FC<{
                       </div>
                       <h5 className="text-md font-semibold">{`${project.clientFName}@gmail.com`}</h5>
                       <div className="text-sm font-semibold">
-                        <h5 className="text-md font-semibold">{`${project.clientContactNum}`}</h5>
+                        <h5 className="text-md font-semibold">{`+639${project.clientContactNum}`}</h5>
                       </div>
                     </div>
                   </div>
