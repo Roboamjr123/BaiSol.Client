@@ -178,6 +178,7 @@ export interface IClientProjectInfo {
   clientId: string;
   clientFName: string;
   clientLName: string;
+  clientEmail: string;
   clientContactNum: string;
   clientAddress: string;
   systemType: string;

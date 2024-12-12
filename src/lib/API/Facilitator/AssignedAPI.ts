@@ -29,6 +29,7 @@ export interface IClientProjectInfoDTO {
   clientLName: string;
   clientContactNum: string;
   clientAddress: string;
+  clientEmail: string;
   systemType: string;
   kWCapacity: number;
   sex: string;
