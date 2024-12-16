@@ -122,6 +122,7 @@ const AssignedSupplyTable = ({ isMaterial, isDemobilization }: any) => {
       returnEquipment.mutateAsync(returnSupply, {
         onSuccess: (data) => {
           toast.success(data);
+          window.location.reload();
           navigate("/");
         },
       });

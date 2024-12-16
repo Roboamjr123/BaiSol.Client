@@ -119,13 +119,14 @@ interface NewClientData {
 
 // Add new project with new client
 export const useAddNewProjectNewClient = () => {
-  // const admin = useSelector(selectUser);
+  
+  const userEmail = useUserEmail();
   return useMutation({
     mutationFn: async (formData: NewClientData) => {
       const data = {
         ...formData,
-        adminEmail: "richardquirante98@gmail.com",
-        // adminEmail: admin.email, // Add adminEmail dynamically
+        // adminEmail: "richardquirante98@gmail.com",
+        adminEmail: userEmail, // Add adminEmail dynamically
       };
 
       try {
@@ -193,7 +194,7 @@ export interface IClientProjectInfo {
 
   projectStarted?: string;
   projectEnded?: string;
-  totalDays?: number;
+  totalDays?: string;
 }
 
 // fetch client Info

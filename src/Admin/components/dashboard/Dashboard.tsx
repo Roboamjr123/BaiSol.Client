@@ -27,16 +27,16 @@ const Dashboard: React.FC = () => {
       <h1 className="flex items-center mb-4 text-lg md:text-xl">Dashboard</h1>
 
       {/* Overview Statistics */}
-      <div className="grid md:grid-cols-4 sm:grid-cols-2 gap-4">
+      <div className="grid md:grid-cols-5 sm:grid-cols-2 gap-5">
         <motion.div
           whileHover={{
             scale: 1.02,
             boxShadow: "inset 0px 0px 10px rgba(0, 0, 0, 0.15)",
           }}
           transition={{ type: "spring", stiffness: 300 }}
-          className="bg-gradient-to-br from-blue-300 to-gray-300 text-gray-800 border border-orange-500 p-4 rounded-lg shadow-lg cursor-pointer"
+          className="bg-gradient-to-br from-blue-300 to-gray-300 text-gray-800 border  p-4 rounded-lg shadow-lg cursor-pointer"
         >
-          <h2 className="text-lg font-medium">Total Personnel</h2>
+          <h2 className="text-md font-medium">Total Personnel</h2>
           <p className="text-3xl font-semibold">
             {dashboardData?.totalPersonnel}
           </p>
@@ -48,9 +48,9 @@ const Dashboard: React.FC = () => {
             boxShadow: "inset 0px 0px 10px rgba(0, 0, 0, 0.15)",
           }}
           transition={{ type: "spring", stiffness: 300 }}
-          className="bg-gradient-to-br from-green-200 to-gray-300 text-gray-800 border border-orange-500 p-4 rounded-lg shadow-lg cursor-pointer"
+          className="bg-gradient-to-br from-green-200 to-gray-300 text-gray-800 border  p-4 rounded-lg shadow-lg cursor-pointer"
         >
-          <h2 className="text-lg font-medium">Complete Projects</h2>
+          <h2 className="text-md font-medium">Complete Projects</h2>
           <p className="text-3xl font-semibold">
             {dashboardData?.finishedProjects}
           </p>
@@ -62,9 +62,9 @@ const Dashboard: React.FC = () => {
             boxShadow: "inset 0px 0px 10px rgba(0, 0, 0, 0.15)",
           }}
           transition={{ type: "spring", stiffness: 300 }}
-          className="bg-gradient-to-br from-yellow-200 to-gray-300 text-gray-800 border border-orange-500 p-4 rounded-lg shadow-lg cursor-pointer"
+          className="bg-gradient-to-br from-yellow-200 to-gray-300 text-gray-800 border  p-4 rounded-lg shadow-lg cursor-pointer"
         >
-          <h2 className="text-lg font-medium">Pending Quotation</h2>
+          <h2 className="text-md font-medium">Pending Quotation</h2>
           <p className="text-3xl font-semibold">
             {dashboardData?.pendingProjects}
           </p>
@@ -76,9 +76,22 @@ const Dashboard: React.FC = () => {
             boxShadow: "inset 0px 0px 10px rgba(0, 0, 0, 0.15)",
           }}
           transition={{ type: "spring", stiffness: 300 }}
-          className="bg-gradient-to-br from-red-200 to-gray-300 text-gray-800 border border-orange-500 p-4 rounded-lg shadow-lg cursor-pointer"
+          className="bg-gradient-to-br from-red-200 to-gray-300 text-gray-800 border  p-4 rounded-lg shadow-lg cursor-pointer"
         >
-          <h2 className="text-lg font-medium">Projects On Work</h2>
+          <h2 className="text-md font-medium">Projects On Work</h2>
+          <p className="text-3xl font-semibold">
+            {dashboardData?.onWorkProjects}
+          </p>
+        </motion.div>
+        <motion.div
+          whileHover={{
+            scale: 1.02,
+            boxShadow: "inset 0px 0px 10px rgba(0, 0, 0, 0.15)",
+          }}
+          transition={{ type: "spring", stiffness: 300 }}
+          className="bg-gradient-to-br from-blue-200 to-gray-300 text-gray-800 border p-4 rounded-lg shadow-lg cursor-pointer"
+        >
+          <h2 className="text-md font-medium">Total of Clients</h2>
           <p className="text-3xl font-semibold">
             {dashboardData?.onWorkProjects}
           </p>

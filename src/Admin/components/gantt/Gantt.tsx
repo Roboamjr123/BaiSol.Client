@@ -142,17 +142,6 @@ const Gantt: React.FC<{
         </span> */}
         <div className="flex flex-col justify-between items-start">
           <span className="text-gray-500 text-xs">
-            Actual Date Start: {projFinishDates?.actualStartDate || "N/A"}
-          </span>
-          <span className="text-gray-500 text-xs">
-            Actual Date End: {projFinishDates?.actualEndDate || "N/A"}
-          </span>
-          <span className="text-gray-500 text-xs">
-            Actual Work Days: {projFinishDates?.actualProjectDays || "N/A"}
-          </span>
-        </div>
-        <div className="flex flex-col justify-between items-start">
-          <span className="text-gray-500 text-xs">
             Estimation Date Start: {projInfo?.estimatedStartDate || "N/A"}
           </span>
           <span className="text-gray-500 text-xs">
@@ -160,6 +149,17 @@ const Gantt: React.FC<{
           </span>
           <span className="text-gray-500 text-xs">
             Estimation Work Days: {projInfo?.estimatedProjectDays || "N/A"}
+          </span>
+        </div>
+        <div className="flex flex-col justify-between items-start">
+          <span className="text-gray-500 text-xs">
+            Actual Date Start: {projFinishDates?.actualStartDate || "N/A"}
+          </span>
+          <span className="text-gray-500 text-xs">
+            Actual Date End: {projFinishDates?.actualEndDate || "N/A"}
+          </span>
+          <span className="text-gray-500 text-xs">
+            Actual Work Days: {projFinishDates?.actualProjectDays || "N/A"}
           </span>
         </div>
       </div>
