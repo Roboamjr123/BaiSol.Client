@@ -140,11 +140,6 @@ const ProjectPage = () => {
         </div>
       </div>
       <div className="flex flex-col gap-y-6 items-center">
-        {/* <ProjectCards
-          projects={filteredItems}
-          currentPage={currentPage}
-          pageSize={pageSize}
-        /> */}
         <ProjectCards2
           projects={filteredItems}
           currentPage={currentPage}
