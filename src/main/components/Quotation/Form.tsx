@@ -13,11 +13,15 @@ import {
   getProjectInfo,
   getProjectSupply,
 } from "../../../lib/API/Project/ProjectApi";
-import { useDisclosure } from "@nextui-org/react";
+import { Button, useDisclosure } from "@nextui-org/react";
 import EditClientInfo from "../../../Admin/components/modal/project/EditClientInfo";
 import { FaDownload } from "react-icons/fa";
-import { getClientProjId } from "../../../lib/API/Client/ClientProjectAPI";
+import {
+  getClientProjId,
+  getIsProjectApprovedQuotation,
+} from "../../../lib/API/Client/ClientProjectAPI";
 import Loader from "../Loader";
+import TermsAndConditionsModal from "../../../Client/components/modal/TermsAndConditionsModal";
 /*************  ✨ Codeium Command ⭐  *************/
 /**
  * Component to generate a PDF of the quotation.
@@ -39,10 +43,21 @@ const Form: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
     refetch: refetchExpense,
     isLoading: expenseLoading,
   } = getProjectExpense(projId);
-  const { data: materialSupplies, isLoading: supplyLoading } =
-    getProjectSupply(projId);
-  const { data: isProjectOnGoing, isLoading: onGoingLoading } =
-    getIsOnGoingProject(projId!);
+  const {
+    data: materialSupplies,
+    isLoading: supplyLoading,
+    refetch: refetchSupply,
+  } = getProjectSupply(projId);
+  const {
+    data: isProjectOnGoing,
+    isLoading: onGoingLoading,
+    refetch: refetchStatus,
+  } = getIsOnGoingProject(projId!);
+  const {
+    data: isProjectApproved,
+    isLoading: approvedLoading,
+    refetch: refetchApprove,
+  } = getIsProjectApprovedQuotation(projId!);
 
   const {
     isOpen: editIsOpen,
@@ -50,7 +65,19 @@ const Form: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
     onClose: editOnClose,
   } = useDisclosure();
 
-  if (expenseLoading || infoLoading || supplyLoading || onGoingLoading)
+  const {
+    isOpen: approveIsOpen,
+    onOpen: approveOnOpen,
+    onClose: approveOnClose,
+  } = useDisclosure();
+
+  if (
+    expenseLoading ||
+    infoLoading ||
+    supplyLoading ||
+    onGoingLoading ||
+    approvedLoading
+  )
     return <Loader />;
 
   if (!projInfo || !projExpense || !materialSupplies)
@@ -95,13 +122,26 @@ const Form: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
         heightLeft -= pageHeight;
       }
 
-      pdf.save(`${projInfo?.projectId}.pdf`);
+      pdf.save(`${projInfo?.customerName}.pdf`);
     });
   };
 
   return (
     <div className="a4-container">
       <div className="print-container text-right flex justify-end gap-x-5 pb-5 px-1">
+        {!isAdmin && (
+          <Button
+            isLoading={
+              expenseLoading || infoLoading || supplyLoading || onGoingLoading
+            }
+            className="bg-orange-500 text-background"
+            size="sm"
+            onClick={() => approveOnOpen()}
+            isDisabled={isProjectApproved}
+          >
+            {isProjectApproved ? "Approved" : "Approve Quotation"}
+          </Button>
+        )}
         <button
           onClick={handleDownload}
           className="print-button flex flex-col items-center hover:text-orange-500 !important"
@@ -132,12 +172,23 @@ const Form: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
           <Footer projExpense={projExpense} />
         </div>
       </div>
+
       <EditClientInfo
         isOpen={editIsOpen}
         onClose={editOnClose}
         projId={projId!}
         refetchExpense={refetchExpense}
         refetchInfo={refetchInfo}
+      />
+
+      <TermsAndConditionsModal
+        isOpen={approveIsOpen}
+        onClose={approveOnClose}
+        refetchInfo={refetchInfo}
+        refetchExpense={refetchExpense}
+        refetchApprove={refetchApprove}
+        refetchSupply={refetchSupply} // if there's a refetch in `getProjectSupply`
+        refetchOnGoing={refetchStatus} // if there's a refetch in `getIsOnGoingProject`
       />
     </div>
   );
