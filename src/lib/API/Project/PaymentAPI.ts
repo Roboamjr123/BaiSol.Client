@@ -17,6 +17,7 @@ interface IPayment {
   isAcknowledged: boolean;
   acknowledgedBy: string;
   acknowledgedAt: string | null;
+  paymentDetail: IAllPayment;
 }
 
 export const getClientPayments = (projId: string) => {
