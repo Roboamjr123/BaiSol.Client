@@ -8,12 +8,9 @@ import { Provider } from "react-redux";
 import { store } from "./app/Store.ts";
 import { BrowserRouter as Router } from "react-router-dom";
 import { registerLicense } from "@syncfusion/ej2/base";
-import TestImage from "./TestImage.tsx";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import CustomAreaChart from "./Admin/components/report/ChartSample.tsx";
+
 
 registerLicense(
-  // import.meta.env.VITE_APP_SYNCFUSION_LICENSE
   `Ngo9BigBOggjHTQxAR8/V1NDaF5cWGFCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdnWH9eeHRSQmNdVURzVkY=`
 );
 

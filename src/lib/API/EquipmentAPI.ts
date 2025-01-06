@@ -202,7 +202,8 @@ export const useUpdateEquipmentUAndD = () => {
 export const useDeleteEquipment = () => {
   //   const admin = useSelector(selectUser);
   //   const adminEmail = admin?.email;
-  const adminEmail = "richardquirante98@gmail.com";
+  const userEmail = useUserEmail();
+  const adminEmail = userEmail;
 
   return useMutation({
     mutationFn: async ({ eqptId }: { eqptId: number }) => {

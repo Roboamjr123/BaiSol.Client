@@ -13,7 +13,7 @@ export const getAssignedProject = () => {
           userEmail: userEmail,
         },
       });
-      return response.data || "73288400-fc5f-4888-96c0-6733c7c3e024";
+      return response.data;
     },
   });
 };
@@ -29,6 +29,7 @@ export interface IClientProjectInfoDTO {
   clientLName: string;
   clientContactNum: string;
   clientAddress: string;
+  clientEmail: string;
   systemType: string;
   kWCapacity: number;
   sex: string;
@@ -36,6 +37,13 @@ export interface IClientProjectInfoDTO {
   projectProgress: number;
   status: string;
   installers?: [{ name: string; position: string }];
+
+  plannedStarted: string;
+  plannedEnded: string;
+  plannedWorkingDays: string;
+  actualStarted: string;
+  actualEnded: string;
+  actualdWorkingDays: string;
 }
 
 export const getProjectHistories = () => {

@@ -30,6 +30,7 @@ import { useUpdateProjectToOnWork } from "../../../lib/API/Project/ProjectApi";
 import { useEffect } from "react";
 import {
   getProjectDateInto,
+  IActualWorkDate,
   IProjectDateInto,
 } from "../../../lib/API/Project/GanttAPI";
 import Loader from "../../../main/components/Loader";
@@ -39,7 +40,8 @@ const Gantt: React.FC<{
   isOnProcess: boolean;
   facProjId?: string;
   projInfo: IProjectDateInto;
-}> = ({ isOnProcess, facProjId, projInfo }) => {
+  projFinishDates?: IActualWorkDate;
+}> = ({ isOnProcess, facProjId, projInfo, projFinishDates }) => {
   const toolbarOptions: ToolbarItem[] = isOnProcess
     ? [
         "Add",
@@ -90,12 +92,12 @@ const Gantt: React.FC<{
     baselineEndDate: "ActualEndDate",
     dependency: "Predecessor",
     parentID: "ParentId",
+    indicators: "Indicators",
   };
 
   const { projId } = useParams<{ projId: string }>();
 
   const projectId = projId ? projId : facProjId;
-
 
   const dataManager: DataManager = new DataManager({
     url: `http://localhost:5152/api/Gantt/${projectId}`,
@@ -124,6 +126,10 @@ const Gantt: React.FC<{
       max: new Date(projInfo?.endDate!),
     },
   };
+
+  let projectStartDate = new Date(projInfo?.startDate ?? new Date());
+  projectStartDate.setDate(projectStartDate.getDate() - 2);
+
   return (
     <div className="flex flex-col gap-y-5 p-5">
       <div className="flex flex-row justify-between items-center">
@@ -145,29 +151,41 @@ const Gantt: React.FC<{
             Estimation Work Days: {projInfo?.estimatedProjectDays || "N/A"}
           </span>
         </div>
+        <div className="flex flex-col justify-between items-start">
+          <span className="text-gray-500 text-xs">
+            Actual Date Start: {projFinishDates?.actualStartDate || "N/A"}
+          </span>
+          <span className="text-gray-500 text-xs">
+            Actual Date End: {projFinishDates?.actualEndDate || "N/A"}
+          </span>
+          <span className="text-gray-500 text-xs">
+            Actual Work Days: {projFinishDates?.actualProjectDays || "N/A"}
+          </span>
+        </div>
       </div>
       <GanttComponent
-        projectStartDate={new Date(projInfo?.startDate ?? new Date())}
+        projectStartDate={projectStartDate}
+        // projectStartDate={new Date(projInfo?.startDate ?? new Date())}
         loadingIndicator={{ indicatorType: "Shimmer" }}
         dataSource={dataManager}
         taskFields={taskFieldData}
-        height="700px"
+        height="500px"
         timelineSettings={{
           timelineViewMode: "Week",
         }}
         splitterSettings={{ position: "50%" }}
         allowSelection={true}
         toolbar={toolbarOptions}
-        allowResizing={true}
+        // allowResizing={true}
         highlightWeekends={true}
         labelSettings={{ taskLabel: "${Progress}%", rightLabel: "TaskName" }}
         baselineColor="orange"
-        renderBaseline={true}
+        // renderBaseline={true}
         showColumnMenu={true}
         editSettings={editOptions}
         allowRowDragAndDrop={isOnProcess}
         // allowReordering={true}
-        // allowParentDependency={true}
+        // allowParentDependency={false}
         sortSettings={sortingOptions}
         // allowSorting={true}
       >
@@ -204,6 +222,18 @@ const Gantt: React.FC<{
             field="Duration"
             allowEditing={false}
           ></ColumnDirective>
+          <ColumnDirective
+            field="Progress"
+            allowEditing={false}
+          ></ColumnDirective>
+          {/* <ColumnDirective
+            field="ActualStartDate"
+            allowEditing={false}
+          ></ColumnDirective>
+          <ColumnDirective
+            field="ActualEndDate"
+            allowEditing={false}
+          ></ColumnDirective> */}
         </ColumnsDirective>
 
         <EditDialogFieldsDirective>

@@ -127,8 +127,10 @@ export interface IProjectDTO {
   facilitator: string;
   plannedStarted: string;
   plannedEnded: string;
+  plannedWorkingDays: string;
   actualStarted: string;
   actualEnded: string;
+  actualdWorkingDays: string;
   cost: string;
   status: string;
 }
@@ -141,3 +143,24 @@ export const getAllProjectReport = () => {
     },
   });
 };
+
+export interface ProjectReport {
+  projectName: string;
+  projectDetails: ProjectDetail[];
+}
+
+export interface ProjectDetail {
+  date: string; 
+  progress: number;
+}
+
+export const getProjectChartReport = () => {
+  return useQuery<IProjectDTO[], Error>({
+    queryKey: ["ProjectChartReport"],
+    queryFn: async () => {
+      const response = await api.get("api/Report/ProjectChartReport");
+      return response.data;
+    },
+  });
+};
+

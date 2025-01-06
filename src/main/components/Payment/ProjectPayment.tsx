@@ -1,7 +1,8 @@
-import { Button, Card, Spinner } from "@nextui-org/react";
+import { Button, Card, Spinner, useDisclosure } from "@nextui-org/react";
 import { paymentsData } from "../../constants/PaymentsData";
 import {
   getClientPayments,
+  IAllPayment,
   useAcknowledgePayment,
   usePayOnCash,
 } from "../../../lib/API/Project/PaymentAPI";
@@ -9,11 +10,22 @@ import { Navigate, useParams } from "react-router-dom";
 import Loader from "../Loader";
 import { toast } from "react-toastify";
 import { getClientProjId } from "../../../lib/API/Client/ClientProjectAPI";
+import { getProjectExpense } from "../../../lib/API/Project/ProjectApi";
+import { useState } from "react";
+import PaymentDetailsModal from "../../../Admin/components/modal/payment/PaymentDetailsModal";
+import { FaInfoCircle } from "react-icons/fa";
 
 const ProjectPayment: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
+  const {
+    isOpen: viewIsOpen,
+    onOpen: viewOnOpen,
+    onClose: viewOnClose,
+  } = useDisclosure();
+
   const { projId } = useParams<{ projId: string }>();
 
   const { data: clientProjId } = getClientProjId();
+  const [paymentInfo, setPaymentInfo] = useState<IAllPayment | null>(null);
 
   if (clientProjId === null) return <div>No project yet...</div>;
 
@@ -23,6 +35,9 @@ const ProjectPayment: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
     isLoading,
     refetch,
   } = getClientPayments(projId!);
+
+  const { data: totalToPay, isLoading: isLoadingTotalExpense } =
+    getProjectExpense(clientProjId?.projId ?? projId);
 
   const paymentArray = Array.isArray(payment) ? payment : [];
   const acknowledgePayment = useAcknowledgePayment();
@@ -61,7 +76,7 @@ const ProjectPayment: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
     }
   };
 
-  if (isLoading) return <Loader />;
+  if (isLoading || isLoadingTotalExpense) return <Loader />;
 
   if ((error || paymentArray.length === 0) && !isAdmin) {
     return <Navigate to="/" />;
@@ -71,8 +86,26 @@ const ProjectPayment: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
     return <Navigate to="/" />;
   }
 
+  const handleViewInfo = (info: IAllPayment) => {
+    setPaymentInfo(info);
+    viewOnOpen();
+  };
+
   return (
     <div className="container mx-auto p-6">
+      {/* Total Project Cost Display */}
+      {paymentArray.length !== 0 && (
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-semibold text-gray-900 mb-2">
+            Total Project Cost
+          </h2>
+          <p className="text-2xl font-bold text-orange-500">
+            ₱ {totalToPay?.total}
+          </p>
+        </div>
+      )}
+
+      {/* Payment Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {paymentArray?.map((payment) => {
           const is60PercentPaid = paymentArray.some(
@@ -107,8 +140,19 @@ const ProjectPayment: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
               className="hover:shadow-lg hover:scale-105"
             >
               <div className="p-4 flex-grow">
-                <h2 className="text-xl font-bold text-gray-900 mb-4">
-                  {payment.description}
+                <h2 className="text-xl font-bold text-gray-900 mb-4 flex justify-between items-center">
+                  <span> {payment.description}</span>
+                  <span>
+                    <Button
+                      isIconOnly
+                      onClick={() => handleViewInfo(payment.paymentDetail)}
+                      radius="full"
+                      size="lg"
+                      variant="light"
+                    >
+                      <FaInfoCircle className="text-default-400" />
+                    </Button>
+                  </span>
                 </h2>
                 <p
                   className={`mb-4 font-semibold ${
@@ -193,6 +237,12 @@ const ProjectPayment: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
           );
         })}
       </div>
+
+      <PaymentDetailsModal
+        isOpen={viewIsOpen}
+        onClose={viewOnClose}
+        paymentDetails={paymentInfo!}
+      />
     </div>
   );
 };

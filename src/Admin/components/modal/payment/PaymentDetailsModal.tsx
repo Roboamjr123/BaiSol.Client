@@ -1,8 +1,16 @@
 import React from "react";
-import { Modal, ModalBody, ModalContent, ModalHeader } from "@nextui-org/react";
-import { FaUser, FaEnvelope, FaPhone } from "react-icons/fa";
+import {
+  Button,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalHeader,
+} from "@nextui-org/react";
+import { FaUser, FaEnvelope, FaPhone, FaDownload } from "react-icons/fa";
 import StatusTag from "./StatusTag";
 import { IAllPayment } from "../../../../lib/API/Project/PaymentAPI";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 interface PaymentDetailsModalProps {
   isOpen: boolean;
@@ -59,6 +67,44 @@ const PaymentDetailsModal: React.FC<PaymentDetailsModalProps> = ({
 
   const isUnpaid = paymentDetails?.status === "unpaid";
 
+  const handleDownload = () => {
+    const input = document.getElementById("pdf-content"); // Use the ID you set on the container
+
+    // Check if input is null
+    if (!input) {
+      console.error("Element with ID 'pdf-content' not found.");
+      return; // Exit the function if input is null
+    }
+
+    html2canvas(input, { scale: 2 }).then((canvas) => {
+      // Increase scale for better quality
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF();
+
+      // Calculate the width and height for the image in the PDF
+      const imgWidth = pdf.internal.pageSize.getWidth() - 20; // 10 margin on each side
+      const pageHeight = pdf.internal.pageSize.getHeight() - 20;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width; // Maintain aspect ratio
+      let heightLeft = imgHeight;
+
+      let position = 0;
+
+      // Add the image to the PDF
+      pdf.addImage(imgData, "PNG", 10, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      // Add new page if the content exceeds the page height
+      while (heightLeft >= 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, "PNG", 10, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+
+      pdf.save(`${paymentDetails?.description}-receipt.pdf`);
+    });
+  };
+
   return (
     <Modal
       backdrop="blur"
@@ -69,12 +115,22 @@ const PaymentDetailsModal: React.FC<PaymentDetailsModalProps> = ({
       size="5xl"
     >
       <ModalContent style={{ padding: "15px" }}>
-        <ModalHeader>
-          <div className="text-2xl font-bold text-center mb-4 text-orange-500">
+        <ModalHeader className="flex justify-between items-center">
+          <span className="text-2xl font-bold text-orange-500">
             {paymentDetails?.referenceNumber}
-          </div>
+          </span>
+          {paymentDetails?.status === "paid" && (
+            <Button
+              onClick={handleDownload}
+              isIconOnly
+              className="bg-orange-400 text-white rounded-lg py-2 px-3 hover:bg-gray-200 hover:text-orange-500 transition-all duration-300 ease-in"
+            >
+              <FaDownload />
+            </Button>
+          )}
         </ModalHeader>
-        <ModalBody>
+
+        <ModalBody id="pdf-content">
           {/* Conditionally render payment details if the status is not unpaid */}
           {!isUnpaid && (
             <div className="flex flex-row gap-6 mb-6">
@@ -123,7 +179,10 @@ const PaymentDetailsModal: React.FC<PaymentDetailsModalProps> = ({
               Link Information
             </h2>
             <div className="grid grid-cols-2 gap-x-11">
-              {renderDetailRow("Reference no.", paymentDetails?.referenceNumber)}
+              {renderDetailRow(
+                "Reference no.",
+                paymentDetails?.referenceNumber
+              )}
               {renderDetailRow(
                 "Amount",
                 `₱${paymentDetails?.amount}`,

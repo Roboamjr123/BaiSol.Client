@@ -224,7 +224,7 @@ const PersonnelTable: React.FC<UserProps> = ({ role }) => {
               size="sm"
               variant="dot"
             >
-              {cellValue}
+              {user.status}
             </Chip>
           );
         case "actions":
@@ -313,7 +313,7 @@ const PersonnelTable: React.FC<UserProps> = ({ role }) => {
                     {(item) => (
                       <DropdownItem key={item.projId}>
                         <Link to={`/project/${item.projId}`}>
-                          {user.currentProjId}
+                          {item.projName}
                         </Link>
                       </DropdownItem>
                     )}

@@ -3,8 +3,8 @@ import Sidebar from "./shared/Sidebar/Sidebar";
 import { AdminSidebarLinks } from "../lib/constants/SidebarLinks";
 import Header from "./shared/Header/Header";
 import { Outlet, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { setUser } from "../state/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { selectIsAuthenticated, setUser } from "../state/authSlice";
 import { validateToken } from "../lib/API/TokenValidation";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
@@ -17,7 +17,6 @@ const AdminLayout = () => {
 
   useEffect(() => {
     const validateAndSetUser = async () => {
-      
       const isValidToken = await validateToken();
       if (isValidToken) {
         const accessToken = Cookies.get("accessToken");
@@ -49,8 +48,8 @@ const AdminLayout = () => {
       }
     };
     validateAndSetUser();
-
   }, [dispatch, navigate]);
+
 
   return (
     <div className="flex h-screen overflow-hidden">

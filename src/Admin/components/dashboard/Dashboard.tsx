@@ -9,6 +9,7 @@ import Loader from "../../../main/components/Loader";
 import { getSalesReport } from "../../../lib/API/Project/PaymentAPI";
 import SalesReportChart from "../report/SalesReportChart";
 import { getDashboardData } from "../../../lib/API/Report";
+import { getAllClientUsers } from "../../../lib/API/Client/ClientApi";
 
 const Dashboard: React.FC = () => {
   // Initialize DashboardData instance
@@ -18,7 +19,10 @@ const Dashboard: React.FC = () => {
     getDashboardData();
   const { data: salesData, isLoading: isLoadingSales } = getSalesReport();
 
-  if (isLoadingDashboard || isLoadingSales)
+  const { data: clients, isLoading } = getAllClientUsers();
+  const clientLength = clients ? clients.length : 0;
+
+  if (isLoadingDashboard || isLoadingSales || isLoading)
     return <Loader label="Loading..." />;
 
   return (
@@ -36,9 +40,9 @@ const Dashboard: React.FC = () => {
           transition={{ type: "spring", stiffness: 300 }}
           className="bg-gradient-to-br from-blue-300 to-gray-300 text-gray-800 border  p-4 rounded-lg shadow-lg cursor-pointer"
         >
-          <h2 className="text-lg font-medium">Total Personnel</h2>
+          <h2 className="text-md font-medium">Total Personnel</h2>
           <p className="text-3xl font-semibold">
-            {dashboardData?.totalPersonnel}
+            {(dashboardData?.totalPersonnel ?? 0) - clientLength}
           </p>
         </motion.div>
 
@@ -50,7 +54,7 @@ const Dashboard: React.FC = () => {
           transition={{ type: "spring", stiffness: 300 }}
           className="bg-gradient-to-br from-green-200 to-gray-300 text-gray-800 border  p-4 rounded-lg shadow-lg cursor-pointer"
         >
-          <h2 className="text-lg font-medium">Complete Projects</h2>
+          <h2 className="text-md font-medium">Complete Projects</h2>
           <p className="text-3xl font-semibold">
             {dashboardData?.finishedProjects}
           </p>
@@ -64,7 +68,7 @@ const Dashboard: React.FC = () => {
           transition={{ type: "spring", stiffness: 300 }}
           className="bg-gradient-to-br from-yellow-200 to-gray-300 text-gray-800 border  p-4 rounded-lg shadow-lg cursor-pointer"
         >
-          <h2 className="text-lg font-medium">Pending Quotation</h2>
+          <h2 className="text-md font-medium">Pending Quotation</h2>
           <p className="text-3xl font-semibold">
             {dashboardData?.pendingProjects}
           </p>
@@ -78,7 +82,7 @@ const Dashboard: React.FC = () => {
           transition={{ type: "spring", stiffness: 300 }}
           className="bg-gradient-to-br from-red-200 to-gray-300 text-gray-800 border  p-4 rounded-lg shadow-lg cursor-pointer"
         >
-          <h2 className="text-lg font-medium">Projects On Work</h2>
+          <h2 className="text-md font-medium">Projects On Work</h2>
           <p className="text-3xl font-semibold">
             {dashboardData?.onWorkProjects}
           </p>

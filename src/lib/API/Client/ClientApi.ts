@@ -10,7 +10,7 @@ interface ClientUser {
   status: string;
   updatedAt: string;
   createdAt: string;
-  ClientContactNum: string;
+  clientContactNum: string;
   clientAddress: string;
   clientMonthlyElectricBill: number;
   currentProjId: string;
@@ -32,7 +32,7 @@ export const getAllClientUsers = () => {
         status: user.status,
         updatedAt: user.updatedAt, // Format updatedAt
         createdAt: user.createdAt, // Format createdAt
-        ClientContactNum: user.ClientContactNum, // Fixed field name
+        clientContactNum: user.clientContactNum, // Fixed field name
         clientAddress: user.clientAddress, // Ensure correct field mapping
         clientMonthlyElectricBill: user.clientMonthlyElectricBill,
         currentProjId: user.currentProjId,

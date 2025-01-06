@@ -2,15 +2,21 @@ import React from "react";
 import { Navigate, useParams } from "react-router-dom";
 import { getClientProjId } from "../../lib/API/Client/ClientProjectAPI";
 import {
+  getProjectActualWorkedDate,
+  getProjectDateInto,
   getProjectProgress,
   getProjectStatus,
 } from "../../lib/API/Project/GanttAPI";
 import TasksUpdates from "../../main/components/Tasks/TasksUpdates";
 import { Card, CircularProgress } from "@nextui-org/react";
 import Loader from "../../main/components/Loader";
-import { getTaskToDo, getTaskToUpdateProgress } from "../../lib/API/Project/TasksAPI";
+import {
+  getTaskToDo,
+  getTaskToUpdateProgress,
+} from "../../lib/API/Project/TasksAPI";
 import TaskToDos from "../../main/components/Tasks/TaskToDos";
 import TasksToUpdateProgress from "../../main/components/Tasks/TasksToUpdateProgress";
+import Gantt from "../../Admin/components/gantt/Gantt";
 
 const ClientProjectReport: React.FC<{ projectId?: string }> = ({
   projectId,
@@ -24,6 +30,9 @@ const ClientProjectReport: React.FC<{ projectId?: string }> = ({
     projectId ?? projId!
   );
   const projectTaskToDos = getTaskToUpdateProgress(projId!);
+  const { data: projInfo, isLoading } = getProjectDateInto(projId!);
+  const { data: projActualWorkDate, isLoading: isLoadingWorkDates } =
+    getProjectActualWorkedDate(projId!);
 
   if (!projectId) {
     if (
@@ -34,13 +43,26 @@ const ClientProjectReport: React.FC<{ projectId?: string }> = ({
     }
   }
 
-  if (isloadingId || isloadingPP || isloadingPs || projectTaskToDos.isLoading)
+  if (
+    isloadingId ||
+    isloadingPP ||
+    isloadingPs ||
+    projectTaskToDos.isLoading ||
+    isLoading ||
+    isLoadingWorkDates
+  )
     return <Loader />;
 
   return (
     <div className="flex flex-row space-y-4">
       {/* Tasks Updates Section */}
       <div className="w-3/4">
+        <Gantt
+          isOnProcess={false}
+          facProjId={projId}
+          projInfo={projInfo!}
+          projFinishDates={projActualWorkDate}
+        />
         <TasksToUpdateProgress taskToDo={projectTaskToDos.data!} />
       </div>
 

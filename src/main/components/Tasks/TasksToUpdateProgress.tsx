@@ -48,7 +48,7 @@ const TasksToUpdateProgress: React.FC<{
     }
   };
 
-  const handleUpdateTask = (taskId: number) => {
+  const handleUpdateTask = (taskId: number, estimationStart: string) => {
     if (uploadedImage && refetch && refetchDateInfo) {
       // Show confirmation dialog
       const confirmSubmission = window.confirm(
@@ -57,7 +57,12 @@ const TasksToUpdateProgress: React.FC<{
 
       if (confirmSubmission) {
         updateTaskProgress.mutateAsync(
-          { ProofImage: uploadedImage, id: taskId, Progress: progress },
+          {
+            ProofImage: uploadedImage,
+            id: taskId,
+            Progress: progress,
+            EstimationStart: estimationStart,
+          },
           {
             onSuccess: (data) => {
               toast.success(data);
@@ -218,7 +223,7 @@ const TasksToUpdateProgress: React.FC<{
                         <CircularProgress
                           value={taskChild.taskProgress}
                           color="success"
-                          //   showValueLabel={true}
+                          // showValueLabel={true}
                           strokeWidth={4}
                           classNames={{
                             svg: "w-5 h-5 drop-shadow-md",
@@ -236,13 +241,13 @@ const TasksToUpdateProgress: React.FC<{
                           }}
                           size="sm"
                         />
-                        {/* {taskChild.taskProgress}% */}
+                        {taskChild.taskProgress}
                       </span>
                     </span>
                   }
                 >
                   <div className="flex flex-col">
-                    {taskChild.isEnable &&
+                    {(taskChild.isEnable || taskChild.isLate) &&
                       // !taskChild.isFinish &&
                       isFacilitator && (
                         <div className="flex flex-row gap-x-5 justify-between">
@@ -270,7 +275,12 @@ const TasksToUpdateProgress: React.FC<{
 
                           <Button
                             isLoading={updateTaskProgress.isPending}
-                            onClick={() => handleUpdateTask(taskChild.id)}
+                            onClick={() =>
+                              handleUpdateTask(
+                                taskChild.id,
+                                taskChild.estimationStart
+                              )
+                            }
                             className="flex ml-auto items-center justify-center p-2 text-white rounded-lg bg-orange-400 hover:bg-gray-200 hover:text-orange-500 transition-all duration-300 ease-in"
                             isDisabled={uploadedImage === null || progress < 1}
                           >

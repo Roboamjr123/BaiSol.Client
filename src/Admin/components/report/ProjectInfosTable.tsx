@@ -74,16 +74,31 @@ const ProjectInfosTable = () => {
           return <div>{project.facilitator}</div>;
         case "plannedDate":
           return (
-            <div>
-              {project.plannedStarted} - {project.plannedEnded}
+            <div className="text-gray-600">
+              {project.plannedStarted} - {project.plannedEnded}{" "}
+              <span className="text-gray-500">
+                ({project.plannedWorkingDays} days)
+              </span>
             </div>
           );
+
         case "actualDate":
           return (
-            <div>
-              {project.actualStarted} - {project.actualEnded}
+            <div
+              className={`${
+                Number(project.actualdWorkingDays) >
+                Number(project.plannedWorkingDays)
+                  ? " text-red-600"
+                  : " text-gray-600"
+              }`}
+            >
+              {project.actualStarted} - {project.actualEnded}{" "}
+              <span className="text-gray-500">
+                ({project.actualdWorkingDays} days)
+              </span>
             </div>
           );
+
         case "cost":
           return <div>{project.cost}</div>;
         case "status":

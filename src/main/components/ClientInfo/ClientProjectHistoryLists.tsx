@@ -36,9 +36,9 @@ const ClientProjectHistoryLists: React.FC<{
                           }`}
                         </h2>
                       </div>
-                      <h5 className="text-sm font-semibold">{`${p.clientFName}@gmail.com`}</h5>
+                      <h5 className="text-sm font-semibold">{`${p.clientEmail}`}</h5>
                       <div className="text-xs font-semibold">
-                        <h5 className="text-sm font-semibold">{`${p.clientContactNum}`}</h5>
+                        <h5 className="text-sm font-semibold">{`+639${p.clientContactNum}`}</h5>
                       </div>
                     </div>
                   </div>

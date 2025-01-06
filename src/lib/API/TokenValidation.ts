@@ -2,6 +2,7 @@ import Cookies from "js-cookie";
 import { jwtDecode as jwt_decode } from "jwt-decode";
 import moment from "moment";
 import { api } from "./AuthAPI";
+import { toast } from "react-toastify";
 
 // Validate user Token
 export async function validateToken() {
@@ -76,6 +77,8 @@ export async function validateToken() {
       localStorage.removeItem("refreshToken");
       console.log("logged out");
       console.log("Token expired");
+      toast.error("Token expired!")
+      toast.info("Logged out!")
       return false;
     }
   } // If the access token is still valid, return true

@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "../AuthAPI";
 import { toast } from "react-toastify";
+import { useUserEmail } from "../../../state/Hooks/userHook";
 
 // const userEmail = useSelector(selectUser);
 
@@ -39,14 +40,15 @@ interface IAssignEquipment {
 
 // Assign new equipment
 export const useAssignEquipment = () => {
+  const userEmail = useUserEmail();
   return useMutation({
     mutationFn: async (formData: IAssignEquipment) => {
       const response = await api.post(
         "api/Quotation/Assign-Equipment",
         {
           ...formData,
-          userEmail: "richardquirante98@gmail.com",
-          // userEmail: userEmail,
+          // userEmail: "richardquirante98@gmail.com",
+          userEmail: userEmail,
         },
         {
           headers: {
@@ -72,14 +74,15 @@ interface IUpdateEquipment {
 
 // Update assigned equipment
 export const useUpdateEquipmentAssigned = () => {
+  const userEmail = useUserEmail();
   return useMutation({
     mutationFn: async (data: IUpdateEquipment) => {
       const response = await api.put(
         "api/Quotation/Update-Equipment-Quantity",
         {
           ...data,
-          userEmail: "richardquirante98@gmail.com",
-          // userEmail: userEmail,
+          // userEmail: "richardquirante98@gmail.com",
+          userEmail: userEmail,
         },
         {
           headers: {
@@ -103,6 +106,7 @@ interface IDeleteEquipment {
 
 // Delete assigned equipment
 export const useDeleteAssignedEquipment = () => {
+  const userEmail = useUserEmail();
   return useMutation({
     mutationFn: async (data: IDeleteEquipment) => {
       const response = await api.delete(
@@ -110,8 +114,8 @@ export const useDeleteAssignedEquipment = () => {
         {
           data: {
             ...data,
-            userEmail: "richardquirante98@gmail.com",
-            // userEmail: userEmail, // Uncomment if using a dynamic userEmail variable
+            // userEmail: "richardquirante98@gmail.com",
+            userEmail: userEmail, // Uncomment if using a dynamic userEmail variable
           },
           headers: {
             "Content-Type": "application/json",

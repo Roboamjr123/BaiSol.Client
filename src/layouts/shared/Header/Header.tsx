@@ -14,7 +14,7 @@ import {
 import { MdMenu } from "react-icons/md";
 import Cookies from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
-import { selectUser } from "../../../state/authSlice";
+import { clearUser, selectUser } from "../../../state/authSlice";
 import { useNavigate } from "react-router-dom";
 import { useLogOut } from "../../../lib/API/AuthAPI";
 import { useUserEmail, useUserRole } from "../../../state/Hooks/userHook";
@@ -27,23 +27,27 @@ interface HeaderProps {
 }
 
 function Header({ isSidebarOpen, setIsSidebarOpen }: HeaderProps) {
-  const navigate = useNavigate();
   const logOut = useLogOut();
 
   const email = useUserEmail();
-  const user = useSelector(selectUser);
 
   const handleLogout = async () => {
-    try {
-      await logOut.mutateAsync(email); // Await the logout mutation
-      // Only execute the following lines if the mutation is successful
-      localStorage.removeItem("refreshToken");
-      Cookies.remove("accessToken");
-      navigate("/");
-      window.location.reload();
-    } catch (err) {
-      console.error("Logout error:", err); // Log error for debugging
-      // Optionally show an error toast here if needed
+    // Show confirmation dialog
+    const isConfirmed = window.confirm("Are you sure you want to log out?");
+
+    if (isConfirmed) {
+      try {
+        await logOut.mutateAsync(email); // Await the logout mutation
+        // Only execute the following lines if the mutation is successful
+        console.log("Successfully logged out");
+        // You can optionally redirect the user after logout or show a success message
+      } catch (err) {
+        console.error("Logout error:", err); // Log error for debugging
+        // Optionally show an error toast here if needed
+      }
+    } else {
+      console.log("Logout canceled");
+      // Optionally handle the case where the user cancels the logout
     }
   };
 

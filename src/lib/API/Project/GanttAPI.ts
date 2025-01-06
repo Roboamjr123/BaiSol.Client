@@ -81,3 +81,23 @@ export const getProjectStatus = (projId: string) => {
     },
   });
 };
+
+export interface IActualWorkDate {
+  actualStartDate: string;
+  actualEndDate: string;
+  actualProjectDays: string;
+}
+
+export const getProjectActualWorkedDate = (projId: string) => {
+  return useQuery<IActualWorkDate, Error>({
+    queryKey: ["ProjectActualWorkedDate", projId],
+    queryFn: async () => {
+      const response = await api.get("api/Gantt/ProjectActualWorkedDate", {
+        params: {
+          projId: projId,
+        },
+      });
+      return response.data;
+    },
+  });
+};

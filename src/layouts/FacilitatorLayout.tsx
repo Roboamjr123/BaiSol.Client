@@ -53,8 +53,15 @@ const FacilitatorLayout = () => {
     validateAndSetUser();
   }, [dispatch, navigate]);
 
-  const { data: dataMobilize, isLoading: isLoadingMobilize } =
-    getIsAssignedProjectOnDemobilization();
+  const {
+    data: dataMobilize,
+    isLoading: isLoadingMobilize,
+    refetch,
+  } = getIsAssignedProjectOnDemobilization();
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
 
   return (
     <div className="flex h-screen overflow-hidden">

@@ -95,9 +95,9 @@ const ProjectHistories: React.FC<{
                           {`${project.clientFName} ${project.clientLName}`}
                         </h2>
                       </div>
-                      <h5 className="text-md font-semibold">{`${project.clientFName}@gmail.com`}</h5>
+                      <h5 className="text-md font-semibold">{`${project.clientEmail}`}</h5>
                       <div className="text-sm font-semibold">
-                        <h5 className="text-md font-semibold">{`${project.clientContactNum}`}</h5>
+                        <h5 className="text-md font-semibold">{`+639${project.clientContactNum}`}</h5>
                       </div>
                     </div>
                   </div>
@@ -126,6 +126,35 @@ const ProjectHistories: React.FC<{
                         {project.kWCapacity} kW
                       </span>
                     </h1>
+                  </div>
+                </div>
+
+                {/* New Section: Project Dates */}
+                <div className="mt-6 p-4 bg-gray-50 rounded-lg shadow">
+                  <h2 className="text-lg font-semibold text-gray-700 mb-3">
+                    Project Dates
+                  </h2>
+                  <div className="text-sm space-y-2">
+                    <div className="flex justify-between">
+                      <span className="font-medium text-gray-600">
+                        Planned:
+                      </span>
+                      <span className="text-gray-700">
+                        {project.plannedStarted} - {project.plannedEnded}{" "}
+                        <span className="text-gray-500">
+                          ({project.plannedWorkingDays} days)
+                        </span>
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="font-medium text-gray-600">Actual:</span>
+                      <span className="text-gray-700">
+                        {project.actualStarted} - {project.actualEnded}{" "}
+                        <span className="text-gray-500">
+                          ({project.actualdWorkingDays} days)
+                        </span>
+                      </span>
+                    </div>
                   </div>
                 </div>
 

@@ -4,6 +4,7 @@ import ClientInfoDisplay from "../../main/components/ClientInfo/ClientInfoDispla
 import { getClientProjectInfo } from "../../lib/API/Project/ProjectApi";
 import { getProjectProgress } from "../../lib/API/Project/GanttAPI";
 import Loader from "../../main/components/Loader";
+import { getPaymentProgress } from "../../lib/API/Project/PaymentAPI";
 
 const FacilitatorDashboard = () => {
   const { data: projId, isLoading: isLoadingId } = getAssignedProject();
@@ -12,16 +13,18 @@ const FacilitatorDashboard = () => {
     projId!
   );
 
+  const { data: payProg, isLoading: isLoadingPay } = getPaymentProgress(
+    projId!
+  );
   const { data: projProg, isLoading: isLoadingproj } = getProjectProgress(
     projId!
   );
 
   // const { data: infos, isLoading } = getClientProjectInfo(projId!);
 
-  if (isLoadingId || isLoadingCPI || isLoadingproj) {
+  if (isLoadingId || isLoadingCPI || isLoadingproj || isLoadingPay) {
     return <Loader />;
   }
-  console.log(projId);
 
   if (!infos)
     return <span className="text-gray-500">Assigned Project Yet...</span>;
@@ -30,6 +33,7 @@ const FacilitatorDashboard = () => {
     <div>
       <ClientInfoDisplay
         project={infos}
+        paymentProgress={payProg}
         projectProgress={projProg?.progress!}
       />
     </div>

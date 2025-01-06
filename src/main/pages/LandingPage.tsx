@@ -1,5 +1,5 @@
 import NavBar from "../../Landing-Page/components/NavBar";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import Footer from "../../layouts/shared/Footer";
 import { setUser } from "../../state/authSlice";
 import { useDispatch } from "react-redux";
@@ -10,6 +10,7 @@ import { jwtDecode } from "jwt-decode";
 
 const LandingPage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const validateAndSetUser = async () => {
@@ -39,6 +40,7 @@ const LandingPage = () => {
             ],
         };
         dispatch(setUser(user));
+        navigate("/");
       }
     };
     validateAndSetUser();
